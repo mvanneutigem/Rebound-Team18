@@ -70,5 +70,17 @@ public class PlayerController : MonoBehaviour
         _camForward.y = 0;
         _camForward.Normalize();
     }
+
+    public void ApplyForce(int forceMagnitude)
+    {
+        if (_characterController.isGrounded)
+        {
+            _moveVector = Vector3.up * forceMagnitude;
+        }
+
+        Debug.Log(_moveVector);
+        _characterController.Move(_moveVector * Time.deltaTime);
+        _jumping = true;
+    }
 }
 
