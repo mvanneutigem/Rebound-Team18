@@ -21,10 +21,9 @@ public class PlayerController : MonoBehaviour
     }
     void Update()
     {
-        //input
+        // input
         float hInput = Input.GetAxis("Horizontal");
         float vInput = Input.GetAxis("Vertical");
-
 
         if (_characterController.isGrounded)
         {
