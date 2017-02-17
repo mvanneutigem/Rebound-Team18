@@ -17,7 +17,8 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     private float _controllerSpeedV = 1f;
     [SerializeField]
-    private Transform _targetObject;
+    private PlayerController _player;
+    private Transform _playerTransform;
     [SerializeField]
     private float _camBoomLength = 10f;
 
@@ -37,8 +38,10 @@ public class CameraController : MonoBehaviour
         _camera.fieldOfView = FOV;
 
         _camTransform.localPosition = new Vector3(0, 0, -_camBoomLength);
-    }
 
+        _playerTransform = _player.transform;
+    }
+    
     void Update()
     {
         UpdatePosition();
@@ -49,7 +52,7 @@ public class CameraController : MonoBehaviour
         float moveX = Input.GetAxis("Controller X") * _controllerSpeedH + Input.GetAxis("Mouse X") * _mouseSpeedH;
         float moveY = Input.GetAxis("Controller Y") * _controllerSpeedV + Input.GetAxis("Mouse Y") * _mouseSpeedV;
 
-        _transSelf.position = _targetObject.position;
+        _transSelf.position = _playerTransform.position;
         Vector3 camAngle = _transSelf.eulerAngles;
 
         if (Mathf.Abs(moveX) > Mathf.Epsilon)
@@ -68,6 +71,7 @@ public class CameraController : MonoBehaviour
 
         _transSelf.eulerAngles = camAngle;
         _camTransform.forward = _transSelf.position - _camTransform.position;
+        _player.SetForwardDir(_camTransform.forward);
     }
 
     public void SetFOV(float fov)
