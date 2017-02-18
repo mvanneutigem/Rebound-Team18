@@ -13,7 +13,7 @@ public class Trampoline : MonoBehaviour {
     {
         if (other.tag == "Player")
         {
-            other.GetComponent<PlayerController>().ApplyForce(10);
+            other.GetComponent<PlayerController>().ApplyForce(5 * this.transform.up);
             Debug.Log("ontrampoline");
         }
     }

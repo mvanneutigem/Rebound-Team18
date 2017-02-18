@@ -10,6 +10,7 @@ public class PlayerController2 : MonoBehaviour
 
     //FIELDS
     private Vector3 _moveVector;
+    private Vector3 _airVector;
     private CharacterController _characterController;
     public GameObject mainCamera;
     private float _rotateSpeed = 0.03f;
@@ -28,13 +29,22 @@ public class PlayerController2 : MonoBehaviour
         float vInput = Input.GetAxis("Vertical");
 
         var camforward = Vector3.Scale(mainCamera.transform.forward, new Vector3(1, 0, 1)).normalized;
-        
-        //old
 
         if (_characterController.isGrounded)
         {
             _moveVector = (vInput * camforward + hInput * mainCamera.transform.right);
             //set the speed
+            _moveVector = Speed * _moveVector.normalized;
+            _airVector = Vector3.zero;
+        }
+        else if (_airVector == Vector3.zero)
+        {
+            _airVector = _moveVector;
+        }
+        else
+        {
+            _airVector += Physics.gravity * Time.deltaTime;
+            _moveVector = (vInput * camforward + hInput * mainCamera.transform.right) + _airVector;
             _moveVector = Speed * _moveVector.normalized;
         }
 
@@ -48,13 +58,9 @@ public class PlayerController2 : MonoBehaviour
             _moveVector.z = vInput * Speed / 2;
         }
 
-
-        //old
-
         //rotate character in the direction it's moving in
         if (_moveVector != Vector3.zero)
         {
-            //viewvector =
             Quaternion targetRotation = Quaternion.LookRotation(_moveVector);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.time * _rotateSpeed);
         }
@@ -66,11 +72,11 @@ public class PlayerController2 : MonoBehaviour
         _characterController.Move(_moveVector * Time.deltaTime);
     }
 
-    public void ApplyForce(int forceMagnitude)
+    public void ApplyForce(Vector3 force)
     {
         if (_characterController.isGrounded)
         {
-            _moveVector += Vector3.up * forceMagnitude;
+            _moveVector += force;
         }
 
         Debug.Log(_moveVector);
