@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GravityPortal : MonoBehaviour {
-    public Vector3 rotationAxis = new Vector3(0, 0, -1);
-    public float rotation = 90;
+    public Vector3 rotation = new Vector3(0, 0, -90);
     public GameObject LevelGameObject;
-    public float Speed = 5.0f;
+    public float Speed = 1.0f;
     private bool Entered = false;
 
     void Update()
     {
         if (Entered)
         {
-            Quaternion targetRotation = Quaternion.AngleAxis(rotation, rotationAxis);
+            Quaternion targetRotation = Quaternion.Euler(rotation);
             LevelGameObject.transform.rotation = Quaternion.Lerp(LevelGameObject.transform.rotation, targetRotation, Time.deltaTime * Speed);
         }
     }
