@@ -3,17 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GravityPortal : MonoBehaviour {
-    public Vector3 rotation = new Vector3(0, 0, -90);
+    public Vector3 rotationAxis = new Vector3(0, 0, -1);
+    public float rotation = 90;
     public GameObject LevelGameObject;
-    public float Speed = 1.0f;
+    public float RotateTime = 0.5f;
+    private float _timer = 0; 
     private bool Entered = false;
+    private Quaternion _startRotation;
 
     void Update()
     {
         if (Entered)
         {
-            Quaternion targetRotation = Quaternion.Euler(rotation);
-            LevelGameObject.transform.rotation = Quaternion.Lerp(LevelGameObject.transform.rotation, targetRotation, Time.deltaTime * Speed);
+            _timer += Time.deltaTime;
+            Quaternion targetRotation = Quaternion.AngleAxis(rotation, rotationAxis);
+            LevelGameObject.transform.rotation = Quaternion.Lerp(_startRotation, targetRotation, _timer / RotateTime);
+
+            if (_timer >= RotateTime)
+            {
+                // disable self
+                this.GetComponent<GravityPortal>().enabled = false;
+            }
         }
     }
 
@@ -22,6 +32,7 @@ public class GravityPortal : MonoBehaviour {
         if (other.tag == "Player" && !Entered)
         {
             Entered = true;
+            _startRotation = LevelGameObject.transform.rotation;
         }
     }
 }
