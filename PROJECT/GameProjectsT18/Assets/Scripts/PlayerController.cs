@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     private bool _jumping = false;
     private float _rotateSpeed = 0.03f;
     private Vector3 _trampolineInfluence = Vector3.zero;
-    public float TrampolineUpPower = 5.0f;
+    public float TrampolineUpPower = 0f;
 
     private Vector3 _camForward;
 
@@ -106,8 +106,8 @@ public class PlayerController : MonoBehaviour
         //used for trampolines
         _moveVector = force + Vector3.up * TrampolineUpPower;
         _trampolineInfluence = force;
-        _trampolineInfluence.y = 0;
         _trampolineInfluence.Normalize();
+        _trampolineInfluence.y = 0;
         _characterController.Move(_moveVector * Time.deltaTime);
     }
 }
