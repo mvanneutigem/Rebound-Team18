@@ -2,18 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Trampoline : MonoBehaviour {
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+public class Trampoline : MonoBehaviour
+{
     //pass up direction of trampoline as jumpvector
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
         {
-            other.GetComponent<PlayerController>().ApplyForce(5 * this.transform.up);
+            var up = this.transform.up;
+            other.GetComponent<PlayerController>().ApplyForce(5 * up);
             Debug.Log("ontrampoline");
         }
     }
