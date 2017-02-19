@@ -17,15 +17,14 @@ public class PlayerController : MonoBehaviour
     public float LateralAcceleration = 5.0f;
 
     private Vector3 _moveVector;
-    private Vector2 _horizontalVelocity;
+    private Vector3 _horizontalVelocity;
+    private Vector3 _worldSpaceHorizontal;
     private Vector3 _moveDirForward;
     private Vector3 _moveDirRight;
     private CharacterController _characterController;
     public float JumpSpeed = 2.0f;
     private bool _jumping = false;
     private float dragForce;
-    private Vector3 _trampolineInfluence = Vector3.zero;
-    public float TrampolineUpPower = 0f;
 
     private Vector3 _camForward;
 
@@ -45,26 +44,24 @@ public class PlayerController : MonoBehaviour
         //rotate character in the direction it's moving in
 
         Vector3 tempMove = Vector3.zero;
+        _moveDirForward = _camForward;
+        _moveDirRight = new Vector3(_moveDirForward.z, _moveDirForward.y, -_moveDirForward.x);
 
-        if (Mathf.Abs(hInput) + Mathf.Abs(vInput) != 0)
+        if (Mathf.Abs(hInput) + Mathf.Abs(vInput) > float.Epsilon)
         {
-            _moveDirForward = _camForward;
-            _moveDirRight = new Vector3(_moveDirForward.z, _moveDirForward.y, -_moveDirForward.x);
-
             Quaternion targetRotation = Quaternion.LookRotation(_camForward);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, RotateSpeed);
 
-
             // MOVEMENT
-            tempMove = (vInput * _moveDirForward * ForwardAcceleration * Time.deltaTime)
-                 + (hInput * _moveDirRight * LateralAcceleration * Time.deltaTime);
+            tempMove.x = vInput * ForwardAcceleration * Time.deltaTime;
+            tempMove.z = hInput * LateralAcceleration * Time.deltaTime;
 
             _horizontalVelocity.x += tempMove.x;
-            _horizontalVelocity.y += tempMove.z;
+            _horizontalVelocity.z += tempMove.z;
 
-            if (Mathf.Abs(_horizontalVelocity.y) > MaxForwardSpeed)
+            if (Mathf.Abs(_horizontalVelocity.z) > MaxForwardSpeed)
             {
-                _horizontalVelocity.y = (_horizontalVelocity.y > 0 ? MaxForwardSpeed : -MaxForwardSpeed);
+                _horizontalVelocity.z = (_horizontalVelocity.z > 0 ? MaxForwardSpeed : -MaxForwardSpeed);
             }
 
             if (Mathf.Abs(_horizontalVelocity.x) > MaxLateralSpeed)
@@ -72,16 +69,23 @@ public class PlayerController : MonoBehaviour
                 _horizontalVelocity.x = (_horizontalVelocity.x > 0 ? MaxLateralSpeed : -MaxLateralSpeed);
             }
         }
-        else
+        else if (Mathf.Abs(_horizontalVelocity.x) + Mathf.Abs(_horizontalVelocity.z) > 0.1f)
         {
             _horizontalVelocity.x += (_horizontalVelocity.x > 0 ? -LateralDeceleration * Time.deltaTime : LateralDeceleration * Time.deltaTime);
-            _horizontalVelocity.y += (_horizontalVelocity.y > 0 ? -ForwardDeceleration * Time.deltaTime : ForwardDeceleration * Time.deltaTime);
+            _horizontalVelocity.z += (_horizontalVelocity.z > 0 ? -ForwardDeceleration * Time.deltaTime : ForwardDeceleration * Time.deltaTime);
         }
+        else
+        {
+            //to make it stop sliding randomly after no input for some time
+            _horizontalVelocity.x = 0;
+            _horizontalVelocity.z = 0;
+        }
+        //from local to worlspace
+        _worldSpaceHorizontal = _horizontalVelocity.x * _moveDirForward + _horizontalVelocity.z * _moveDirRight;
 
-        _moveVector.x = _horizontalVelocity.x;
-        _moveVector.z = _horizontalVelocity.y;
+        _moveVector.x = _worldSpaceHorizontal.x;
+        _moveVector.z = _worldSpaceHorizontal.z;
 
-        
         if (Input.GetAxis("Jump") > 0 && !_jumping)
         {
             _moveVector = Vector3.up * JumpSpeed;
@@ -92,27 +96,6 @@ public class PlayerController : MonoBehaviour
             if (_characterController.isGrounded)
             {
                 _jumping = false;
-                _trampolineInfluence = Vector3.zero;
-            }
-            else
-            {
-                //let player push back against trampoline force
-                if (tempMove.x > 0 && _trampolineInfluence.x < 0)
-                {
-                    _trampolineInfluence.x += tempMove.x * Time.deltaTime;
-                }
-                if (tempMove.x < 0 && _trampolineInfluence.x > 0)
-                {
-                    _trampolineInfluence.x += tempMove.x * Time.deltaTime;
-                }
-                if (tempMove.z > 0 && _trampolineInfluence.z < 0)
-                {
-                    _trampolineInfluence.z += tempMove.z * Time.deltaTime;
-                }
-                if (tempMove.z < 0 && _trampolineInfluence.z > 0)
-                {
-                    _trampolineInfluence.z += tempMove.z * Time.deltaTime;
-                }
             }
         }
 
@@ -132,11 +115,11 @@ public class PlayerController : MonoBehaviour
 
     public void ApplyForce(Vector3 force)
     {
-        //used for trampolines
-        _moveVector = force + Vector3.up * TrampolineUpPower;
-        _trampolineInfluence = force;
-        _trampolineInfluence.Normalize();
-        _trampolineInfluence.y = 0;
+        _moveVector = force;
+        //from world to local space
+        _moveDirRight = new Vector3(_moveDirForward.z, _moveDirForward.y, -_moveDirForward.x);
+        _horizontalVelocity += force.x * _camForward + force.z * _moveDirRight;
+        _moveVector += Physics.gravity * Time.deltaTime;
         _characterController.Move(_moveVector * Time.deltaTime);
     }
 }
