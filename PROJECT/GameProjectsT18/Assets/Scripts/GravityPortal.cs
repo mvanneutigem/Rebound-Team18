@@ -5,12 +5,16 @@ using UnityEngine;
 public class GravityPortal : MonoBehaviour {
     public Vector3 rotationAxis = new Vector3(0, 0, -1);
     public float rotation = 90;
-    public GameObject LevelGameObject;
+    private GameObject LevelGameObject;
     public float RotateTime = 0.5f;
     private float _timer = 0; 
     private bool Entered = false;
     private Quaternion _startRotation;
 
+    void Start()
+    {
+        LevelGameObject = GameObject.FindWithTag("level");
+    }
     void Update()
     {
         if (Entered)

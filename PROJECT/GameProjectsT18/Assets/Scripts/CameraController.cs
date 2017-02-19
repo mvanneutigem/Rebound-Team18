@@ -24,9 +24,6 @@ public class CameraController : MonoBehaviour
 
     private Transform _transSelf;
 
-    private float _verMin = -30f;
-    private float _verMax = 85f;
-
     void Awake()
     {
         _transSelf = transform;
