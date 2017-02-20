@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Trampoline : MonoBehaviour
 {
-    public float TrampolinePower = 20;
+    private float TrampolinePower = 10;
     //pass up direction of trampoline as jumpvector
     void OnTriggerEnter(Collider other)
     {
