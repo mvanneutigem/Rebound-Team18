@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GravityPortal : MonoBehaviour {
-    private Vector3 GravityDirectionVector = new Vector3(0, 0, -1);
+    public Vector3 GravityDirectionVector = new Vector3(-1, 0, 0);
     private PlayerController _playerController;
     public float RotateTime = 0.5f;
     private float _timer = 0; 
