@@ -53,7 +53,7 @@ public class Rewind : MonoBehaviour {
         {
             Transform playerTransform = PlayerGameObject.GetComponent<Transform>();
             playerTransform.position = (Vector3)previousPosition[positionIdx];
-            playerTransform.localRotation = (Quaternion)previousRotation[positionIdx];
+            //playerTransform.localRotation = (Quaternion)previousRotation[positionIdx];
             previousPosition.RemoveAt(positionIdx);
             previousRotation.RemoveAt(positionIdx);
             Debug.Log("Player Position:" + playerTransform.position + "Position Array:" + previousPosition.Count + "Position Idx" + positionIdx);
