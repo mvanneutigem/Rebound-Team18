@@ -96,7 +96,7 @@ public class PlayerController : MonoBehaviour
         {
             if (_characterController.isGrounded)
             {
-                if (!_jumping)
+                if (!_jumping )
                 {
                     _horizontalVelocity.y = 0;
                 }
@@ -125,13 +125,11 @@ public class PlayerController : MonoBehaviour
 
     public void ApplyForce(Vector3 force)
     {
-        //_moveVector = force;
-        _horizontalVelocity = force.z* _moveDirForward + force.x * _moveDirRight + force.y * _upVector3;
-        ////from world to local space
-        //_horizontalVelocity += force.x * _moveDirForward + force.z * _moveDirRight;
-        //_moveVector += Physics.gravity * Time.deltaTime;
-        //_characterController.Move(_moveVector * Time.deltaTime);
-        //_horizontalVelocity.y += 10.0f;
+        var forceLocal = force.z * _moveDirForward + force.x * _moveDirRight + force.y * _upVector3;
+        _horizontalVelocity.z += forceLocal.z;
+        _horizontalVelocity.x += forceLocal.x;
+        _horizontalVelocity.y = forceLocal.y;
+
         _jumping = true;
     }
 
