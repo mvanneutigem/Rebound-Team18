@@ -6,7 +6,7 @@ public class Core : MonoBehaviour
 {
     private float _rotSpeed = 15.0f;
     private bool _isTriggerEntered = false;
-    private float _coreSpeed = 10.0f;
+    private float _coreSpeed = 40.0f;
 
 
     public Transform PlayerTransform;
