@@ -139,5 +139,10 @@ public class PlayerController : MonoBehaviour
     {
         _upVector3 = up;
     }
+
+    public Vector3 GetUpVector()
+    {
+        return _upVector3;
+    }
 }
 
