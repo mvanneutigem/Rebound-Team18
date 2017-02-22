@@ -15,11 +15,14 @@ public class PlayerController : MonoBehaviour
     public float LateralDeceleration = 10.0f;
     public float ForwardAcceleration = 5.0f;
     public float LateralAcceleration = 5.0f;
+    private float _forwardVelocity = 0.0f;
+    private float _lateralVelocity = 0.0f;
 
     private Vector3 _moveVector;
+    private Vector3 _gravityVelocity;
     private Vector3 _horizontalVelocity;
-    private Vector3 _worldSpaceHorizontal;
-    private Vector3 _moveDirForward;
+    private Vector3 _worldSpaceVector;
+    private Vector3 _moveDirForward = new Vector3(0, 0, 1);
     private Vector3 _moveDirRight;
     private CharacterController _characterController;
     public float JumpSpeed = 2.0f;
@@ -32,6 +35,7 @@ public class PlayerController : MonoBehaviour
     //METHODS
     void Awake()
     {
+        _upVector3 = new Vector3(0, 1, 0);
         _characterController = this.GetComponent<CharacterController>();
     }
 
@@ -44,21 +48,21 @@ public class PlayerController : MonoBehaviour
         //set the speed
         //rotate character in the direction it's moving in
 
-        Vector3 tempMove = Vector3.zero;
-        _moveDirForward = _camForward;
-        _moveDirRight = new Vector3(_moveDirForward.z, _moveDirForward.y, -_moveDirForward.x);
+        Vector3 acceleration = Vector3.zero;
+        _moveDirRight = Vector3.Cross(_moveDirForward.normalized, _upVector3.normalized);
 
         if (Mathf.Abs(hInput) + Mathf.Abs(vInput) > float.Epsilon)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(_camForward);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, RotateSpeed);
+            Quaternion targetRotation = Quaternion.LookRotation(_moveVector.normalized);
+            transform.rotation = targetRotation;
 
             // MOVEMENT
-            tempMove.x = vInput * ForwardAcceleration * Time.deltaTime;
-            tempMove.z = hInput * LateralAcceleration * Time.deltaTime;
+            acceleration.z += vInput * ForwardAcceleration * Time.deltaTime;
+            acceleration.x += -hInput * LateralAcceleration * Time.deltaTime;
 
-            _horizontalVelocity.x += tempMove.x;
-            _horizontalVelocity.z += tempMove.z;
+            _horizontalVelocity += acceleration;
+
+            Vector3 forwardVel = (_horizontalVelocity + _moveDirForward) / 2.0f;
 
             if (Mathf.Abs(_horizontalVelocity.z) > MaxForwardSpeed)
             {
@@ -72,7 +76,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (Mathf.Abs(_horizontalVelocity.x) + Mathf.Abs(_horizontalVelocity.z) > 0.1f)
         {
-            _horizontalVelocity.x += (_horizontalVelocity.x > 0 ? -LateralDeceleration * Time.deltaTime : LateralDeceleration * Time.deltaTime);
+            _horizontalVelocity.x += (_horizontalVelocity.x < 0 ? +LateralDeceleration * Time.deltaTime : -LateralDeceleration * Time.deltaTime);
             _horizontalVelocity.z += (_horizontalVelocity.z > 0 ? -ForwardDeceleration * Time.deltaTime : ForwardDeceleration * Time.deltaTime);
         }
         else
@@ -81,30 +85,35 @@ public class PlayerController : MonoBehaviour
             _horizontalVelocity.x = 0;
             _horizontalVelocity.z = 0;
         }
-        //from local to worlspace
-        _worldSpaceHorizontal = _horizontalVelocity.x * _moveDirForward + _horizontalVelocity.z * _moveDirRight;
 
-        _moveVector.x = _worldSpaceHorizontal.x;
-        _moveVector.z = _worldSpaceHorizontal.z;
 
         if (Input.GetAxis("Jump") > 0 && !_jumping)
         {
-            _moveVector = Vector3.up * JumpSpeed;
+            _horizontalVelocity.y += JumpSpeed;
             _jumping = true;
         }
         else
         {
             if (_characterController.isGrounded)
             {
+                if (!_jumping)
+                {
+                    _horizontalVelocity.y = 0;
+                }
+
                 _jumping = false;
             }
         }
 
         //Gravity
-        _moveVector += Physics.gravity * Time.deltaTime;
+        _horizontalVelocity += Physics.gravity * Time.deltaTime;
+
+        //from local to worlspace
+        _worldSpaceVector = _horizontalVelocity.z * _moveDirForward + _horizontalVelocity.x * _moveDirRight + _horizontalVelocity.y * _upVector3;
+        _moveVector = _worldSpaceVector;
 
         //Move
-        _characterController.Move(_moveVector * Time.deltaTime);
+        _characterController.Move((_moveVector) * Time.deltaTime);
     }
 
     public void SetForwardDir(Vector3 forward)
@@ -116,12 +125,14 @@ public class PlayerController : MonoBehaviour
 
     public void ApplyForce(Vector3 force)
     {
-        _moveVector = force;
-        //from world to local space
-        _moveDirRight = new Vector3(_moveDirForward.z, _moveDirForward.y, -_moveDirForward.x);
-        _horizontalVelocity += force.x * _camForward + force.z * _moveDirRight;
-        _moveVector += Physics.gravity * Time.deltaTime;
-        _characterController.Move(_moveVector * Time.deltaTime);
+        //_moveVector = force;
+        _horizontalVelocity = force.z* _moveDirForward + force.x * _moveDirRight + force.y * _upVector3;
+        ////from world to local space
+        //_horizontalVelocity += force.x * _moveDirForward + force.z * _moveDirRight;
+        //_moveVector += Physics.gravity * Time.deltaTime;
+        //_characterController.Move(_moveVector * Time.deltaTime);
+        //_horizontalVelocity.y += 10.0f;
+        _jumping = true;
     }
 
     public void SetUpVector(Vector3 up)
