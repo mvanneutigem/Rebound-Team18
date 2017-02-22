@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
     public float JumpSpeed = 2.0f;
     private bool _jumping = false;
     private float dragForce;
+    private Vector3 _upVector3;
 
     private Vector3 _camForward;
 
@@ -121,6 +122,11 @@ public class PlayerController : MonoBehaviour
         _horizontalVelocity += force.x * _camForward + force.z * _moveDirRight;
         _moveVector += Physics.gravity * Time.deltaTime;
         _characterController.Move(_moveVector * Time.deltaTime);
+    }
+
+    public void SetUpVector(Vector3 up)
+    {
+        _upVector3 = up;
     }
 }
 
