@@ -50,7 +50,7 @@ public class CameraController : MonoBehaviour
         float moveY = Input.GetAxis("Controller Y") * _controllerSpeedV + Input.GetAxis("Mouse Y") * _mouseSpeedV;
 
         _transSelf.position = _playerTransform.position;
-        Vector3 camAngle = _transSelf.eulerAngles;
+        Vector3 camAngle = _transSelf.localEulerAngles;
 
         if (Mathf.Abs(moveX) > Mathf.Epsilon)
         {
@@ -66,8 +66,8 @@ public class CameraController : MonoBehaviour
         if (camAngle.x > 85 && camAngle.x < 180) camAngle.x = 85;
         //else if (camAngle.x > _verMax) camAngle.x = _verMax;
 
-        _transSelf.eulerAngles = camAngle;
-        _camTransform.forward = _transSelf.position - _camTransform.position;
+        _transSelf.localEulerAngles = camAngle;
+        //_camTransform.forward = _transSelf.position - _camTransform.position;
         _player.SetForwardDir(_camTransform.forward);
     }
 

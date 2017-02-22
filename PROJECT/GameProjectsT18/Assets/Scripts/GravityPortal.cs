@@ -46,6 +46,7 @@ public class GravityPortal : MonoBehaviour {
         if (other.tag == "Player" && !Entered)
         {
             Entered = true;
+            _upVector3 = _playerController.GetUpVector();
         }
     }
 }
