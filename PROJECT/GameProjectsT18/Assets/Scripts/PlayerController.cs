@@ -142,5 +142,10 @@ public class PlayerController : MonoBehaviour
     {
         return _upVector3;
     }
+
+    public Vector3 GetVelocity()
+    {
+        return _horizontalVelocity;
+    }
 }
 
