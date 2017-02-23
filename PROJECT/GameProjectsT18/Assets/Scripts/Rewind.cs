@@ -4,21 +4,25 @@ using UnityEngine;
 
 public class Rewind : MonoBehaviour {
 
+    // Array Lists
     private ArrayList _previousPositions = new ArrayList();
     private ArrayList _previousRotations = new ArrayList();
     private ArrayList _previousVelocities = new ArrayList();
     private ArrayList _previousUpVectors = new ArrayList();
+
     private int _arrayIdx = 0;
+
     private GameObject _playerGameObject;
     private PlayerController _playerController;
+    private Transform _playerTransform;
+
     private bool bRewinding = false;
-    public int RewindDuration; // for later use once a timer is available
-    private Vector3 _velocity;
 
 	void Start ()
     {
         _playerGameObject = GameObject.FindWithTag("Player");
         _playerController = _playerGameObject.GetComponent<PlayerController>();
+        _playerTransform = _playerGameObject.GetComponent<Transform>();
     }
 	
 	void Update ()
@@ -29,15 +33,9 @@ public class Rewind : MonoBehaviour {
         }
 
 		if(!bRewinding)
-        {
-            Transform playerTransform = _playerGameObject.GetComponent<Transform>();
-            Debug.Log("Player Position:" + playerTransform.position
-                + "Player Rotation:" + playerTransform.localRotation
-                + "Position Array:" + _previousPositions.Count 
-                + "Position Idx" + _arrayIdx);
-            // Save Pos and Rot
-            _previousPositions.Add(playerTransform.position);
-            _previousRotations.Add(playerTransform.localRotation);
+        {   
+            _previousPositions.Add(_playerTransform.position);
+            _previousRotations.Add(_playerTransform.localRotation);
             _previousVelocities.Add(_playerController.GetVelocity());
             _previousUpVectors.Add(_playerController.GetUpVector());
             _arrayIdx++;
@@ -62,17 +60,14 @@ public class Rewind : MonoBehaviour {
         _arrayIdx--;
         if(_arrayIdx > 0)
         {
-            Transform playerTransform = _playerGameObject.GetComponent<Transform>();
-            playerTransform.position = (Vector3)_previousPositions[_arrayIdx-1];
-            playerTransform.localRotation = (Quaternion)_previousRotations[_arrayIdx-1];
+            _playerTransform.position = (Vector3)_previousPositions[_arrayIdx-1];
+            _playerTransform.localRotation = (Quaternion)_previousRotations[_arrayIdx-1];
             _playerController.SetUpVector((Vector3)_previousUpVectors[_arrayIdx-1]);
 
             _previousPositions.RemoveAt(_arrayIdx);
             _previousRotations.RemoveAt(_arrayIdx);
             _previousVelocities.RemoveAt(_arrayIdx);
             _previousUpVectors.RemoveAt(_arrayIdx);
-
-            Debug.Log("Player Position:" + playerTransform.position + "Position Array:" + _previousPositions.Count + "Position Idx" + _arrayIdx);
         }
     }
 }
