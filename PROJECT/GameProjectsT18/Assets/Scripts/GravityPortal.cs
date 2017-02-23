@@ -27,7 +27,7 @@ public class GravityPortal : MonoBehaviour {
             _timer += Time.deltaTime;
             //Quaternion targetRotation = Quaternion.AngleAxis(rotation, rotationAxis);
 
-            _upVector3 = Vector3.Lerp(_upVector3, -GravityDirectionVector, _timer /RotateTime);
+            _upVector3 = Vector3.Slerp(_upVector3, -GravityDirectionVector, _timer /RotateTime);
             _upVector3.Normalize();
             _playerController.SetUpVector(_upVector3);
             Debug.Log("upvector : " + _upVector3);
