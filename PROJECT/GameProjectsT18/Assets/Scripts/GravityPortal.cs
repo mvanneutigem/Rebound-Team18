@@ -36,14 +36,16 @@ public class GravityPortal : MonoBehaviour {
             if (_timer >= RotateTime)
             {
                 // disable self
-                this.GetComponent<GravityPortal>().enabled = false;
+                //this.GetComponent<GravityPortal>().enabled = false;
+                Entered = false;
+                _timer = 0;
             }
         }
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player" && !Entered)
+        if (other.tag == "Player" && !Entered && !_playerController.GetLockMovement())
         {
             Entered = true;
             _upVector3 = _playerController.GetUpVector();

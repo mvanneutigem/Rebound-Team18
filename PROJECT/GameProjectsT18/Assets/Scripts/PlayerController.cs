@@ -19,8 +19,7 @@ public class PlayerController : MonoBehaviour
     private float _lateralVelocity = 0.0f;
 
     private Vector3 _moveVector;
-    private Vector3 _gravityVelocity;
-    private Vector3 _horizontalVelocity;
+    private Vector3 _velocity;
     private Vector3 _worldSpaceVector;
     private Vector3 _moveDirForward = new Vector3(0, 0, 1);
     private Vector3 _moveDirRight;
@@ -29,6 +28,7 @@ public class PlayerController : MonoBehaviour
     private bool _jumping = false;
     private float dragForce;
     private Vector3 _upVector3;
+    private bool _movementLock = false;
 
     private Vector3 _camForward;
 
@@ -41,79 +41,82 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // input
-        float hInput = Input.GetAxisRaw("Horizontal");
-        float vInput = Input.GetAxisRaw("Vertical");
-
-        //set the speed
-        //rotate character in the direction it's moving in
-
-        Vector3 acceleration = Vector3.zero;
-        _moveDirRight = Vector3.Cross(_moveDirForward.normalized, _upVector3.normalized);
-
-        if (Mathf.Abs(hInput) + Mathf.Abs(vInput) > float.Epsilon)
+        if (!_movementLock)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(_moveVector.normalized);
-            transform.rotation = targetRotation;
+            // input
+            float hInput = Input.GetAxisRaw("Horizontal");
+            float vInput = Input.GetAxisRaw("Vertical");
 
-            // MOVEMENT
-            acceleration.z += vInput * ForwardAcceleration * Time.deltaTime;
-            acceleration.x += -hInput * LateralAcceleration * Time.deltaTime;
+            //set the speed
+            //rotate character in the direction it's moving in
 
-            _horizontalVelocity += acceleration;
+            Vector3 acceleration = Vector3.zero;
+            _moveDirRight = Vector3.Cross(_moveDirForward.normalized, _upVector3.normalized);
 
-            Vector3 forwardVel = (_horizontalVelocity + _moveDirForward) / 2.0f;
-
-            if (Mathf.Abs(_horizontalVelocity.z) > MaxForwardSpeed)
+            if (Mathf.Abs(hInput) + Mathf.Abs(vInput) > float.Epsilon)
             {
-                _horizontalVelocity.z = (_horizontalVelocity.z > 0 ? MaxForwardSpeed : -MaxForwardSpeed);
-            }
+                Quaternion targetRotation = Quaternion.LookRotation(_moveVector.normalized);
+                transform.rotation = targetRotation;
 
-            if (Mathf.Abs(_horizontalVelocity.x) > MaxLateralSpeed)
-            {
-                _horizontalVelocity.x = (_horizontalVelocity.x > 0 ? MaxLateralSpeed : -MaxLateralSpeed);
-            }
-        }
-        else if (Mathf.Abs(_horizontalVelocity.x) + Mathf.Abs(_horizontalVelocity.z) > 0.1f)
-        {
-            _horizontalVelocity.x += (_horizontalVelocity.x < 0 ? +LateralDeceleration * Time.deltaTime : -LateralDeceleration * Time.deltaTime);
-            _horizontalVelocity.z += (_horizontalVelocity.z > 0 ? -ForwardDeceleration * Time.deltaTime : ForwardDeceleration * Time.deltaTime);
-        }
-        else
-        {
-            //to make it stop sliding randomly after no input for some time
-            _horizontalVelocity.x = 0;
-            _horizontalVelocity.z = 0;
-        }
+                // MOVEMENT
+                acceleration.z += vInput * ForwardAcceleration * Time.deltaTime;
+                acceleration.x += -hInput * LateralAcceleration * Time.deltaTime;
 
+                _velocity += acceleration;
 
-        if (Input.GetAxis("Jump") > 0 && !_jumping)
-        {
-            _horizontalVelocity.y += JumpSpeed;
-            _jumping = true;
-        }
-        else
-        {
-            if (_characterController.isGrounded)
-            {
-                if (!_jumping )
+                Vector3 forwardVel = (_velocity + _moveDirForward) / 2.0f;
+
+                if (Mathf.Abs(_velocity.z) > MaxForwardSpeed)
                 {
-                    _horizontalVelocity.y = 0;
+                    _velocity.z = (_velocity.z > 0 ? MaxForwardSpeed : -MaxForwardSpeed);
                 }
 
-                _jumping = false;
+                if (Mathf.Abs(_velocity.x) > MaxLateralSpeed)
+                {
+                    _velocity.x = (_velocity.x > 0 ? MaxLateralSpeed : -MaxLateralSpeed);
+                }
             }
+            else if (Mathf.Abs(_velocity.x) + Mathf.Abs(_velocity.z) > 0.1f)
+            {
+                _velocity.x += (_velocity.x < 0 ? +LateralDeceleration * Time.deltaTime : -LateralDeceleration * Time.deltaTime);
+                _velocity.z += (_velocity.z > 0 ? -ForwardDeceleration * Time.deltaTime : ForwardDeceleration * Time.deltaTime);
+            }
+            else
+            {
+                //to make it stop sliding randomly after no input for some time
+                _velocity.x = 0;
+                _velocity.z = 0;
+            }
+
+
+            if (Input.GetAxis("Jump") > 0 && !_jumping)
+            {
+                _velocity.y += JumpSpeed;
+                _jumping = true;
+            }
+            else
+            {
+                if (_characterController.isGrounded)
+                {
+                    if (!_jumping)
+                    {
+                        _velocity.y = 0;
+                    }
+
+                    _jumping = false;
+                }
+            }
+
+            //Gravity
+            _velocity += Physics.gravity * Time.deltaTime;
+
+            //from local to worlspace
+            _worldSpaceVector = _velocity.z * _moveDirForward + _velocity.x * _moveDirRight + _velocity.y * _upVector3;
+            _moveVector = _worldSpaceVector;
+
+            //Move
+            _characterController.Move((_moveVector) * Time.deltaTime);
         }
-
-        //Gravity
-        _horizontalVelocity += Physics.gravity * Time.deltaTime;
-
-        //from local to worlspace
-        _worldSpaceVector = _horizontalVelocity.z * _moveDirForward + _horizontalVelocity.x * _moveDirRight + _horizontalVelocity.y * _upVector3;
-        _moveVector = _worldSpaceVector;
-
-        //Move
-        _characterController.Move((_moveVector) * Time.deltaTime);
     }
 
     public void SetForwardDir(Vector3 forward)
@@ -126,9 +129,9 @@ public class PlayerController : MonoBehaviour
     public void ApplyForce(Vector3 force)
     {
         var forceLocal = force.z * _moveDirForward + force.x * _moveDirRight + force.y * _upVector3;
-        _horizontalVelocity.z += forceLocal.z;
-        _horizontalVelocity.x += forceLocal.x;
-        _horizontalVelocity.y = forceLocal.y;
+        _velocity.z += forceLocal.z;
+        _velocity.x += forceLocal.x;
+        _velocity.y = forceLocal.y;
 
         _jumping = true;
     }
@@ -145,7 +148,19 @@ public class PlayerController : MonoBehaviour
 
     public Vector3 GetVelocity()
     {
-        return _horizontalVelocity;
+        return _velocity;
+    }
+    public void SetVelocity(Vector3 velocity)
+    {
+        _velocity = velocity;
+    }
+    public void SetLockMovement(bool locked)
+    {
+        _movementLock = locked;
+    }
+    public bool GetLockMovement()
+    {
+        return _movementLock;
     }
 }
 
