@@ -59,33 +59,41 @@ public class PlayerController : MonoBehaviour
                 transform.rotation = targetRotation;
 
                 // MOVEMENT
-                acceleration.z += vInput * ForwardAcceleration * Time.deltaTime;
-                acceleration.x += -hInput * LateralAcceleration * Time.deltaTime;
 
-                _velocity += acceleration;
 
                 Vector3 forwardVel = (_velocity + _moveDirForward) / 2.0f;
 
-                if (Mathf.Abs(_velocity.z) > MaxForwardSpeed)
+                if (_velocity.z < MaxForwardSpeed && vInput > 0)
                 {
-                    _velocity.z = (_velocity.z > 0 ? MaxForwardSpeed : -MaxForwardSpeed);
+                    acceleration.z += vInput * ForwardAcceleration * Time.deltaTime;
                 }
 
-                if (Mathf.Abs(_velocity.x) > MaxLateralSpeed)
+                //if (_velocity.z > -MaxForwardSpeed && vInput < 0)
+                //{
+                //    acceleration.z += vInput * ForwardAcceleration * Time.deltaTime;
+                //}
+
+                if (_velocity.x < MaxLateralSpeed && hInput < 0)
                 {
-                    _velocity.x = (_velocity.x > 0 ? MaxLateralSpeed : -MaxLateralSpeed);
+                    acceleration.x += -hInput * LateralAcceleration * Time.deltaTime;
                 }
+
+                if (_velocity.x > -MaxLateralSpeed && hInput > 0)
+                {
+                    acceleration.x += -hInput * LateralAcceleration * Time.deltaTime;
+                }
+
+                _velocity += acceleration;
             }
-            else if (Mathf.Abs(_velocity.x) + Mathf.Abs(_velocity.z) > 0.1f)
+
+            if (Mathf.Abs(acceleration.x) < 0.1f)
             {
                 _velocity.x += (_velocity.x < 0 ? +LateralDeceleration * Time.deltaTime : -LateralDeceleration * Time.deltaTime);
-                _velocity.z += (_velocity.z > 0 ? -ForwardDeceleration * Time.deltaTime : ForwardDeceleration * Time.deltaTime);
             }
-            else
+
+            if (Mathf.Abs(acceleration.z) < 0.1f)
             {
-                //to make it stop sliding randomly after no input for some time
-                _velocity.x = 0;
-                _velocity.z = 0;
+                _velocity.z += (_velocity.z > 0 ? -ForwardDeceleration * Time.deltaTime : ForwardDeceleration * Time.deltaTime);
             }
 
 
