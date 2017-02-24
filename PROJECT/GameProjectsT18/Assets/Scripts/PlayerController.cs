@@ -136,10 +136,9 @@ public class PlayerController : MonoBehaviour
 
     public void ApplyForce(Vector3 force)
     {
-        var forceLocal = force.z * _moveDirForward + force.x * _moveDirRight + force.y * _upVector3;
-        _velocity.z += forceLocal.z;
-        _velocity.x += forceLocal.x;
-        _velocity.y = forceLocal.y;
+        _velocity.z += force.z;
+        _velocity.x = force.x;
+        _velocity.y = force.y;
 
         _jumping = true;
     }
