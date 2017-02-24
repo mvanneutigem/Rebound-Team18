@@ -27,7 +27,7 @@ public class GravityPortal : MonoBehaviour {
             _timer += Time.deltaTime;
             //Quaternion targetRotation = Quaternion.AngleAxis(rotation, rotationAxis);
 
-            _upVector3 = Vector3.Lerp(_upVector3, -GravityDirectionVector, _timer /RotateTime);
+            _upVector3 = Vector3.Slerp(_upVector3, -GravityDirectionVector, _timer /RotateTime);
             _upVector3.Normalize();
             _playerController.SetUpVector(_upVector3);
             Debug.Log("upvector : " + _upVector3);
@@ -36,16 +36,19 @@ public class GravityPortal : MonoBehaviour {
             if (_timer >= RotateTime)
             {
                 // disable self
-                this.GetComponent<GravityPortal>().enabled = false;
+                //this.GetComponent<GravityPortal>().enabled = false;
+                Entered = false;
+                _timer = 0;
             }
         }
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player" && !Entered)
+        if (other.tag == "Player" && !Entered && !_playerController.GetLockMovement())
         {
             Entered = true;
+            _upVector3 = _playerController.GetUpVector();
         }
     }
 }
