@@ -169,5 +169,9 @@ public class PlayerController : MonoBehaviour
     {
         return _movementLock;
     }
+    public Vector3 GetRightVector()
+    {
+        return _moveDirRight;
+    }
 }
 

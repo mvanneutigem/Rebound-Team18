@@ -9,6 +9,8 @@ public class GravityPortal : MonoBehaviour {
     private float _timer = 0; 
     private bool Entered = false;
     private Vector3 _upVector3;
+    private Vector3 _rightVector3;
+    private bool _180Turn = false;
 
     void Start()
     {
@@ -26,8 +28,24 @@ public class GravityPortal : MonoBehaviour {
         {
             _timer += Time.deltaTime;
             //Quaternion targetRotation = Quaternion.AngleAxis(rotation, rotationAxis);
+            float angle = Vector3.Angle(_upVector3, -GravityDirectionVector);
+            if (angle >= 180)
+            {
+                _upVector3 = Vector3.RotateTowards(_upVector3, _rightVector3, _timer / 2 / RotateTime, 0.0f);
+                _180Turn = true;
+            }
+            else
+            {
+                if (_180Turn)
+                {
 
-            _upVector3 = Vector3.Slerp(_upVector3, -GravityDirectionVector, _timer /RotateTime);
+                    _upVector3 = Vector3.RotateTowards(_upVector3, -GravityDirectionVector, _timer / 2 / RotateTime, 0.0f);
+                }
+                else
+                {
+                    _upVector3 = Vector3.RotateTowards(_upVector3, -GravityDirectionVector, _timer / RotateTime, 0.0f);
+                }
+            }
             _upVector3.Normalize();
             _playerController.SetUpVector(_upVector3);
             Debug.Log("upvector : " + _upVector3);
@@ -49,6 +67,7 @@ public class GravityPortal : MonoBehaviour {
         {
             Entered = true;
             _upVector3 = _playerController.GetUpVector();
+            _rightVector3 = _playerController.GetRightVector();
         }
     }
 }
