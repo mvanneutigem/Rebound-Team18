@@ -21,6 +21,8 @@ public class CameraController : MonoBehaviour
     private Transform _playerTransform;
     [SerializeField]
     private float _camBoomLength = 10f;
+    [SerializeField]
+    private bool _AllowRotation = false;
 
     private Transform _transSelf;
 
@@ -46,28 +48,31 @@ public class CameraController : MonoBehaviour
 
     void UpdatePosition()
     {
-        float moveX = Input.GetAxis("Controller X") * _controllerSpeedH + Input.GetAxis("Mouse X") * _mouseSpeedH;
-        float moveY = Input.GetAxis("Controller Y") * _controllerSpeedV + Input.GetAxis("Mouse Y") * _mouseSpeedV;
+        if (_AllowRotation)
+        {
+            float moveX = Input.GetAxis("Controller X") * _controllerSpeedH + Input.GetAxis("Mouse X") * _mouseSpeedH;
+            float moveY = Input.GetAxis("Controller Y") * _controllerSpeedV + Input.GetAxis("Mouse Y") * _mouseSpeedV;
 
+            Vector3 camAngle = _transSelf.localEulerAngles;
+
+            if (Mathf.Abs(moveX) > Mathf.Epsilon)
+            {
+                camAngle = new Vector3(camAngle.x, camAngle.y + moveX, camAngle.z);
+            }
+
+            if (Mathf.Abs(moveY) > Mathf.Epsilon)
+            {
+                camAngle = new Vector3(camAngle.x + moveY, camAngle.y, camAngle.z);
+            }
+
+            if (camAngle.x < 275 && camAngle.x > 180) camAngle.x = 275;
+            if (camAngle.x > 85 && camAngle.x < 180) camAngle.x = 85;
+            //else if (camAngle.x > _verMax) camAngle.x = _verMax;
+
+            _transSelf.localEulerAngles = camAngle;
+            //_camTransform.forward = _transSelf.position - _camTransform.position;
+        }
         _transSelf.position = _playerTransform.position;
-        Vector3 camAngle = _transSelf.eulerAngles;
-
-        if (Mathf.Abs(moveX) > Mathf.Epsilon)
-        {
-            camAngle = new Vector3(camAngle.x, camAngle.y + moveX, camAngle.z);
-        }
-
-        if (Mathf.Abs(moveY) > Mathf.Epsilon)
-        {
-            camAngle = new Vector3(camAngle.x + moveY, camAngle.y, camAngle.z);
-        }
-
-        if (camAngle.x < 275 && camAngle.x > 180) camAngle.x = 275;
-        if (camAngle.x > 85 && camAngle.x < 180) camAngle.x = 85;
-        //else if (camAngle.x > _verMax) camAngle.x = _verMax;
-
-        _transSelf.eulerAngles = camAngle;
-        _camTransform.forward = _transSelf.position - _camTransform.position;
         _player.SetForwardDir(_camTransform.forward);
     }
 
