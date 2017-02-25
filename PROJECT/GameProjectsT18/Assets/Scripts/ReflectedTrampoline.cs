@@ -13,7 +13,7 @@ public class ReflectedTrampoline : MonoBehaviour
         {
 
             var normal = this.transform.up;
-            var inVelocity = other.GetComponent<PlayerController>().GetVelocity();
+            var inVelocity = other.GetComponent<PlayerController>().GetWorldSpaceVelocity();
             var reflectedVector = Vector3.Reflect(inVelocity, normal);
             if (reflectedVector.y < 10.0f)
             {

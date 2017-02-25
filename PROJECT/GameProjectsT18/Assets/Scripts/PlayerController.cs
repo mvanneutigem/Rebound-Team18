@@ -136,7 +136,8 @@ public class PlayerController : MonoBehaviour
 
     public void ApplyForce(Vector3 force)
     {
-        _velocity.z += force.z;
+        force = ToWorlSpace(force);
+        _velocity.z = force.z;
         _velocity.x = force.x;
         _velocity.y = force.y;
 
@@ -168,6 +169,15 @@ public class PlayerController : MonoBehaviour
     public bool GetLockMovement()
     {
         return _movementLock;
+    }
+
+    private Vector3 ToWorlSpace(Vector3 v)
+    {
+        return v.z * _moveDirForward + v.x * _moveDirRight + v.y * _upVector3;
+    }
+    public Vector3 GetWorldSpaceVelocity()
+    {
+        return ToWorlSpace(_velocity);
     }
     public Vector3 GetRightVector()
     {
