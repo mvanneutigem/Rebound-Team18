@@ -6,6 +6,8 @@ public class ReflectedTrampoline : MonoBehaviour
 {
     private float TrampolinePower = 1f;
     private float UpPower = 10;
+    private float threshold = 10;
+    private float SlowDownRate = 0.8f;
     //pass up direction of trampoline as jumpvector
     void OnTriggerEnter(Collider other)
     {
@@ -13,15 +15,21 @@ public class ReflectedTrampoline : MonoBehaviour
         {
 
             var normal = this.transform.up;
-            var inVelocity = other.GetComponent<PlayerController>().GetWorldSpaceVelocity();
+            var inVelocity = other.GetComponent<PlayerController>().GetVelocity();
             var reflectedVector = Vector3.Reflect(inVelocity, normal);
-            if (reflectedVector.y < 10.0f)
+            reflectedVector.x = inVelocity.x;
+            reflectedVector.z = inVelocity.z;
+            //only reflect y part of velocity over set threshold
+            if (reflectedVector.y < threshold)
             {
                 reflectedVector.y = UpPower;
             }
             else
             {
-                reflectedVector.y *= 0.8f;
+                //rate of slowdown
+                reflectedVector.y *= SlowDownRate;
+                if (reflectedVector.y < threshold)
+                    reflectedVector.y = threshold;
             }
             Debug.Log("add Up, " + reflectedVector);
             Debug.Log("in, " + inVelocity);
