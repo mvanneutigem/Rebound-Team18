@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 _moveDirRight;
     private CharacterController _characterController;
     public float JumpSpeed = 2.0f;
+    public float SlamSpeed = -50.0f;
     private bool _jumping = false;
     private float dragForce;
     private Vector3 _upVector3;
@@ -96,7 +97,7 @@ public class PlayerController : MonoBehaviour
                 _velocity.z += (_velocity.z > 0 ? -ForwardDeceleration * Time.deltaTime : ForwardDeceleration * Time.deltaTime);
             }
 
-
+            //jump
             if (Input.GetAxis("Jump") > 0 && !_jumping)
             {
                 _velocity.y += JumpSpeed;
@@ -113,6 +114,12 @@ public class PlayerController : MonoBehaviour
 
                     _jumping = false;
                 }
+            }
+            
+            //slam
+            if (Input.GetButtonDown("Slam") && !_characterController.isGrounded)
+            {
+                _velocity.y += SlamSpeed;
             }
 
             //Gravity
@@ -136,7 +143,6 @@ public class PlayerController : MonoBehaviour
 
     public void ApplyForce(Vector3 force)
     {
-        //force = ToWorlSpace(force);
         _velocity.z = force.z;
         _velocity.x = force.x;
         _velocity.y = force.y;
