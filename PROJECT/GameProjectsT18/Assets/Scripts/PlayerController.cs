@@ -136,7 +136,7 @@ public class PlayerController : MonoBehaviour
 
     public void ApplyForce(Vector3 force)
     {
-        force = ToWorlSpace(force);
+        //force = ToWorlSpace(force);
         _velocity.z = force.z;
         _velocity.x = force.x;
         _velocity.y = force.y;
