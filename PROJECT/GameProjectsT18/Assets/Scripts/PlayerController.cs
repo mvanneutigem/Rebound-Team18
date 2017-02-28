@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 _moveDirRight;
     private CharacterController _characterController;
     public float JumpSpeed = 2.0f;
-    public float SlamSpeed = -50.0f;
+    public float SlamSpeed = -10.0f;
     private bool _jumping = false;
     private float dragForce;
     private Vector3 _upVector3;
@@ -117,7 +117,7 @@ public class PlayerController : MonoBehaviour
             }
             
             //slam
-            if (Input.GetButtonDown("Slam") && !_characterController.isGrounded)
+            if (Input.GetButton("Slam") && !_characterController.isGrounded)
             {
                 _velocity.y += SlamSpeed;
             }

@@ -7,13 +7,11 @@ public class Core : MonoBehaviour
     private float _rotSpeed = 15.0f;
     private bool _isTriggerEntered = false;
     private float _coreSpeed = 100.0f;
-    private float _coreTime = 1.0f;
     private float _distance = 2.0f;
-    private float _timer = 0f;
     private GameObject _player;
     private bool _setNewPos = true;
 
-    public Transform transformPosition;
+    private Transform transformPosition;
 
     void Start()
     {
@@ -36,16 +34,18 @@ public class Core : MonoBehaviour
                 transformPosition.position = newPos;
                 _setNewPos = false;
             }
-
+            var temp = transformPosition.position;
+            temp.y = _player.transform.position.y;
+            transformPosition.position = temp;
             var curDistance = _player.transform.position - transformPosition.position;
+            transformPosition.RotateAround(_player.transform.position, _player.GetComponent<PlayerController>().GetUpVector(), _coreSpeed * Time.deltaTime);
+
             if (curDistance.magnitude > _distance)
             {
                 curDistance.Normalize();
                 curDistance *= _distance;
                 transformPosition.position = Vector3.Lerp(transformPosition.position, _player.transform.position - curDistance, 0.5f);
             }
-
-            transformPosition.RotateAround(_player.transform.position, _player.GetComponent<PlayerController>().GetUpVector(), _coreSpeed * Time.deltaTime);
 
             transform.position = transformPosition.position;
 
