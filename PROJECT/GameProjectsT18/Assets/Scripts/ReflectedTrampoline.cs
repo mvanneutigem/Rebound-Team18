@@ -20,21 +20,22 @@ public class ReflectedTrampoline : MonoBehaviour
             reflectedVector.x = inVelocity.x;
             reflectedVector.z = inVelocity.z;
             //only reflect y part of velocity over set threshold
-            if (reflectedVector.y < threshold)
-            {
-                reflectedVector.y = UpPower;
-            }
-            else
-            {
-                //rate of slowdown
-                reflectedVector.y *= SlowDownRate;
-                if (reflectedVector.y < threshold)
-                    reflectedVector.y = threshold;
-            }
-            Debug.Log("add Up, " + reflectedVector);
-            Debug.Log("in, " + inVelocity);
+
+            reflectedVector.y = UpPower;
+
+            //if (reflectedVector.y < threshold)
+            //{
+            //    reflectedVector.y = UpPower;
+            //}
+            //else
+            //{
+            //    //rate of slowdown
+            //    reflectedVector.y *= SlowDownRate;
+            //    if (reflectedVector.y < threshold)
+            //        reflectedVector.y = threshold;
+            //}
+
             other.GetComponent<PlayerController>().ApplyForce(reflectedVector * TrampolinePower);
-            Debug.Log("ontrampoline");
         }
     }
 }
