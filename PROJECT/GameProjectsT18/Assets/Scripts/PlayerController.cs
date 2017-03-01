@@ -45,8 +45,8 @@ public class PlayerController : MonoBehaviour
         if (!_movementLock)
         {
             // input
-            float hInput = Input.GetAxisRaw("Horizontal");
-            float vInput = Input.GetAxisRaw("Vertical");
+            float hInput = Input.GetAxisRaw("Horizontal") + Input.GetAxisRaw("Controller X");
+            float vInput = Input.GetAxisRaw("Vertical") + Input.GetAxisRaw("Controller Y");
 
             //set the speed
             //rotate character in the direction it's moving in
@@ -117,7 +117,7 @@ public class PlayerController : MonoBehaviour
             }
             
             //slam
-            if (Input.GetButton("Slam") && !_characterController.isGrounded)
+            if (Input.GetButtonDown("Slam") && !_characterController.isGrounded)
             {
                 _velocity.y += SlamSpeed;
             }

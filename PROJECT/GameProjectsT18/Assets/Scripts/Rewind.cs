@@ -43,12 +43,12 @@ public class Rewind : MonoBehaviour {
         else { RewindTime(); }
 
 
-        if(Input.GetKeyDown("r"))
+        if(Input.GetAxisRaw("Rewind") > 0)
         {
             bRewinding = true;
             _playerController.SetLockMovement(true);
         } 
-        if(Input.GetKeyUp("r"))
+        if(Input.GetAxisRaw("Rewind") == 0 && bRewinding)
         {
             bRewinding = false;
             _playerController.SetLockMovement(false);
