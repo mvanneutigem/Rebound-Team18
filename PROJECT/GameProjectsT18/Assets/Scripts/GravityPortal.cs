@@ -6,15 +6,15 @@ public class GravityPortal : MonoBehaviour {
     public Vector3 GravityDirectionVector = new Vector3(-1, 0, 0);
     private PlayerController _playerController;
     public float RotateTime = 0.5f;
-    private float _timer = 0; 
-    private bool Entered = false;
+    private bool _entered = false;
+    private bool _rewinding = false;
     private Vector3 _upVector3;
     private Vector3 _rightVector3;
-    private bool _180Turn = false;
-
+    private float _step = 0;
+    private float _timer = 0;
+    private float _angle = 0;
     void Start()
     {
-        //LevelGameObject = GameObject.FindWithTag("level");
         var playerGameObject = GameObject.FindWithTag("Player");
         if (playerGameObject != null)
         {
@@ -24,50 +24,45 @@ public class GravityPortal : MonoBehaviour {
     }
     void Update()
     {
-        if (Entered)
+        if (_entered)
         {
-            _timer += Time.deltaTime;
-            //Quaternion targetRotation = Quaternion.AngleAxis(rotation, rotationAxis);
-            float angle = Vector3.Angle(_upVector3, -GravityDirectionVector);
-            if (angle >= 180)
+            _rewinding = GameObject.FindWithTag("Player").GetComponent<Rewind>().getRewinding();
+            if (!_rewinding)
             {
-                _upVector3 = Vector3.RotateTowards(_upVector3, _rightVector3, _timer / 2 / RotateTime, 0.0f);
-                _180Turn = true;
-            }
-            else
-            {
-                if (_180Turn)
-                {
+                _timer += Time.deltaTime;
+                float fps = 1.0f / Time.deltaTime;
+                _angle = Vector3.Angle(_upVector3, -GravityDirectionVector);
 
-                    _upVector3 = Vector3.RotateTowards(_upVector3, -GravityDirectionVector, _timer / 2 / RotateTime, 0.0f);
-                }
-                else
+                if (_angle == 180)
                 {
-                    _upVector3 = Vector3.RotateTowards(_upVector3, -GravityDirectionVector, _timer / RotateTime, 0.0f);
+                    _upVector3 = Vector3.RotateTowards(_upVector3, _rightVector3, _step / fps, 0.0f);
                 }
-            }
-            _upVector3.Normalize();
-            _playerController.SetUpVector(_upVector3);
-            Debug.Log("upvector : " + _upVector3);
-            //LevelGameObject.transform.rotation = Quaternion.Lerp(_startRotation, targetRotation, _timer / RotateTime);
+                else if (_angle > 0)
+                {
+                    _upVector3 = Vector3.RotateTowards(_upVector3, -GravityDirectionVector, _step / fps, 0.0f);
+                }
 
-            if (_timer >= RotateTime)
-            {
-                // disable self
-                //this.GetComponent<GravityPortal>().enabled = false;
-                Entered = false;
-                _timer = 0;
+                _upVector3.Normalize();
+                _playerController.SetUpVector(_upVector3);
+                Debug.Log("upvector : " + _upVector3);
+
+                if (_upVector3 == -GravityDirectionVector)
+                {
+                    _entered = false;
+                }
             }
         }
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player" && !Entered && !_playerController.GetLockMovement())
+        if (other.tag == "Player" && !_entered && !_playerController.GetLockMovement())
         {
-            Entered = true;
             _upVector3 = _playerController.GetUpVector();
+            _angle = Vector3.Angle(_upVector3, -GravityDirectionVector);
+            _step = (Mathf.Deg2Rad * _angle) / RotateTime;
             _rightVector3 = _playerController.GetRightVector();
+            _entered = true;
         }
     }
 }
