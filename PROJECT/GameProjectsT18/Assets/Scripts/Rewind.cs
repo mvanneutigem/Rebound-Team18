@@ -16,7 +16,7 @@ public class Rewind : MonoBehaviour {
     private PlayerController _playerController;
     private Transform _playerTransform;
 
-    private bool bRewinding = false;
+    private bool _rewinding = false;
 
 	void Start ()
     {
@@ -32,7 +32,7 @@ public class Rewind : MonoBehaviour {
             _arrayIdx = _previousPositions.Count;
         }
 
-		if(!bRewinding)
+		if(!_rewinding)
         {   
             _previousPositions.Add(_playerTransform.position);
             _previousRotations.Add(_playerTransform.localRotation);
@@ -45,12 +45,12 @@ public class Rewind : MonoBehaviour {
 
         if(Input.GetAxisRaw("Rewind") > 0)
         {
-            bRewinding = true;
+            _rewinding = true;
             _playerController.SetLockMovement(true);
         } 
-        if(Input.GetAxisRaw("Rewind") == 0 && bRewinding)
+        if(Input.GetAxisRaw("Rewind") == 0 && _rewinding)
         {
-            bRewinding = false;
+            _rewinding = false;
             _playerController.SetLockMovement(false);
             _playerController.SetVelocity((Vector3)_previousVelocities[_arrayIdx-1]);
         }
@@ -69,5 +69,9 @@ public class Rewind : MonoBehaviour {
             _previousVelocities.RemoveAt(_arrayIdx);
             _previousUpVectors.RemoveAt(_arrayIdx);
         }
+    }
+    public bool getRewinding()
+    {
+        return _rewinding;
     }
 }
