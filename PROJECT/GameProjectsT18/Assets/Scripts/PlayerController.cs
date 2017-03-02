@@ -56,8 +56,8 @@ public class PlayerController : MonoBehaviour
 
             if (Mathf.Abs(hInput) + Mathf.Abs(vInput) > float.Epsilon)
             {
-                Quaternion targetRotation = Quaternion.LookRotation(_moveVector.normalized);
-                transform.rotation = targetRotation;
+                //Quaternion targetRotation = Quaternion.LookRotation(_moveVector.normalized);
+                //transform.rotation = targetRotation;
 
                 // MOVEMENT
 
@@ -120,8 +120,13 @@ public class PlayerController : MonoBehaviour
                 var temp = transform.up;
                 temp = Vector3.RotateTowards(temp, _upVector3, Mathf.PI, Mathf.PI);
                 transform.up = temp;
+
+                if (Vector3.Dot(transform.forward, _moveDirForward) < 0)
+                {
+                    transform.forward = _moveDirForward;
+                }
             }
-            
+
             //slam
             if (Input.GetButtonDown("Slam") && !_characterController.isGrounded)
             {
