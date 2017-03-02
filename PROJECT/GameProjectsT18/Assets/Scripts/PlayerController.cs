@@ -61,7 +61,6 @@ public class PlayerController : MonoBehaviour
 
                 // MOVEMENT
 
-
                 Vector3 forwardVel = (_velocity + _moveDirForward) / 2.0f;
 
                 if (_velocity.z < MaxForwardSpeed && vInput > 0)
@@ -114,6 +113,13 @@ public class PlayerController : MonoBehaviour
 
                     _jumping = false;
                 }
+            }
+
+            if (transform.up != _upVector3)
+            {
+                var temp = transform.up;
+                temp = Vector3.RotateTowards(temp, _upVector3, Mathf.PI, Mathf.PI);
+                transform.up = temp;
             }
             
             //slam
