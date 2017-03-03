@@ -10,6 +10,8 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: NGon001
+    4300002: NGon003
+    4300004: Gravity Portal
   materials:
     importMaterials: 1
     materialName: 0
