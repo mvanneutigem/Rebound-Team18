@@ -120,6 +120,7 @@
   <ItemGroup>
     <None Include="Assets\Materials\PBR_Silhouette.shader" />
     <None Include="Assets\Materials\ToonShading.shader" />
+    <None Include="Assets\Materials\ToonShadingFlatColor.shader" />
     <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\BlendModesOverlay.shader" />
     <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\BlurEffectConeTaps.shader" />
     <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\CameraMotionBlur.shader" />
