@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(CharacterController))]
 
@@ -42,8 +43,15 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (_velocity.y < -50.0f)
+        {
+            int currentScene = SceneManager.GetActiveScene().buildIndex;
+            SceneManager.LoadScene(currentScene);
+        }
+
         if (!_movementLock)
         {
+
             // input
             float hInput = Input.GetAxisRaw("Horizontal") + Input.GetAxisRaw("Controller X");
             float vInput = Input.GetAxisRaw("Vertical") + Input.GetAxisRaw("Controller Y");
