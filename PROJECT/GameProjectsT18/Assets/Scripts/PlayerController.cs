@@ -38,6 +38,7 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         _upVector3 = new Vector3(0, 1, 0);
+        _velocity = Vector3.zero;
         _characterController = this.GetComponent<CharacterController>();
     }
 
@@ -64,8 +65,8 @@ public class PlayerController : MonoBehaviour
 
             if (Mathf.Abs(hInput) + Mathf.Abs(vInput) > float.Epsilon)
             {
-                //Quaternion targetRotation = Quaternion.LookRotation(_moveVector.normalized);
-                //transform.rotation = targetRotation;
+                Quaternion targetRotation = Quaternion.LookRotation(_moveVector.normalized);
+                transform.rotation = targetRotation;
 
                 // MOVEMENT
 
@@ -93,15 +94,23 @@ public class PlayerController : MonoBehaviour
 
                 _velocity += acceleration;
             }
-
-            if (Mathf.Abs(acceleration.x) < 0.1f)
+            else if (Mathf.Abs(_velocity.x) + Mathf.Abs(_velocity.z) > 0.1f)
             {
-                _velocity.x += (_velocity.x < 0 ? +LateralDeceleration * Time.deltaTime : -LateralDeceleration * Time.deltaTime);
+                if (Mathf.Abs(acceleration.x) < 0.1f)
+                {
+                    _velocity.x += (_velocity.x < 0 ? +LateralDeceleration * Time.deltaTime : -LateralDeceleration * Time.deltaTime);
+                }
+
+                if (Mathf.Abs(acceleration.z) < 0.1f)
+                {
+                    _velocity.z += (_velocity.z > 0 ? -ForwardDeceleration * Time.deltaTime : ForwardDeceleration * Time.deltaTime);
+                }
             }
-
-            if (Mathf.Abs(acceleration.z) < 0.1f)
+            else
             {
-                _velocity.z += (_velocity.z > 0 ? -ForwardDeceleration * Time.deltaTime : ForwardDeceleration * Time.deltaTime);
+                //to make it stop sliding randomly after no input for some time
+                _velocity.x = 0;
+                _velocity.z = 0;
             }
 
             //jump
