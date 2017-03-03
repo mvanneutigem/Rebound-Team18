@@ -3,6 +3,7 @@
 
 Shader "Cg shader for toon shading" {
 	Properties{
+		_DiffuseColor("Diffuse Color", Color) = (0.5, 0.5, 0.5, 1)
 		_Color("Light Color", Color) = (1,1,1,1)
 		_DiffuseThreshold("Threshold for Diffuse Colors", Range(0,1))
 		= 0.1
@@ -12,8 +13,6 @@ Shader "Cg shader for toon shading" {
 		= 0.4*/
 		_SpecColor("Specular Color", Color) = (1,1,1,1)
 		_Shininess("Shininess", Float) = 10
-		_MainTex("Base (RGB)", 2D) = "white" { }
-		_EmissiveTex("Emissive mask", 2D) = "black" { }
 	}
 		SubShader{
 		Pass{
@@ -31,6 +30,7 @@ Shader "Cg shader for toon shading" {
 
 	// User-specified properties
 	uniform float4 _Color;
+	uniform float4 _DiffuseColor;
 	uniform float _DiffuseThreshold;
 	uniform float4 _OutlineColor;
 	uniform float _LitOutlineThickness;
@@ -38,19 +38,14 @@ Shader "Cg shader for toon shading" {
 	uniform float4 _SpecColor;
 	uniform float _Shininess;
 
-	sampler2D _MainTex;
-	sampler2D _EmissiveTex;
-
 	struct vertexInput {
 		float4 vertex : POSITION;
 		float3 normal : NORMAL;
-		float2 texCoord : TEXCOORD;
 	};
 	struct vertexOutput {
 		float4 pos : SV_POSITION;
 		float4 posWorld : TEXCOORD0;
 		float3 normalDir : TEXCOORD1;
-		float2 texCoord : TEXCOORD2;
 	};
 
 	vertexOutput vert(vertexInput input)
@@ -64,12 +59,12 @@ Shader "Cg shader for toon shading" {
 		output.normalDir = normalize(
 			mul(float4(input.normal, 0.0), modelMatrixInverse).xyz);
 		output.pos = mul(UNITY_MATRIX_MVP, input.vertex);
-		output.texCoord = input.texCoord;
 		return output;
 	}
 
 	float4 frag(vertexOutput input) : COLOR
 	{
+		
 		float3 normalDirection = normalize(input.normalDir);
 
 		float3 viewDirection = normalize(
@@ -92,8 +87,7 @@ Shader "Cg shader for toon shading" {
 		}
 
 		// default: unlit 
-		float4 diffuse = tex2D(_MainTex, input.texCoord);
-		float3 fragmentColor = diffuse.rgb;
+		float3 fragmentColor = _DiffuseColor.rgb;
 		// low priority: diffuse illumination
 		if (attenuation
 			* max(0.0, dot(normalDirection, lightDirection))

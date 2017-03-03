@@ -46,8 +46,9 @@ public class GravityPortal : MonoBehaviour {
                 _playerController.SetUpVector(_upVector3);
                 Debug.Log("upvector : " + _upVector3);
 
-                if (_upVector3 == -GravityDirectionVector)
+                if (_timer >= RotateTime)
                 {
+                    _timer = 0;
                     _entered = false;
                 }
             }
