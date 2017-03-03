@@ -27,33 +27,37 @@ public class Rewind : MonoBehaviour {
 	
 	void Update ()
     {
-        if(_arrayIdx > _previousPositions.Count - 1 | _arrayIdx < 0)
+        if (Time.timeScale > float.Epsilon)
         {
-            _arrayIdx = _previousPositions.Count;
-        }
+            if (_arrayIdx > _previousPositions.Count - 1 | _arrayIdx < 0)
+            {
+                _arrayIdx = _previousPositions.Count;
+            }
 
-		if(!_rewinding)
-        {   
-            _previousPositions.Add(_playerTransform.position);
-            _previousRotations.Add(_playerTransform.localRotation);
-            _previousVelocities.Add(_playerController.GetVelocity());
-            _previousUpVectors.Add(_playerController.GetUpVector());
-            _arrayIdx++;
-        }
-        else { RewindTime(); }
+            if (!_rewinding)
+            {
+                _previousPositions.Add(_playerTransform.position);
+                _previousRotations.Add(_playerTransform.localRotation);
+                _previousVelocities.Add(_playerController.GetVelocity());
+                _previousUpVectors.Add(_playerController.GetUpVector());
+                _arrayIdx++;
+            }
+            else { RewindTime(); }
 
 
-        if(Input.GetAxisRaw("Rewind") > 0)
-        {
-            _rewinding = true;
-            _playerController.SetLockMovement(true);
-        } 
-        if(Input.GetAxisRaw("Rewind") == 0 && _rewinding)
-        {
-            _rewinding = false;
-            _playerController.SetLockMovement(false);
-            _playerController.SetVelocity((Vector3)_previousVelocities[_arrayIdx-1]);
+            if (Input.GetAxisRaw("Rewind") > 0)
+            {
+                _rewinding = true;
+                _playerController.SetLockMovement(true);
+            }
+            if (Input.GetAxisRaw("Rewind") == 0 && _rewinding)
+            {
+                _rewinding = false;
+                _playerController.SetLockMovement(false);
+                _playerController.SetVelocity((Vector3)_previousVelocities[_arrayIdx - 1]);
+            }
         }
+        
     }
     void RewindTime()
     {
