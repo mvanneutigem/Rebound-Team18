@@ -8,7 +8,6 @@ public class Rewind : MonoBehaviour {
     private ArrayList _previousPositions = new ArrayList();
     private ArrayList _previousRotations = new ArrayList();
     private ArrayList _previousVelocities = new ArrayList();
-    private ArrayList _previousUpVectors = new ArrayList();
 
     private int _arrayIdx = 0;
 
@@ -39,7 +38,6 @@ public class Rewind : MonoBehaviour {
                 _previousPositions.Add(_playerTransform.position);
                 _previousRotations.Add(_playerTransform.localRotation);
                 _previousVelocities.Add(_playerController.GetVelocity());
-                _previousUpVectors.Add(_playerController.GetUpVector());
                 _arrayIdx++;
             }
             else { RewindTime(); }
@@ -66,12 +64,10 @@ public class Rewind : MonoBehaviour {
         {
             _playerTransform.position = (Vector3)_previousPositions[_arrayIdx-1];
             _playerTransform.localRotation = (Quaternion)_previousRotations[_arrayIdx-1];
-            _playerController.SetUpVector((Vector3)_previousUpVectors[_arrayIdx-1]);
 
             _previousPositions.RemoveAt(_arrayIdx);
             _previousRotations.RemoveAt(_arrayIdx);
             _previousVelocities.RemoveAt(_arrayIdx);
-            _previousUpVectors.RemoveAt(_arrayIdx);
         }
     }
     public bool getRewinding()
