@@ -15,6 +15,8 @@ public class PickUp : MonoBehaviour {
     private Vector3 _originalPos;
     private Transform _transSelf;
 
+    private GameController _gameController;
+
     //METHODs
 	
     void Start()
@@ -26,6 +28,12 @@ public class PickUp : MonoBehaviour {
         {
             _playerController = gameControllerObj.GetComponent<PlayerController>();
             _playerTransform = gameControllerObj.transform;
+        }
+
+        gameControllerObj = GameObject.FindWithTag("GameController");
+        if (gameControllerObj != null)
+        {
+            _gameController = gameControllerObj.GetComponent<GameController>();
         }
     }
 
@@ -55,6 +63,7 @@ public class PickUp : MonoBehaviour {
     {
         if (other.tag == "Player")
         {
+            _gameController.AddScore(100);
             Destroy(gameObject);  
         }
     }
