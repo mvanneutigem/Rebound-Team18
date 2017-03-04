@@ -2,23 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GravityPortal : MonoBehaviour {
+public class GravityPortal : MonoBehaviour
+{
     public Vector3 GravityDirectionVector = new Vector3(-1, 0, 0);
     private PlayerController _playerController;
-    public float RotateTime = 0.5f;
+    private Transform _playerTransform;
+    private Transform _transSelf;
+    public float RotateDistance = 20.0f;
     private bool _entered = false;
-    private bool _rewinding = false;
-    private Vector3 _upVector3;
+    private Vector3 _playerStartUpVector;
     private Vector3 _rightVector3;
     private float _step = 0;
     private float _timer = 0;
     private float _angle = 0;
+    private float _switchAngle = 0;
     void Start()
     {
+        _transSelf = this.transform;
         var playerGameObject = GameObject.FindWithTag("Player");
         if (playerGameObject != null)
         {
-            _upVector3 = playerGameObject.transform.up;
+            _playerTransform = playerGameObject.transform;
+            _playerStartUpVector = _playerTransform.up;
             _playerController = playerGameObject.GetComponent<PlayerController>();
         }
     }
@@ -26,44 +31,65 @@ public class GravityPortal : MonoBehaviour {
     {
         if (_entered)
         {
-            _rewinding = GameObject.FindWithTag("Player").GetComponent<Rewind>().getRewinding();
-            if (!_rewinding)
+            Vector3 direction = _playerTransform.position - _transSelf.position;
+            float distance = Vector3.Dot(direction, _transSelf.forward);
+            float dot = Vector3.Dot(direction.normalized, _transSelf.forward);
+
+            float range = (distance / RotateDistance);
+            if (range < 1.05f && range > -0.05f)
             {
-                _timer += Time.deltaTime;
-                float fps = 1.0f / Time.deltaTime;
-                _angle = Vector3.Angle(_upVector3, -GravityDirectionVector);
+                Vector3 up = Vector3.zero;
+                _angle = Vector3.Angle(_playerTransform.up, -GravityDirectionVector);
+                Debug.Log("Angle between " + -GravityDirectionVector + " and " +_playerTransform.up + " = " + _angle);
 
-                if (_angle == 180)
+                if (range > 0)
                 {
-                    _upVector3 = Vector3.RotateTowards(_upVector3, _rightVector3, _step / fps, 0.0f);
+                    if (range < 0.5f)
+                    {
+                        up = Vector3.Lerp(_playerStartUpVector, _rightVector3, range * 2.0f);
+                    }
+                    else if (_angle > 0)
+                    {
+                        up = Vector3.Lerp(_rightVector3, -GravityDirectionVector, (range - 0.5f) * 2.0f);
+                    }
+                    else
+                    {
+                        return;
+                    }
                 }
-                else if (_angle > 0)
+                else
                 {
-                    _upVector3 = Vector3.RotateTowards(_upVector3, -GravityDirectionVector, _step / fps, 0.0f);
+                    up = _playerStartUpVector;
                 }
 
-                _upVector3.Normalize();
-                _playerController.SetUpVector(_upVector3);
-                Debug.Log("upvector : " + _upVector3);
-
-                if (_timer >= RotateTime)
-                {
-                    _timer = 0;
-                    _entered = false;
-                }
+                up.Normalize();
+                _playerController.SetUpVector(up);
             }
         }
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player" && !_entered && !_playerController.GetLockMovement())
+        if (other.tag == "Player")
         {
-            _upVector3 = _playerController.GetUpVector();
-            _angle = Vector3.Angle(_upVector3, -GravityDirectionVector);
-            _step = (Mathf.Deg2Rad * _angle) / RotateTime;
-            _rightVector3 = _playerController.GetRightVector();
-            _entered = true;
+            if (!_entered && !_playerController.GetLockMovement())
+            {
+                _playerStartUpVector = _playerController.GetUpVector();
+                _angle = Vector3.Angle(_playerStartUpVector, -GravityDirectionVector);
+                if (_angle > 178)
+                {
+                    _rightVector3 = _playerController.GetRightVector();
+                }
+                else
+                {
+                    _rightVector3 = _playerStartUpVector - GravityDirectionVector;
+                    _rightVector3.Normalize();
+                }
+
+                _switchAngle = _angle / 2.0f;
+
+                _entered = true;
+            }
         }
     }
 }
