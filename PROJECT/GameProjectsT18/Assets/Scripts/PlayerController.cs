@@ -63,25 +63,11 @@ public class PlayerController : MonoBehaviour
             Vector3 acceleration = Vector3.zero;
             _moveDirRight = Vector3.Cross(_moveDirForward.normalized, _upVector3.normalized);
 
-            if (Mathf.Abs(hInput) + Mathf.Abs(vInput) > float.Epsilon)
+            Quaternion targetRotation = Quaternion.LookRotation(_moveVector.normalized);
+            transform.rotation = targetRotation;
+
+            if (Mathf.Abs(hInput) > float.Epsilon)
             {
-                Quaternion targetRotation = Quaternion.LookRotation(_moveVector.normalized);
-                transform.rotation = targetRotation;
-
-                // MOVEMENT
-
-                Vector3 forwardVel = (_velocity + _moveDirForward) / 2.0f;
-
-                if (_velocity.z < MaxForwardSpeed && vInput > 0)
-                {
-                    acceleration.z += vInput * ForwardAcceleration * Time.deltaTime;
-                }
-
-                //if (_velocity.z > -MaxForwardSpeed && vInput < 0)
-                //{
-                //    acceleration.z += vInput * ForwardAcceleration * Time.deltaTime;
-                //}
-
                 if (_velocity.x < MaxLateralSpeed && hInput < 0)
                 {
                     acceleration.x += -hInput * LateralAcceleration * Time.deltaTime;
@@ -91,27 +77,25 @@ public class PlayerController : MonoBehaviour
                 {
                     acceleration.x += -hInput * LateralAcceleration * Time.deltaTime;
                 }
-
-                _velocity += acceleration;
             }
-            else if (Mathf.Abs(_velocity.x) + Mathf.Abs(_velocity.z) > 0.1f)
+            else if (Mathf.Abs(_velocity.x) > 0.1f)
             {
-                if (Mathf.Abs(acceleration.x) < 0.1f)
-                {
-                    _velocity.x += (_velocity.x < 0 ? +LateralDeceleration * Time.deltaTime : -LateralDeceleration * Time.deltaTime);
-                }
+                _velocity.x += (_velocity.x < 0 ? +LateralDeceleration * Time.deltaTime : -LateralDeceleration * Time.deltaTime);
+            }
 
-                if (Mathf.Abs(acceleration.z) < 0.1f)
+            if (Mathf.Abs(vInput) > float.Epsilon)
+            {
+                if (_velocity.z < MaxForwardSpeed && vInput > 0)
                 {
-                    _velocity.z += (_velocity.z > 0 ? -ForwardDeceleration * Time.deltaTime : ForwardDeceleration * Time.deltaTime);
+                    acceleration.z += vInput * ForwardAcceleration * Time.deltaTime;
                 }
             }
-            else
+            else if (Mathf.Abs(_velocity.z) > 0.1f)
             {
-                //to make it stop sliding randomly after no input for some time
-                _velocity.x = 0;
-                _velocity.z = 0;
+                _velocity.z += (_velocity.z > 0 ? -ForwardDeceleration * Time.deltaTime : ForwardDeceleration * Time.deltaTime);
             }
+
+            _velocity += acceleration;
 
             //jump
             if (Input.GetAxis("Jump") > 0 && !_jumping)
