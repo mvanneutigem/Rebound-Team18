@@ -1,10 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Rewind : MonoBehaviour {
 
     // Array Lists
+    public float RefillSpeed = 10.0f;
+    public float DrainSpeed = 20.0f;
+
     private ArrayList _previousPositions = new ArrayList();
     private ArrayList _previousRotations = new ArrayList();
     private ArrayList _previousVelocities = new ArrayList();
@@ -12,13 +16,18 @@ public class Rewind : MonoBehaviour {
     private int _arrayIdx = 0;
 
     private GameObject _playerGameObject;
+    private Transform _rewindBar;
+    private float _barLength;
     private PlayerController _playerController;
     private Transform _playerTransform;
-
+    private float _rewindAmount = 0;
+    private const float MAX_REWIND_AMOUNT = 75.0f;
     private bool _rewinding = false;
 
 	void Start ()
     {
+        _rewindBar = GameObject.Find("RewindBar").transform;
+        _barLength = _rewindBar.localScale.x;
         _playerGameObject = GameObject.FindWithTag("Player");
         _playerController = _playerGameObject.GetComponent<PlayerController>();
         _playerTransform = _playerGameObject.GetComponent<Transform>();
@@ -28,6 +37,7 @@ public class Rewind : MonoBehaviour {
     {
         if (Time.timeScale > float.Epsilon)
         {
+
             if (_arrayIdx > _previousPositions.Count - 1 | _arrayIdx < 0)
             {
                 _arrayIdx = _previousPositions.Count;
@@ -35,12 +45,35 @@ public class Rewind : MonoBehaviour {
 
             if (!_rewinding)
             {
+                if (_rewindAmount < MAX_REWIND_AMOUNT)
+                {
+                    _rewindAmount += RefillSpeed * Time.deltaTime;
+                }
+                else
+                {
+                    _rewindAmount = MAX_REWIND_AMOUNT;
+                }
+
                 _previousPositions.Add(_playerTransform.position);
                 _previousRotations.Add(_playerTransform.localRotation);
                 _previousVelocities.Add(_playerController.GetVelocity());
                 _arrayIdx++;
             }
-            else { RewindTime(); }
+            else
+            {
+                _rewindAmount -= DrainSpeed * Time.deltaTime; ;
+                if (_rewindAmount > 0)
+                {
+                    RewindTime();
+                }
+                else
+                {
+                    _rewindAmount = 0;
+                }
+            }
+            Vector3 scale = _rewindBar.localScale;
+            scale.x = (_rewindAmount / MAX_REWIND_AMOUNT) * _barLength;
+            _rewindBar.localScale = scale;
 
 
             if (Input.GetAxisRaw("Rewind") > 0)
