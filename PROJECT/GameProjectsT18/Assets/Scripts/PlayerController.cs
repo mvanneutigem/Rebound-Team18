@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
         _upVector3 = new Vector3(0, 1, 0);
         _velocity = Vector3.zero;
         _characterController = this.GetComponent<CharacterController>();
+        PlayerPrefs.SetInt("Score", 0);
     }
 
     void Update()

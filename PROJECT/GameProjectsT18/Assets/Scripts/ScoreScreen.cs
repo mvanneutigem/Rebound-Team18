@@ -31,6 +31,13 @@ public class ScoreScreen : MonoBehaviour
     public void ContinueButton()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene(PlayerPrefs.GetInt("Scene") + 1);
+        if (PlayerPrefs.GetInt("Scene") < 7)
+        {
+            SceneManager.LoadScene(PlayerPrefs.GetInt("Scene") + 1);
+        }
+        else
+        {
+            SceneManager.LoadScene(0);
+        }
     }
 }
