@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (_velocity.y < -50.0f)
+        if (_velocity.y < -70.0) // Set to 70 for Tommie's Level; Original is 50
         {
             int currentScene = SceneManager.GetActiveScene().buildIndex;
             SceneManager.LoadScene(currentScene);
