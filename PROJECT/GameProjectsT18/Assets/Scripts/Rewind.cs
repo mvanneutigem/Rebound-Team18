@@ -26,11 +26,11 @@ public class Rewind : MonoBehaviour {
 
 	void Start ()
     {
-        _rewindBar = GameObject.Find("RewindBar").transform;
-        _barLength = _rewindBar.localScale.x;
         _playerGameObject = GameObject.FindWithTag("Player");
         _playerController = _playerGameObject.GetComponent<PlayerController>();
         _playerTransform = _playerGameObject.GetComponent<Transform>();
+        _rewindBar = GameObject.Find("RewindBar").transform;
+        _barLength = _rewindBar.localScale.x;
     }
 	
 	void Update ()
