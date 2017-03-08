@@ -45,6 +45,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        Debug.Log("Forward Vector variable: " + _moveDirForward);
         if (_velocity.y < -70.0) // Set to 70 for Tommie's Level; Original is 50
         {
             int currentScene = SceneManager.GetActiveScene().buildIndex;
@@ -149,9 +150,12 @@ public class PlayerController : MonoBehaviour
 
     public void SetForwardDir(Vector3 forward)
     {
-        _camForward = forward;
-        _camForward.y = 0;
-        _camForward.Normalize();
+
+        _moveDirForward = forward;
+    }
+    public Vector3 GetForwardDir()
+    {
+        return _moveDirForward;
     }
 
     public void ApplyForce(Vector3 force)

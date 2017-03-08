@@ -12,6 +12,7 @@ public class Rewind : MonoBehaviour {
     private ArrayList _previousPositions = new ArrayList();
     private ArrayList _previousRotations = new ArrayList();
     private ArrayList _previousVelocities = new ArrayList();
+    private ArrayList _previousForward = new ArrayList();
 
     private int _arrayIdx = 0;
 
@@ -21,7 +22,7 @@ public class Rewind : MonoBehaviour {
     private PlayerController _playerController;
     private Transform _playerTransform;
     private float _rewindAmount = 0;
-    private const float MAX_REWIND_AMOUNT = 75.0f;
+    private const float MAX_REWIND_AMOUNT = 750.0f;
     private bool _rewinding = false;
 
 	void Start ()
@@ -47,7 +48,8 @@ public class Rewind : MonoBehaviour {
             {
                 if (_rewindAmount < MAX_REWIND_AMOUNT)
                 {
-                    _rewindAmount += RefillSpeed * Time.deltaTime;
+                    //_rewindAmount += RefillSpeed * Time.deltaTime;
+                    _rewindAmount = MAX_REWIND_AMOUNT;
                 }
                 else
                 {
@@ -57,6 +59,7 @@ public class Rewind : MonoBehaviour {
                 _previousPositions.Add(_playerTransform.position);
                 _previousRotations.Add(_playerTransform.localRotation);
                 _previousVelocities.Add(_playerController.GetVelocity());
+                _previousForward.Add(_playerController.GetForwardDir());
                 _arrayIdx++;
             }
             else
@@ -97,10 +100,12 @@ public class Rewind : MonoBehaviour {
         {
             _playerTransform.position = (Vector3)_previousPositions[_arrayIdx-1];
             _playerTransform.localRotation = (Quaternion)_previousRotations[_arrayIdx-1];
+            _playerController.SetForwardDir((Vector3)_previousForward[_arrayIdx - 1]);
 
             _previousPositions.RemoveAt(_arrayIdx);
             _previousRotations.RemoveAt(_arrayIdx);
             _previousVelocities.RemoveAt(_arrayIdx);
+            _previousForward.RemoveAt(_arrayIdx);
         }
     }
     public bool getRewinding()

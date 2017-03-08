@@ -13,7 +13,7 @@ public class camDummy : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         transform.position = _player.transform.position;
-        Quaternion rotation = Quaternion.LookRotation(Vector3.forward, _player.GetUpVector());
+        Quaternion rotation = Quaternion.LookRotation(_player.GetForwardDir(), _player.GetUpVector());
         transform.rotation = rotation;
     }
 }

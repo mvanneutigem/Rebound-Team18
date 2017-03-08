@@ -73,7 +73,6 @@ public class CameraController : MonoBehaviour
             //_camTransform.forward = _transSelf.position - _camTransform.position;
         }
         _transSelf.position = _playerTransform.position;
-        _player.SetForwardDir(_camTransform.forward);
     }
 
     public void SetFOV(float fov)
