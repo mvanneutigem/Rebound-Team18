@@ -26,11 +26,12 @@ public class PlayerController : MonoBehaviour
     private Vector3 _moveDirRight;
     private CharacterController _characterController;
     public float JumpSpeed = 2.0f;
-    public float SlamSpeed = -10.0f;
+    public float SlamSpeed = -30.0f;
     private bool _jumping = false;
     private float dragForce;
     private Vector3 _upVector3;
     private bool _movementLock = false;
+    public float MaxFallForce = 50.0f;
 
     private Vector3 _camForward;
 
@@ -46,7 +47,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Debug.Log("Forward Vector variable: " + _moveDirForward);
-        if (_velocity.y < -70.0) // Set to 70 for Tommie's Level; Original is 50
+        if (_velocity.y < -MaxFallForce) // Set to 70 for Tommie's Level; Original is 50
         {
             int currentScene = SceneManager.GetActiveScene().buildIndex;
             SceneManager.LoadScene(currentScene);
