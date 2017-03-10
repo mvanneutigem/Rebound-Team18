@@ -1,0 +1,6 @@
+name:Marieke
+score:8000
+name:Kiam
+score:7000
+name:Tommie
+score:6000

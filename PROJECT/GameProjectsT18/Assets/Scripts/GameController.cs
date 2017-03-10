@@ -6,15 +6,24 @@ using UnityEngine;
 public class GameController : MonoBehaviour {
 
     private Text _scoreText;
+    private Text _timeText;
     private int _score;
+    private float _timer;
 
     // Use this for initialization
     void Start ()
     {
         _scoreText = GameObject.FindWithTag("ScoreText").GetComponent<Text>();
+        _timeText = GameObject.FindWithTag("TimeText").GetComponent<Text>();
         _score = 0;
+        _timer = 120;
     }
-	
+
+    void Update()
+    {
+        _timer -= Time.deltaTime;
+        _timeText.text = _timer.ToString("n2");
+    }
     void UpdateScore()
     {
         _scoreText.text = _score.ToString();
@@ -25,5 +34,10 @@ public class GameController : MonoBehaviour {
     {
         _score += newScore;
         UpdateScore();
+    }
+
+    public float GetTime()
+    {
+        return _timer;
     }
 }
