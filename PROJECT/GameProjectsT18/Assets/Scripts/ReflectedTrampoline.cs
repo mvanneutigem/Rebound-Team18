@@ -8,7 +8,15 @@ public class ReflectedTrampoline : MonoBehaviour
     private float UpPower = 10;
     private float threshold = 10;
     private float SlowDownRate = 0.8f;
+    public bool IsSpecial = false;
     //pass up direction of trampoline as jumpvector
+    void Start()
+    {
+        if (IsSpecial)
+        {
+            UpPower = 20;
+        }
+    }
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
