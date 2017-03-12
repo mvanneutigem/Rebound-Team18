@@ -9,18 +9,61 @@ using UnityEditor;
 
 public class ScoreScreen : MonoBehaviour
 {
+    public Text NameText;
+    public Text scoreText;
+
     private int _score;
     private int _count;
     private int _offset = 100;
     private bool _baseScore = false;
-    private bool _highscore = false;
-	// Use this for initialization
-	void Start ()
+    private HighScores highScoreManager;
+    public int _levelIndex;
+    private bool highscore = false;
+    private string lowestUser = "";
+    private string name = "";
+    private int NrOfNames = 0;
+    private Highscore[] list;
+    // Use this for initialization
+    void Start ()
     {
+        highscore = true;
+        _levelIndex = PlayerPrefs.GetInt("Scene");
+        
         _score = PlayerPrefs.GetInt("Score");
         _score += (int)PlayerPrefs.GetFloat("time") * 100;
         PlayerPrefs.SetInt("Score", 0);
-    }
+
+        highScoreManager = GetComponent<HighScores>();
+        //list = highScoreManager.GetHighscoreslist();
+	    /*highScoreManager.SetLeaderboard(_levelIndex - 3);*///tutorial is at index 3
+        print(_levelIndex);
+
+	    //   int lowestScore = 10000000;
+
+	    //int length = list.Length;
+	    //   for (int i = 0; i < length; ++i)
+	    //   {
+	    //       if (list[i].levelIndex == _levelIndex)
+	    //       {
+	    //           ++NrOfNames;
+	    //           if (list[i].score < lowestScore)
+	    //           {
+	    //               lowestScore = list[i].score;
+	    //               lowestUser = list[i].username;
+	    //           }
+	    //           if (list[i].score < _score)
+	    //           {
+	    //               highscore = true;
+	    //           }
+	    //       }
+	    //   }
+
+	    //if (NrOfNames < 5)
+	    //{
+	    //       highscore = true;
+	    //   }
+
+	}
 	
 	// Update is called once per frame
 	void Update ()
@@ -29,56 +72,50 @@ public class ScoreScreen : MonoBehaviour
 	    {
 	        if (_count < _score)
 	        {
-	            this.GetComponent<Text>().text = _count.ToString();
+                scoreText.GetComponent<Text>().text = _count.ToString();
 	            _count += _offset;
 	        }
 	        else
 	        {
-                this.GetComponent<Text>().text = _score.ToString();
+                scoreText.GetComponent<Text>().text = _score.ToString();
 	            _baseScore = true;
 	        }   
         }
-	    
-	}
+
+        //if (highscore && name != "")//check if highscore && name entered
+        //{
+        //    //if (NrOfNames >= 5)
+        //    //    highScoreManager.DeleteHighscore(lowestUser);
+        //    highScoreManager.AddNewHighscore(name , _score, _levelIndex);
+        //    highscore = false;
+        //}
+    }
 
     public void ContinueButton()
     {
         Time.timeScale = 1;
-        if (PlayerPrefs.GetInt("Scene") < 7)
+        if (_levelIndex < 7)//max levelindex for now
         {
-            SceneManager.LoadScene(PlayerPrefs.GetInt("Scene") + 1);
+            SceneManager.LoadScene(_levelIndex + 1);
         }
         else
         {
             SceneManager.LoadScene(0);
         }
     }
-
-    //working on it:
-    static void WriteString()
+    public void LoadScene(int index)
     {
-        string path = "Assets/resources/highscores.txt";
-
-        //Write some text to the test.txt file
-        StreamWriter writer = new StreamWriter(path, true);
-        writer.WriteLine("Test");
-        writer.Close();
-
-        //Re-import the file to update the reference in the editor
-        AssetDatabase.ImportAsset(path);
-        //TextAsset asset = Resources.Load("test");
-
-        //Print the text from the file
-        //Debug.Log(asset.text);
+        Time.timeScale = 1;
+        SceneManager.LoadScene(index);
     }
 
-    static void ReadString()
+    public void NameEntered()
     {
-        string path = "Assets/resources/highscores.txt";
-
-        //Read the text from directly from the test.txt file
-        StreamReader reader = new StreamReader(path);
-        Debug.Log(reader.ReadToEnd());
-        reader.Close();
+        if (highscore)
+        {
+            name = NameText.text;
+            highScoreManager.AddNewHighscore(name, _score, _levelIndex);
+            highscore = false;
+        }
     }
 }
