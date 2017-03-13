@@ -33,7 +33,7 @@ public class DisplayHighScores : MonoBehaviour
         //    if (highscoreList[i].levelIndex == levelIndex)
         //        localHighscores[i] = highscoreList[i];
         //}
-        for (int i = 0; i < highscoreList.Length; ++i)
+        for (int i = 0; i < HighscoresTexts.Length; ++i)
         {
             HighscoresTexts[i].text = i + 1 + ". ";//one based board
             if (highscoreList.Length > i)//ignore if not enough entries

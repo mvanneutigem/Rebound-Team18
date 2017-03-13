@@ -48,7 +48,7 @@ public class HighScores : MonoBehaviour
     }
     IEnumerator UploadNewHighscore(string username, int score, int sceneIndex)
     {
-        WWW www = new WWW(webURL + privateCode +  "/add/" + WWW.EscapeURL(username) + "/" + score + "/" + sceneIndex);
+        WWW www = new WWW(webURL + privateCode +  "/add/" + WWW.EscapeURL(username) + "/" + score);
         yield return www;
 
         if (!string.IsNullOrEmpty(www.error))
@@ -91,8 +91,7 @@ public class HighScores : MonoBehaviour
             string[] entryInfo = entries[i].Split(new char[] {'|'});
             string username = entryInfo[0];
             int score = int.Parse(entryInfo[1]);
-            int levelIndex = int.Parse(entryInfo[2]);
-            Highscoreslist[i] = new Highscore(username, score, levelIndex);
+            Highscoreslist[i] = new Highscore(username, score);
         }
     }
 
@@ -118,12 +117,10 @@ public struct Highscore
 {
     public string username;
     public int score;
-    public int levelIndex;//0 for tutorial then counting up
 
-    public Highscore(string _username, int _score, int _levelIndex)
+    public Highscore(string _username, int _score)
     {
         username = _username;
         score = _score;
-        levelIndex = _levelIndex;
     }
 }

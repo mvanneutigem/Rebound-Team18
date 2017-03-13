@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.IO;
-using UnityEditor;
+//using UnityEditor;
 
 public class ScoreScreen : MonoBehaviour
 {
