@@ -30,7 +30,7 @@ public class GravityPortal : MonoBehaviour
     }
     void Update()
     {
-        DrawLine(_playerTransform.position, _playerTransform.position + (_playerController.GetForwardDir() * 10), Color.red, .2f);
+        //DrawLine(_playerTransform.position, _playerTransform.position + (_playerController.GetForwardDir() * 10), Color.red, .2f);
         if (_entered)
         {
             Vector3 direction = _playerTransform.position - _transSelf.position;
