@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: ebca13f1c639a48459ec40a6e52c980d
-timeCreated: 1489146129
+guid: f9139c285efa3ed4bac72dc6298a5570
+timeCreated: 1489418865
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Rectangle003
+    4300000: BuildingBlock
   materials:
     importMaterials: 1
     materialName: 0

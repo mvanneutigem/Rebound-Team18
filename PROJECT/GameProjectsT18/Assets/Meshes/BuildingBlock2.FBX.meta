@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 8bf2e486d67de3a4cad4f9e5305a5cb5
-timeCreated: 1489146128
+timeCreated: 1489418864
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -10,6 +10,7 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: Rectangle007
+    4300002: BuildingBlock2
   materials:
     importMaterials: 1
     materialName: 0
