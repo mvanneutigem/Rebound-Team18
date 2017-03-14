@@ -46,7 +46,6 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("Forward Vector variable: " + _moveDirForward);
         if (_velocity.y < -MaxFallForce) // Set to 70 for Tommie's Level; Original is 50
         {
             int currentScene = SceneManager.GetActiveScene().buildIndex;
