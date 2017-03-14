@@ -23,4 +23,10 @@ public class Buttons : MonoBehaviour
         Time.timeScale = 1;
         panel.gameObject.SetActive(false);
     }
+
+    public void restartGame()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 }
