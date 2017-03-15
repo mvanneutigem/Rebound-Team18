@@ -12,6 +12,7 @@ public class GravityPortal : MonoBehaviour
     public float RotateDistance = 20.0f;
     private bool _entered = false;
     private Vector3 _playerStartUpVector;
+    private Vector3 _playerStartForwardVector;
     private Vector3 _rightVector3;
     private float _step = 0;
     private float _timer = 0;
@@ -25,31 +26,33 @@ public class GravityPortal : MonoBehaviour
         {
             _playerTransform = playerGameObject.transform;
             _playerStartUpVector = _playerTransform.up;
+            _playerStartForwardVector = _playerTransform.forward;
             _playerController = playerGameObject.GetComponent<PlayerController>();
         }
     }
     void Update()
     {
-        DrawLine(_playerTransform.position, _playerTransform.position + (_playerController.GetForwardDir() * 10), Color.red, .002f);
+        DrawLine(_playerTransform.position, _playerTransform.position + (_playerController.GetForwardDir() * 10), Color.red, .02f);
         if (_entered)
         {
             Vector3 direction = _playerTransform.position - _transSelf.position;
             float distance = Vector3.Dot(direction, _transSelf.forward);
-            float dot = Vector3.Dot(direction.normalized, _transSelf.forward);
 
             float range = (distance / RotateDistance);
+            Debug.Log("distance" + distance);
+
             if (range < 1.05f && range > -0.05f)
             {
-                Vector3 up = Vector3.zero;
-                Vector3 forward = Vector3.zero;
-                _angle = Vector3.Angle(_playerTransform.up, -GravityDirectionVector);
-                Debug.Log("Angle between " + -GravityDirectionVector + " and " +_playerTransform.up + " = " + _angle);
+                Vector3 up = _playerController.GetUpVector();
+                Vector3 forward = _playerController.GetForwardDir();
+                _angle = Vector3.Angle(_playerController.GetUpVector(), -GravityDirectionVector);
+                //Debug.Log("Angle between " + -GravityDirectionVector + " and " +_playerTransform.up + " = " + _angle);
 
-                forward = Vector3.RotateTowards(_playerController.GetForwardDir(), ChangeForwardVector, 0.05f, 1.0f);
-                _playerController.SetForwardDir(forward);
 
                 if (range > 0)
                 {
+                    forward = Vector3.Lerp(_playerStartForwardVector, ChangeForwardVector, range * 2.0f);
+                    //forward = Vector3.RotateTowards(_playerController.GetForwardDir(), ChangeForwardVector, 1.0f * range, 1.0f);
                     if (range < 0.5f)
                     {
                         up = Vector3.Lerp(_playerStartUpVector, _rightVector3, range * 2.0f);
@@ -63,14 +66,14 @@ public class GravityPortal : MonoBehaviour
                         return;
                     }
                 }
-                else
-                {
-                    up = _playerStartUpVector;
-                }
-
-                up.Normalize();
-                _playerController.SetUpVector(up);
+                    up.Normalize();
+                    _playerController.SetUpVector(up);
+                    forward.Normalize();
+                    _playerController.SetForwardDir(forward);
             }
+            else { _entered = false;}
+            //Debug.Log("Up Vector " + _playerController.GetUpVector());
+
         }
     }
 

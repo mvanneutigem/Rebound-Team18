@@ -130,7 +130,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            if(transform.forward != _moveDirForward)
+            if (transform.forward != _moveDirForward)
             {
                 var temp = transform.forward;
                 temp = Vector3.RotateTowards(temp, _moveDirForward, Mathf.PI, Mathf.PI);
@@ -154,7 +154,8 @@ public class PlayerController : MonoBehaviour
 
             //Move
             _characterController.Move((_moveVector) * Time.deltaTime);
-            Debug.Log("Z velocity " + _velocity.z);
+            //Debug.Log("Z velocity " + _velocity.z);
+            //Debug.Log("Up Vector " + _upVector3);
 
         }
     }

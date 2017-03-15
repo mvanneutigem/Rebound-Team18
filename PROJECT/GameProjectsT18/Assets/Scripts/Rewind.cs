@@ -49,7 +49,7 @@ public class Rewind : MonoBehaviour {
                 if (_rewindAmount < MAX_REWIND_AMOUNT)
                 {
                     _rewindAmount += RefillSpeed * Time.deltaTime;
-                    //_rewindAmount = MAX_REWIND_AMOUNT;
+                    _rewindAmount = MAX_REWIND_AMOUNT;
                 }
                 else
                 {
