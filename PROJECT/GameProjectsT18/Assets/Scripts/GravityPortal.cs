@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GravityPortal : MonoBehaviour
 {
-    public Vector3 GravityDirectionVector = new Vector3(-1, 0, 0);
+    public Vector3 GravityDirectionVector = new Vector3(0, -1, 0);
     public Vector3 ChangeForwardVector = new Vector3(0, 0, 1);
     private PlayerController _playerController;
     private Transform _playerTransform;
@@ -30,7 +30,7 @@ public class GravityPortal : MonoBehaviour
     }
     void Update()
     {
-        //DrawLine(_playerTransform.position, _playerTransform.position + (_playerController.GetForwardDir() * 10), Color.red, .2f);
+        DrawLine(_playerTransform.position, _playerTransform.position + (_playerController.GetForwardDir() * 10), Color.red, .002f);
         if (_entered)
         {
             Vector3 direction = _playerTransform.position - _transSelf.position;
