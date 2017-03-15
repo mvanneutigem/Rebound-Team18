@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (_velocity.y < -MaxFallForce) // Set to 70 for Tommie's Level; Original is 50
+        if (_velocity.y < -MaxFallForce) // Will change into Death planes 
         {
             int currentScene = SceneManager.GetActiveScene().buildIndex;
             SceneManager.LoadScene(currentScene);
@@ -130,6 +130,14 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
+            if(transform.forward != _moveDirForward)
+            {
+                var temp = transform.forward;
+                temp = Vector3.RotateTowards(temp, _moveDirForward, Mathf.PI, Mathf.PI);
+                transform.forward = temp;
+            }
+
+
             //slam
             if (Input.GetButtonDown("Slam") && !_characterController.isGrounded)
             {
@@ -137,6 +145,7 @@ public class PlayerController : MonoBehaviour
             }
 
             //Gravity
+
             _velocity += Physics.gravity * Time.deltaTime;
 
             //from local to worlspace
@@ -145,6 +154,8 @@ public class PlayerController : MonoBehaviour
 
             //Move
             _characterController.Move((_moveVector) * Time.deltaTime);
+            Debug.Log("Z velocity " + _velocity.z);
+
         }
     }
 
@@ -153,6 +164,7 @@ public class PlayerController : MonoBehaviour
 
         _moveDirForward = forward;
     }
+
     public Vector3 GetForwardDir()
     {
         return _moveDirForward;
