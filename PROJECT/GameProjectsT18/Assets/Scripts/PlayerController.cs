@@ -34,6 +34,8 @@ public class PlayerController : MonoBehaviour
     public float MaxFallForce = 50.0f;
 
     private Vector3 _camForward;
+    private Animator myAnimator;
+    private bool OnTrampoline = false;
 
     //METHODS
     void Awake()
@@ -42,6 +44,7 @@ public class PlayerController : MonoBehaviour
         _velocity = Vector3.zero;
         _characterController = this.GetComponent<CharacterController>();
         PlayerPrefs.SetInt("Score", 0);
+        myAnimator = GetComponent<Animator>();
     }
 
     void Update()
@@ -87,6 +90,7 @@ public class PlayerController : MonoBehaviour
 
             if (Mathf.Abs(vInput) > float.Epsilon)
             {
+                myAnimator.SetBool("Running", true);
                 if (_velocity.z < MaxForwardSpeed && vInput > 0)
                 {
                     acceleration.z += vInput * ForwardAcceleration * Time.deltaTime;
@@ -95,6 +99,7 @@ public class PlayerController : MonoBehaviour
             else if (Mathf.Abs(_velocity.z) > 0.1f)
             {
                 _velocity.z += (_velocity.z > 0 ? -ForwardDeceleration * Time.deltaTime : ForwardDeceleration * Time.deltaTime);
+               
             }
 
             _velocity += acceleration;
@@ -113,7 +118,6 @@ public class PlayerController : MonoBehaviour
                     {
                         _velocity.y = 0;
                     }
-
                     _jumping = false;
                 }
             }
@@ -137,13 +141,25 @@ public class PlayerController : MonoBehaviour
                 transform.forward = temp;
             }
 
-
             //slam
             if (Input.GetButtonDown("Slam") && !_characterController.isGrounded)
             {
                 _velocity.y += SlamSpeed;
             }
 
+            //animations
+            if (OnTrampoline)
+            {
+                Debug.Log("Ontrampoline");
+                myAnimator.SetBool("Falling", false);
+                myAnimator.SetBool("Jumping", true);
+            }
+            else
+            {
+                myAnimator.SetBool("Falling", true);
+            }
+
+            //Debug.Log("velocity Y: " + _velocity.y);
             //Gravity
 
             _velocity += Physics.gravity * Time.deltaTime;
@@ -176,7 +192,6 @@ public class PlayerController : MonoBehaviour
         _velocity.z = force.z;
         _velocity.x = force.x;
         _velocity.y = force.y;
-
         _jumping = true;
     }
 
@@ -218,6 +233,22 @@ public class PlayerController : MonoBehaviour
     public Vector3 GetRightVector()
     {
         return _moveDirRight;
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "TrampolineBox")
+        {
+            OnTrampoline = true;
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "TrampolineBox")
+        {
+            OnTrampoline = false;
+        }
     }
 }
 
