@@ -36,10 +36,10 @@ public class GravityPortal : MonoBehaviour
         if (_entered)
         {
             Vector3 direction = _playerTransform.position - _transSelf.position;
-            float distance = Vector3.Dot(direction, _transSelf.forward);
+            float distance = Vector3.Dot(direction, _playerController.GetForwardDir());
 
             float range = (distance / RotateDistance);
-            Debug.Log("distance" + distance);
+            Debug.Log("distance" + distance + "Range" + range);
 
             if (range < 1.05f && range > -0.05f)
             {
@@ -51,14 +51,15 @@ public class GravityPortal : MonoBehaviour
 
                 if (range > 0)
                 {
+                    //forward = Vector3.RotateTowards(forward, ChangeForwardVector, (Mathf.PI * 2), 1.0f);
                     forward = Vector3.Lerp(_playerStartForwardVector, ChangeForwardVector, range * 2.0f);
-                    //forward = Vector3.RotateTowards(_playerController.GetForwardDir(), ChangeForwardVector, 1.0f * range, 1.0f);
                     if (range < 0.5f)
                     {
                         up = Vector3.Lerp(_playerStartUpVector, _rightVector3, range * 2.0f);
                     }
                     else if (_angle > 0)
                     {
+                        
                         up = Vector3.Lerp(_rightVector3, -GravityDirectionVector, (range - 0.5f) * 2.0f);
                     }
                     else
@@ -66,12 +67,11 @@ public class GravityPortal : MonoBehaviour
                         return;
                     }
                 }
-                    up.Normalize();
-                    _playerController.SetUpVector(up);
-                    forward.Normalize();
-                    _playerController.SetForwardDir(forward);
+                up.Normalize();
+                _playerController.SetUpVector(up);
+                forward.Normalize();
+                _playerController.SetForwardDir(forward);
             }
-            else { _entered = false;}
             //Debug.Log("Up Vector " + _playerController.GetUpVector());
 
         }
