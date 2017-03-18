@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameProjectsT18", "GameProj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameProjectsT18.Editor.Plugins", "GameProjectsT18.Editor.Plugins.csproj", "{C3678794-7E63-DFCE-D7B0-34B0B553346C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameProjectsT18.Editor", "GameProjectsT18.Editor.csproj", "{4FEA7168-6707-0CFE-9721-6480099E5DD0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{C3678794-7E63-DFCE-D7B0-34B0B553346C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3678794-7E63-DFCE-D7B0-34B0B553346C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3678794-7E63-DFCE-D7B0-34B0B553346C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FEA7168-6707-0CFE-9721-6480099E5DD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FEA7168-6707-0CFE-9721-6480099E5DD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FEA7168-6707-0CFE-9721-6480099E5DD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FEA7168-6707-0CFE-9721-6480099E5DD0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
