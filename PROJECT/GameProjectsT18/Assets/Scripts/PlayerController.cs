@@ -240,6 +240,7 @@ public class PlayerController : MonoBehaviour
         if (other.tag == "TrampolineBox")
         {
             OnTrampoline = true;
+            myAnimator.SetBool("Landing", true);
         }
     }
 
@@ -248,6 +249,7 @@ public class PlayerController : MonoBehaviour
         if (other.tag == "TrampolineBox")
         {
             OnTrampoline = false;
+            myAnimator.SetBool("Landing", false);
         }
     }
 }
