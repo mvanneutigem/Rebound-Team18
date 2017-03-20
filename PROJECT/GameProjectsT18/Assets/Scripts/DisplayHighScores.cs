@@ -27,18 +27,12 @@ public class DisplayHighScores : MonoBehaviour
 
     public void OnHighscoresDownloaded(Highscore[] highscoreList)
     {
-        //Highscore[] localHighscores = new Highscore[5]; ;
-        //for (int i = 0; i < highscoreList.Length; ++i)
-        //{
-        //    if (highscoreList[i].levelIndex == levelIndex)
-        //        localHighscores[i] = highscoreList[i];
-        //}
         for (int i = 0; i < HighscoresTexts.Length; ++i)
         {
             HighscoresTexts[i].text = i + 1 + ". ";//one based board
             if (highscoreList.Length > i)//ignore if not enough entries
             {
-                HighscoresTexts[i].text += highscoreList[i].username + " - " + highscoreList[i].score;
+                HighscoresTexts[i].text += highscoreList[i].username + " - " + highscoreList[i].score ;
             }
         }
 

@@ -42,11 +42,11 @@ public class HighScores : MonoBehaviour
     {
         highScoresDisplay = GetComponent<DisplayHighScores>();
     }
-    public void AddNewHighscore(string username, int score, int sceneIndex)
+    public void AddNewHighscore(string username, int score)
     {
-        StartCoroutine(UploadNewHighscore(username, score, sceneIndex));
+        StartCoroutine(UploadNewHighscore(username, score));
     }
-    IEnumerator UploadNewHighscore(string username, int score, int sceneIndex)
+    IEnumerator UploadNewHighscore(string username, int score)
     {
         WWW www = new WWW(webURL + privateCode +  "/add/" + WWW.EscapeURL(username) + "/" + score);
         yield return www;
