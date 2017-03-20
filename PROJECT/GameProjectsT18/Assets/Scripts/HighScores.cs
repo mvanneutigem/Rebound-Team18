@@ -90,6 +90,7 @@ public class HighScores : MonoBehaviour
         {
             string[] entryInfo = entries[i].Split(new char[] {'|'});
             string username = entryInfo[0];
+            username = username.Replace("+", " ");
             int score = int.Parse(entryInfo[1]);
             Highscoreslist[i] = new Highscore(username, score);
         }

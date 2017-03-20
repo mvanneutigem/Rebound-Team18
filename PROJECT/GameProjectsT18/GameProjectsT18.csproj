@@ -110,7 +110,6 @@
     <Compile Include="Assets\Scripts\SpeedBoostLinear.cs" />
     <Compile Include="Assets\Scripts\Trampoline.cs" />
     <Compile Include="Assets\Scripts\camDummy.cs" />
-    <Compile Include="Assets\rigs\AnimationController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\CloudsToy\Shaders\CloudBright.shader" />
