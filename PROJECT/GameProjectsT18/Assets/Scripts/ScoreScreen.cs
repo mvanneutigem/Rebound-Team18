@@ -30,7 +30,7 @@ public class ScoreScreen : MonoBehaviour
         _levelIndex = PlayerPrefs.GetInt("Scene");
         
         _score = PlayerPrefs.GetInt("Score");
-        _score += (int)PlayerPrefs.GetFloat("time") * 100;
+        _score += (int)(PlayerPrefs.GetFloat("time") * 100.0f);
         PlayerPrefs.SetInt("Score", 0);
 
         highScoreManager = GetComponent<HighScores>();
@@ -114,7 +114,7 @@ public class ScoreScreen : MonoBehaviour
         if (highscore)
         {
             name = NameText.text;
-            highScoreManager.AddNewHighscore(name, _score, _levelIndex);
+            highScoreManager.AddNewHighscore(name, _score);
             highscore = false;
         }
     }
