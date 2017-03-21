@@ -76,9 +76,6 @@
     <Reference Include="Mono.Cecil">
       <HintPath>Library\UnityAssemblies\Mono.Cecil.dll</HintPath>
     </Reference>
-    <Reference Include="Cloudstoyv5">
-      <HintPath>Assets\CloudsToy\DLL\Cloudstoyv5.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Standard Assets\Character Controllers\Sources\Scripts\MouseLook.cs" />
@@ -122,8 +119,6 @@
     <Compile Include="Assets\Standard Assets\Effects\ImageEffects\Scripts\Vortex.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\CloudsToy\Shaders\CloudBright.shader" />
-    <None Include="Assets\CloudsToy\Shaders\CloudRealistic.shader" />
     <None Include="Assets\Materials\ToonShading.shader" />
     <None Include="Assets\Materials\ToonShadingFlatColor.shader" />
     <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\BlendModesOverlay.shader" />
