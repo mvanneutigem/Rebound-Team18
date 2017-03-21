@@ -32,7 +32,7 @@ public class GravityPortal : MonoBehaviour
     }
     void Update()
     {
-        DrawLine(_playerTransform.position, _playerTransform.position + (_playerController.GetForwardDir() * 10), Color.red, .02f);
+        //DrawLine(_playerTransform.position, _playerTransform.position + (_playerController.GetForwardDir() * 10), Color.red, .02f);
         if (_entered)
         {
             Vector3 direction = _playerTransform.position - _transSelf.position;
@@ -77,6 +77,10 @@ public class GravityPortal : MonoBehaviour
         }
     }
 
+    public void SetGravityDirection(Vector3 direction)
+    {
+        GravityDirectionVector = direction;
+    }
 
     void DrawLine(Vector3 start, Vector3 end, Color color, float duration = 0.2f)
     {
