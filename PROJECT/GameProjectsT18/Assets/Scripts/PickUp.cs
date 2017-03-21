@@ -15,6 +15,7 @@ public class PickUp : MonoBehaviour {
     private Vector3 _originalPos;
     private Transform _transSelf;
 
+    private bool _followPlayer = false;
     private GameController _gameController;
 
     //METHODs
@@ -38,20 +39,18 @@ public class PickUp : MonoBehaviour {
     }
 
 	void Update () {
-        //_angle += Speed*Time.deltaTime;
-        //Vector3 pos = _originalPos;
-        //pos.y += Mathf.Sin(_angle)*Amplitude;
-        //_transSelf.Rotate(0f,0f,1.0f);
-        //_transSelf.position = pos;
-
-
-        if (Mathf.Abs((_playerTransform.position - _transSelf.position).sqrMagnitude) < PickupRange * PickupRange)
+        if (_followPlayer)
         {
             _timer += Time.deltaTime;
             _transSelf.position = Vector3.Lerp(_originalPos, _playerTransform.position, _timer / MoveTime);
         }
         else
         {
+            if (Mathf.Abs((_playerTransform.position - _transSelf.position).sqrMagnitude) < PickupRange * PickupRange)
+            {
+                _followPlayer = true;
+            }
+
             _angle += Speed * Time.deltaTime;
             _transSelf.Rotate(0f, 1.0f, 0f);
             _transSelf.position = _originalPos;
