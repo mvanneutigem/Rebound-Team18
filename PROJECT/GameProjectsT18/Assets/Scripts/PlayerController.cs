@@ -90,7 +90,6 @@ public class PlayerController : MonoBehaviour
 
             if (Mathf.Abs(vInput) > float.Epsilon)
             {
-                myAnimator.SetBool("Running", true);
                 if (_velocity.z < MaxForwardSpeed && vInput > 0)
                 {
                     acceleration.z += vInput * ForwardAcceleration * Time.deltaTime;
@@ -147,17 +146,6 @@ public class PlayerController : MonoBehaviour
                 _velocity.y += SlamSpeed;
             }
 
-            //animations
-            if (OnTrampoline)
-            {
-                Debug.Log("Ontrampoline");
-                myAnimator.SetBool("Falling", false);
-                myAnimator.SetBool("Jumping", true);
-            }
-            else
-            {
-                myAnimator.SetBool("Falling", true);
-            }
 
             //Debug.Log("velocity Y: " + _velocity.y);
             //Gravity
@@ -233,24 +221,6 @@ public class PlayerController : MonoBehaviour
     public Vector3 GetRightVector()
     {
         return _moveDirRight;
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "TrampolineBox")
-        {
-            OnTrampoline = true;
-            myAnimator.SetBool("Landing", true);
-        }
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "TrampolineBox")
-        {
-            OnTrampoline = false;
-            myAnimator.SetBool("Landing", false);
-        }
     }
 }
 

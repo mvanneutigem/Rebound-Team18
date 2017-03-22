@@ -33,7 +33,7 @@ public class GravityPortal : MonoBehaviour
     }
     void Update()
     {
-        DrawLine(_playerTransform.position, _playerTransform.position + (_playerController.GetForwardDir() * 10), Color.red, .02f);
+        //DrawLine(_playerTransform.position, _playerTransform.position + (_playerController.GetForwardDir() * 10), Color.red, .02f);
         if (_entered)
         {
             _timer += Time.deltaTime;
