@@ -10,6 +10,7 @@ public class GravityPortal : MonoBehaviour
     private Transform _playerTransform;
     private Transform _transSelf;
     public float RotateDistance = 20.0f;
+    public float ChangeDirectionSpeed = 20.0f;
     private bool _entered = false;
     private Vector3 _playerStartUpVector;
     private Vector3 _playerStartForwardVector;
@@ -32,16 +33,24 @@ public class GravityPortal : MonoBehaviour
     }
     void Update()
     {
-        //DrawLine(_playerTransform.position, _playerTransform.position + (_playerController.GetForwardDir() * 10), Color.red, .02f);
+        DrawLine(_playerTransform.position, _playerTransform.position + (_playerController.GetForwardDir() * 10), Color.red, .02f);
         if (_entered)
         {
+            _timer += Time.deltaTime;
+            Debug.Log("Time: " + _timer);
+            if(_playerTransform.forward == ChangeForwardVector)
+            {
+                Debug.Log("TRUE");
+            }
+
             Vector3 direction = _playerTransform.position - _transSelf.position;
             float distance = Vector3.Dot(direction, _playerController.GetForwardDir());
 
             float range = (distance / RotateDistance);
-            Debug.Log("distance" + distance + "Range" + range);
+            //Debug.Log("distance" + distance + "Range" + range);
 
-            if (range < 1.05f && range > -0.05f)
+
+            if (range < 1.05f && range > 0)
             {
                 Vector3 up = _playerController.GetUpVector();
                 Vector3 forward = _playerController.GetForwardDir();
@@ -51,15 +60,15 @@ public class GravityPortal : MonoBehaviour
 
                 if (range > 0)
                 {
-                    //forward = Vector3.RotateTowards(forward, ChangeForwardVector, (Mathf.PI * 2), 1.0f);
-                    forward = Vector3.Lerp(_playerStartForwardVector, ChangeForwardVector, range * 2.0f);
+                    forward = Vector3.RotateTowards(forward, ChangeForwardVector, Mathf.PI / 360 * (ChangeDirectionSpeed), Mathf.PI);
+                    //forward = Vector3.Lerp(_playerStartForwardVector, ChangeForwardVector, range * 2.0f);
                     if (range < 0.5f)
                     {
                         up = Vector3.Lerp(_playerStartUpVector, _rightVector3, range * 2.0f);
                     }
                     else if (_angle > 0)
                     {
-                        
+
                         up = Vector3.Lerp(_rightVector3, -GravityDirectionVector, (range - 0.5f) * 2.0f);
                     }
                     else
