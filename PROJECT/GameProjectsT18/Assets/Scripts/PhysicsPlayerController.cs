@@ -74,27 +74,51 @@ public class PhysicsPlayerController : MonoBehaviour
 
             if (Mathf.Abs(hInput) > float.Epsilon)
             {
-                if (_velocity.x < MaxLateralSpeed && hInput < 0)
+                if ( _velocity.x > -MaxLateralSpeed && hInput < 0)
                 {
                     force.x += -hInput * LateralAcceleration * Time.deltaTime;
                 }
 
-                if (_velocity.x > -MaxLateralSpeed && hInput > 0)
+                if ( _velocity.x < MaxLateralSpeed && hInput > 0)
                 {
                     force.x += -hInput * LateralAcceleration * Time.deltaTime;
+                }
+            }
+            else
+            {
+                //decceleration
+                if (_velocity.x > 0)
+                {
+                    force.x += LateralDeceleration * Time.deltaTime;
+                }
+                if (_velocity.x < 0)
+                {
+                    force.x -= LateralDeceleration * Time.deltaTime;
                 }
             }
 
             if (Mathf.Abs(vInput) > float.Epsilon)
             {
-                if (_velocity.z < MaxForwardSpeed && _velocity.z > -MaxForwardSpeed && vInput < 0)
+                if ( _velocity.z > -MaxForwardSpeed && vInput < 0)
                 {
                     force.z += vInput * ForwardAcceleration * Time.deltaTime;
                 }
 
-                if (_velocity.z > -MaxForwardSpeed && _velocity.z < MaxForwardSpeed && vInput > 0)
+                if ( _velocity.z < MaxForwardSpeed && vInput > 0)
                 {
                     force.z += vInput * ForwardAcceleration * Time.deltaTime;
+                }
+            }
+            else
+            {
+                //decceleration
+                if (_velocity.z > 0)
+                {
+                    force.z -= LateralDeceleration * Time.deltaTime;
+                }
+                if (_velocity.z < 0)
+                {
+                    force.z += LateralDeceleration * Time.deltaTime;
                 }
             }
 
@@ -113,10 +137,10 @@ public class PhysicsPlayerController : MonoBehaviour
             }
 
             //slam
-            //if (Input.GetButtonDown("Slam") && _grounded > 0)
-            //{
-            //    _velocity.y += SlamSpeed;
-            //}
+            if (Input.GetButtonDown("Slam") )
+            {
+                _playerRigidBody.AddForce(_lastSurfaceNormal * SlamSpeed, ForceMode.Impulse);
+            }
 
             //from local to worlspace
             force = ToWorldSpace(force);
