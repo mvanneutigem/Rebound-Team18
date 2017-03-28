@@ -20,7 +20,7 @@ public class Rewind : MonoBehaviour {
     private GameObject _playerGameObject;
     private Transform _rewindBar;
     private float _barLength;
-    private PlayerController _playerController;
+    private PhysicsPlayerController _playerController;
     private Transform _playerTransform;
     private float _rewindAmount = 0;
     private const float MAX_REWIND_AMOUNT = 750.0f;
@@ -29,7 +29,7 @@ public class Rewind : MonoBehaviour {
 	void Start ()
     {
         _playerGameObject = GameObject.FindWithTag("Player");
-        _playerController = _playerGameObject.GetComponent<PlayerController>();
+        _playerController = _playerGameObject.GetComponent<PhysicsPlayerController>();
         _playerTransform = _playerGameObject.GetComponent<Transform>();
         _rewindBar = GameObject.Find("RewindBar").transform;
         _barLength = _rewindBar.localScale.x;
