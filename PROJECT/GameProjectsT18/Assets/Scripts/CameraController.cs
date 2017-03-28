@@ -92,7 +92,7 @@ public class CameraController : MonoBehaviour
         float minDist = 5.0f;
 
         Vector3 targetPos = spherePos - meanDir * minDist;
-        Vector3 targetVector = (targetPos - camPos) / 30.0f;
+        Vector3 targetVector = (targetPos - camPos) / 10.0f;
         Vector3 newPos = camPos + targetVector;
 
         transform.position = newPos;
