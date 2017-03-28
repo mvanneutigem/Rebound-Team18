@@ -66,21 +66,21 @@ public class PlayerController : MonoBehaviour
             //rotate character in the direction it's moving in
 
             Vector3 acceleration = Vector3.zero;
-            _moveDirRight = Vector3.Cross(_moveDirForward.normalized, _upVector3.normalized);
+            _moveDirRight = Vector3.Cross(_upVector3.normalized, _moveDirForward.normalized);
 
             Quaternion targetRotation = Quaternion.LookRotation(_moveVector.normalized);
             transform.rotation = targetRotation;
 
             if (Mathf.Abs(hInput) > float.Epsilon)
             {
-                if (_velocity.x < MaxLateralSpeed && hInput < 0)
-                {
-                    acceleration.x += -hInput * LateralAcceleration * Time.deltaTime;
-                }
-
                 if (_velocity.x > -MaxLateralSpeed && hInput > 0)
                 {
-                    acceleration.x += -hInput * LateralAcceleration * Time.deltaTime;
+                    acceleration.x += hInput * LateralAcceleration * Time.deltaTime;
+                }
+
+                if (_velocity.x < MaxLateralSpeed && hInput < 0)
+                {
+                    acceleration.x += hInput * LateralAcceleration * Time.deltaTime;
                 }
             }
             else if (Mathf.Abs(_velocity.x) > 0.1f)
@@ -98,7 +98,7 @@ public class PlayerController : MonoBehaviour
             else if (Mathf.Abs(_velocity.z) > 0.1f)
             {
                 _velocity.z += (_velocity.z > 0 ? -ForwardDeceleration * Time.deltaTime : ForwardDeceleration * Time.deltaTime);
-               
+
             }
 
             _velocity += acceleration;
@@ -221,6 +221,10 @@ public class PlayerController : MonoBehaviour
     public Vector3 GetRightVector()
     {
         return _moveDirRight;
+    }
+    public void SetTransform(Quaternion rotation)
+    {
+        transform.rotation = rotation;
     }
 }
 
