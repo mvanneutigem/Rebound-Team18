@@ -52,7 +52,10 @@ public class PhysicsPlayerController : MonoBehaviour
 
     void Update()
     {
-        _velocity = _playerRigidBody.velocity;
+        _moveDirRight = Vector3.Cross( _upVector3.normalized, _moveDirForward.normalized);
+        _velocity = ConvertToLocalSpace(_playerRigidBody.velocity);
+
+
         if (_velocity.y < -MaxFallForce) // Will change into Death planes 
         {
             int currentScene = SceneManager.GetActiveScene().buildIndex;
@@ -70,7 +73,6 @@ public class PhysicsPlayerController : MonoBehaviour
             //rotate character in the direction it's moving in
 
             Vector3 force = Vector3.zero;
-            _moveDirRight = Vector3.Cross( _upVector3.normalized, _moveDirForward.normalized);
 
             if (Mathf.Abs(hInput) > float.Epsilon)
             {
@@ -138,7 +140,7 @@ public class PhysicsPlayerController : MonoBehaviour
             //slam
             if (Input.GetButtonDown("Slam") )
             {
-                _playerRigidBody.AddForce(_lastSurfaceNormal * SlamSpeed, ForceMode.Impulse);
+                _playerRigidBody.AddForce(_upVector3 * SlamSpeed, ForceMode.Impulse);
             }
 
             //from local to worlspace
@@ -149,15 +151,24 @@ public class PhysicsPlayerController : MonoBehaviour
 
             //Move
             Debug.Log("up " + _upVector3);
-            Debug.Log("force " + force);
-            Debug.Log("velocity " + _velocity);
             _playerRigidBody.AddForce(force * 50.0f);
         }
     }
 
+    private Vector3 ConvertToLocalSpace(Vector3 v)
+    {
+        Vector3 temp;
+        temp.x = Vector3.Dot(_moveDirRight.normalized, v.normalized);
+        temp.y = Vector3.Dot(_upVector3.normalized, v.normalized);
+        temp.z = Vector3.Dot(_moveDirForward.normalized, v.normalized);
+
+        temp = temp.normalized * v.magnitude;
+
+        return temp;
+    }
+
     public void SetForwardDir(Vector3 forward)
     {
-
         _moveDirForward = forward;
     }
 

@@ -73,9 +73,6 @@
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
-    <Reference Include="Cloudstoyv5">
-      <HintPath>Assets\CloudsToy\DLL\Cloudstoyv5.dll</HintPath>
-    </Reference>
     <Reference Include="Assembly-UnityScript-firstpass">
       <HintPath>Library\ScriptAssemblies\Assembly-UnityScript-firstpass.dll</HintPath>
     </Reference>
@@ -87,7 +84,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\PlayerDeath.cs" />
     <Compile Include="Assets\Scripts\Buttons.cs" />
     <Compile Include="Assets\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\Core.cs" />
@@ -95,10 +91,13 @@
     <Compile Include="Assets\Scripts\DisplayHighScores.cs" />
     <Compile Include="Assets\Scripts\Finish.cs" />
     <Compile Include="Assets\Scripts\GameController.cs" />
+    <Compile Include="Assets\Scripts\GravityChoice.cs" />
     <Compile Include="Assets\Scripts\GravityPortal.cs" />
     <Compile Include="Assets\Scripts\HighScores.cs" />
+    <Compile Include="Assets\Scripts\Magnetize.cs" />
     <Compile Include="Assets\Scripts\Movement.cs" />
     <Compile Include="Assets\Scripts\PauseGame.cs" />
+    <Compile Include="Assets\Scripts\PhysicsPlayerController.cs" />
     <Compile Include="Assets\Scripts\PickUp.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
     <Compile Include="Assets\Scripts\ReflectedTrampoline.cs" />
@@ -110,8 +109,7 @@
     <Compile Include="Assets\Scripts\camDummy.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\CloudsToy\Shaders\CloudBright.shader" />
-    <None Include="Assets\CloudsToy\Shaders\CloudRealistic.shader" />
+    <None Include="Assets\Materials\Fog.shader" />
     <None Include="Assets\Materials\ToonShading.shader" />
     <None Include="Assets\Materials\ToonShadingFlatColor.shader" />
     <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\BlendModesOverlay.shader" />
