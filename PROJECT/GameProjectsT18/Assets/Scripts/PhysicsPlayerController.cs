@@ -52,6 +52,7 @@ public class PhysicsPlayerController : MonoBehaviour
 
     void Update()
     {
+        _velocity = _playerRigidBody.velocity;
         if (_velocity.y < -MaxFallForce) // Will change into Death planes 
         {
             int currentScene = SceneManager.GetActiveScene().buildIndex;
@@ -86,12 +87,12 @@ public class PhysicsPlayerController : MonoBehaviour
 
             if (Mathf.Abs(vInput) > float.Epsilon)
             {
-                if (_velocity.x < MaxForwardSpeed && vInput < 0)
+                if (_velocity.z < MaxForwardSpeed && _velocity.z > -MaxForwardSpeed && vInput < 0)
                 {
                     force.z += vInput * ForwardAcceleration * Time.deltaTime;
                 }
 
-                if (_velocity.x > -MaxForwardSpeed && vInput > 0)
+                if (_velocity.z > -MaxForwardSpeed && _velocity.z < MaxForwardSpeed && vInput > 0)
                 {
                     force.z += vInput * ForwardAcceleration * Time.deltaTime;
                 }
@@ -121,6 +122,8 @@ public class PhysicsPlayerController : MonoBehaviour
             force = ToWorldSpace(force);
 
             //Move
+            Debug.Log("force " + force);
+            Debug.Log("velocity " + _velocity);
             _playerRigidBody.AddForce(force * 50.0f);
         }
     }
