@@ -179,7 +179,7 @@ public class PhysicsPlayerController : MonoBehaviour
 
     public void ApplyForce(Vector3 appliedForce)
     {
-        _playerRigidBody.velocity = appliedForce;
+        _playerRigidBody.velocity = ToWorldSpace( appliedForce);
         _jumping = true;
     }
 
@@ -210,7 +210,7 @@ public class PhysicsPlayerController : MonoBehaviour
         return _movementLock;
     }
 
-    private Vector3 ToWorldSpace(Vector3 v)
+    public Vector3 ToWorldSpace(Vector3 v)
     {
         return v.z * _moveDirForward + v.x * _moveDirRight + v.y * _upVector3;
     }
