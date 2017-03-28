@@ -9,10 +9,10 @@ public class SpeedBoost : MonoBehaviour {
     {
         if (other.tag == "Player")
         {
-            var speedVector = other.GetComponent<PlayerController>().GetVelocity();
+            var speedVector = other.GetComponent<PhysicsPlayerController>().GetVelocity();
             var speed = Vector3.forward * speedMultiplier;
             speedVector += speed;
-            other.GetComponent<PlayerController>().SetVelocity(speedVector);
+            other.GetComponent<PhysicsPlayerController>().SetVelocity(speedVector);
         }
     }
 }

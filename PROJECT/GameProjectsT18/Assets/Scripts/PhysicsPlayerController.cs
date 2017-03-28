@@ -186,11 +186,10 @@ public class PhysicsPlayerController : MonoBehaviour
     public Vector3 GetVelocity()
     {
         return _playerRigidBody.velocity;
-
     }
     public void SetVelocity(Vector3 velocity)
     {
-        _velocity = velocity;
+        _playerRigidBody.velocity = velocity; 
     }
     public void SetLockMovement(bool locked)
     {
