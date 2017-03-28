@@ -143,9 +143,13 @@ public class PhysicsPlayerController : MonoBehaviour
             }
 
             //from local to worlspace
+            Vector3 gravity = _upVector3;
+            gravity *= -9.81f;
+            _playerRigidBody.velocity += gravity * Time.deltaTime;
             force = ToWorldSpace(force);
 
             //Move
+            Debug.Log("up " + _upVector3);
             Debug.Log("force " + force);
             Debug.Log("velocity " + _velocity);
             _playerRigidBody.AddForce(force * 50.0f);
