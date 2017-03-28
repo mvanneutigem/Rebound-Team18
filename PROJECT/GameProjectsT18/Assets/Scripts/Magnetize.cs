@@ -37,9 +37,11 @@ public class Magnetize : MonoBehaviour
                 else
                     difference = _magneticObject[i].transform.position - transform.position;
 
-                if (difference.magnitude <= MinimumDistance)
+                if (difference.magnitude <=  MinimumDistance)
                 {
-                    _rigidbody.AddForce(difference * RepelForce * Time.deltaTime);
+                    float scale = 1 - difference.magnitude / MinimumDistance;
+                    difference.Scale(new Vector3( scale,scale,scale));
+                    _rigidbody.AddForce(difference * RepelForce * 10* Time.deltaTime);
                 }
             }
            

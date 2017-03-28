@@ -101,6 +101,7 @@ public class GravityPortal : MonoBehaviour
             // Both the up Gravity direction and the Forward direction CAN change the upvector. so I calculate them twice, locally, and then lerp them 50/50
             // 1st calculations is with the up
             Vector3 upSecond = Vector3.zero;
+
             if (_playerController.GetForwardDir() != ChangeForwardVector)
             {
                 forward = Vector3.RotateTowards(forward, ChangeForwardVector, Mathf.PI / 360 * (ChangeDirectionSpeed), Mathf.PI);
