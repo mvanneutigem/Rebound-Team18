@@ -32,16 +32,16 @@ public class CameraController : MonoBehaviour
     {
         _transSelf = transform;
         _camTransform = _camera.transform;
-        //_camTransform.SetParent(this.transform);
-        //_camTransform.forward = _transSelf.position - _camTransform.position;
+        _camTransform.SetParent(this.transform);
+        _camTransform.forward = _transSelf.position - _camTransform.position;
 
-        //_camera = _camTransform.GetComponent<Camera>();
-        //_camera.fieldOfView = FOV;
+        _camera = _camTransform.GetComponent<Camera>();
+        _camera.fieldOfView = FOV;
 
-        //_camTransform.localPosition = new Vector3(0, 0, -_camBoomLength);
+        _camTransform.localPosition = new Vector3(0, 0, -_camBoomLength);
 
-        //_playerTransform = _player.transform;
-        sphereGameObject = GameObject.FindWithTag("Player");
+        _playerTransform = _player.transform;
+        //sphereGameObject = GameObject.FindWithTag("Player");
     }
     
     void Update()
@@ -52,54 +52,54 @@ public class CameraController : MonoBehaviour
     void UpdatePosition()
     {
         //old code:
-        //if (_AllowRotation)
-        //{
-        //    float moveX = Input.GetAxis("Controller X") * _controllerSpeedH + Input.GetAxis("Mouse X") * _mouseSpeedH;
-        //    float moveY = Input.GetAxis("Controller Y") * _controllerSpeedV + Input.GetAxis("Mouse Y") * _mouseSpeedV;
+        if (_AllowRotation)
+        {
+            float moveX = Input.GetAxis("Controller X") * _controllerSpeedH + Input.GetAxis("Mouse X") * _mouseSpeedH;
+            float moveY = Input.GetAxis("Controller Y") * _controllerSpeedV + Input.GetAxis("Mouse Y") * _mouseSpeedV;
 
-        //    Vector3 camAngle = _transSelf.localEulerAngles;
+            Vector3 camAngle = _transSelf.localEulerAngles;
 
-        //    if (Mathf.Abs(moveX) > Mathf.Epsilon)
-        //    {
-        //        camAngle = new Vector3(camAngle.x, camAngle.y + moveX, camAngle.z);
-        //    }
+            if (Mathf.Abs(moveX) > Mathf.Epsilon)
+            {
+                camAngle = new Vector3(camAngle.x, camAngle.y + moveX, camAngle.z);
+            }
 
-        //    if (Mathf.Abs(moveY) > Mathf.Epsilon)
-        //    {
-        //        camAngle = new Vector3(camAngle.x + moveY, camAngle.y, camAngle.z);
-        //    }
+            if (Mathf.Abs(moveY) > Mathf.Epsilon)
+            {
+                camAngle = new Vector3(camAngle.x + moveY, camAngle.y, camAngle.z);
+            }
 
-        //    if (camAngle.x < 275 && camAngle.x > 180) camAngle.x = 275;
-        //    if (camAngle.x > 85 && camAngle.x < 180) camAngle.x = 85;
-        //    //else if (camAngle.x > _verMax) camAngle.x = _verMax;
+            if (camAngle.x < 275 && camAngle.x > 180) camAngle.x = 275;
+            if (camAngle.x > 85 && camAngle.x < 180) camAngle.x = 85;
+            //else if (camAngle.x > _verMax) camAngle.x = _verMax;
 
-        //    _transSelf.localEulerAngles = camAngle;
-        //    //_camTransform.forward = _transSelf.position - _camTransform.position;
-        //}
-        //_transSelf.position = _playerTransform.position;
+            _transSelf.localEulerAngles = camAngle;
+            //_camTransform.forward = _transSelf.position - _camTransform.position;
+        }
+        _transSelf.position = _playerTransform.position;
 
         // followcam
-        Vector3 sphereVelocity = sphereGameObject.GetComponent<Rigidbody>().velocity;
-        sphereVelocity.Normalize();
+        //Vector3 sphereVelocity = sphereGameObject.GetComponent<Rigidbody>().velocity;
+        //sphereVelocity.Normalize();
 
-        Vector3 spherePos = sphereGameObject.transform.position;
-        Vector3 camPos = transform.position;
-        Vector3 camToSphere = spherePos - camPos;
-        camToSphere.Normalize();
+        //Vector3 spherePos = sphereGameObject.transform.position;
+        //Vector3 camPos = transform.position;
+        //Vector3 camToSphere = spherePos - camPos;
+        //camToSphere.Normalize();
 
-        Vector3 meanDir = camToSphere + sphereVelocity;
-        meanDir.Normalize();
-        float minDist = 5.0f;
+        //Vector3 meanDir = camToSphere + sphereVelocity;
+        //meanDir.Normalize();
+        //float minDist = 5.0f;
 
-        Vector3 targetPos = spherePos - meanDir * minDist;
-        Vector3 targetVector = (targetPos - camPos) / 100.0f;
-        Vector3 newPos = camPos + targetVector;
+        //Vector3 targetPos = spherePos - meanDir * minDist;
+        //Vector3 targetVector = (targetPos - camPos) / 30.0f;
+        //Vector3 newPos = camPos + targetVector;
 
-        transform.position = newPos;
+        //transform.position = newPos;
 
-        transform.LookAt(spherePos);
+        //transform.LookAt(spherePos);
 
-        transform.right = sphereGameObject.transform.right;
+        //transform.right = sphereGameObject.transform.right;
     }
 
     public void SetFOV(float fov)
