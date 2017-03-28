@@ -70,18 +70,18 @@ public class PhysicsPlayerController : MonoBehaviour
             //rotate character in the direction it's moving in
 
             Vector3 force = Vector3.zero;
-            _moveDirRight = Vector3.Cross(_moveDirForward.normalized, _upVector3.normalized);
+            _moveDirRight = Vector3.Cross( _upVector3.normalized, _moveDirForward.normalized);
 
             if (Mathf.Abs(hInput) > float.Epsilon)
             {
-                if ( _velocity.x > -MaxLateralSpeed && hInput < 0)
-                {
-                    force.x += -hInput * LateralAcceleration * Time.deltaTime;
-                }
-
                 if ( _velocity.x < MaxLateralSpeed && hInput > 0)
                 {
-                    force.x += -hInput * LateralAcceleration * Time.deltaTime;
+                    force.x += hInput * LateralAcceleration * Time.deltaTime;
+                }
+
+                if ( _velocity.x > -MaxLateralSpeed && hInput < 0)
+                {
+                    force.x += hInput * LateralAcceleration * Time.deltaTime;
                 }
             }
             else
@@ -89,11 +89,11 @@ public class PhysicsPlayerController : MonoBehaviour
                 //decceleration
                 if (_velocity.x > 0)
                 {
-                    force.x += LateralDeceleration * Time.deltaTime;
+                    force.x -= LateralDeceleration * Time.deltaTime;
                 }
                 if (_velocity.x < 0)
                 {
-                    force.x -= LateralDeceleration * Time.deltaTime;
+                    force.x += LateralDeceleration * Time.deltaTime;
                 }
             }
 
@@ -121,7 +121,6 @@ public class PhysicsPlayerController : MonoBehaviour
                     force.z += LateralDeceleration * Time.deltaTime;
                 }
             }
-
             //jump
             if (Input.GetAxis("Jump") > 0 && !_jumping)
             {
