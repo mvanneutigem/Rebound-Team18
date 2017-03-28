@@ -158,7 +158,6 @@ public class PhysicsPlayerController : MonoBehaviour
 
     public void SetForwardDir(Vector3 forward)
     {
-
         _moveDirForward = forward;
     }
 
