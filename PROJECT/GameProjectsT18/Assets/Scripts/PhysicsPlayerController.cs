@@ -52,6 +52,7 @@ public class PhysicsPlayerController : MonoBehaviour
 
     void Update()
     {
+        _velocity = _playerRigidBody.velocity;
         if (_velocity.y < -MaxFallForce) // Will change into Death planes 
         {
             int currentScene = SceneManager.GetActiveScene().buildIndex;
@@ -73,27 +74,51 @@ public class PhysicsPlayerController : MonoBehaviour
 
             if (Mathf.Abs(hInput) > float.Epsilon)
             {
-                if (_velocity.x < MaxLateralSpeed && hInput < 0)
+                if ( _velocity.x > -MaxLateralSpeed && hInput < 0)
                 {
                     force.x += -hInput * LateralAcceleration * Time.deltaTime;
                 }
 
-                if (_velocity.x > -MaxLateralSpeed && hInput > 0)
+                if ( _velocity.x < MaxLateralSpeed && hInput > 0)
                 {
                     force.x += -hInput * LateralAcceleration * Time.deltaTime;
+                }
+            }
+            else
+            {
+                //decceleration
+                if (_velocity.x > 0)
+                {
+                    force.x += LateralDeceleration * Time.deltaTime;
+                }
+                if (_velocity.x < 0)
+                {
+                    force.x -= LateralDeceleration * Time.deltaTime;
                 }
             }
 
             if (Mathf.Abs(vInput) > float.Epsilon)
             {
-                if (_velocity.x < MaxForwardSpeed && vInput < 0)
+                if ( _velocity.z > -MaxForwardSpeed && vInput < 0)
                 {
                     force.z += vInput * ForwardAcceleration * Time.deltaTime;
                 }
 
-                if (_velocity.x > -MaxForwardSpeed && vInput > 0)
+                if ( _velocity.z < MaxForwardSpeed && vInput > 0)
                 {
                     force.z += vInput * ForwardAcceleration * Time.deltaTime;
+                }
+            }
+            else
+            {
+                //decceleration
+                if (_velocity.z > 0)
+                {
+                    force.z -= LateralDeceleration * Time.deltaTime;
+                }
+                if (_velocity.z < 0)
+                {
+                    force.z += LateralDeceleration * Time.deltaTime;
                 }
             }
 
@@ -112,15 +137,21 @@ public class PhysicsPlayerController : MonoBehaviour
             }
 
             //slam
-            //if (Input.GetButtonDown("Slam") && _grounded > 0)
-            //{
-            //    _velocity.y += SlamSpeed;
-            //}
+            if (Input.GetButtonDown("Slam") )
+            {
+                _playerRigidBody.AddForce(_lastSurfaceNormal * SlamSpeed, ForceMode.Impulse);
+            }
 
             //from local to worlspace
+            Vector3 gravity = _upVector3;
+            gravity *= -9.81f;
+            _playerRigidBody.velocity += gravity * Time.deltaTime;
             force = ToWorldSpace(force);
 
             //Move
+            Debug.Log("up " + _upVector3);
+            Debug.Log("force " + force);
+            Debug.Log("velocity " + _velocity);
             _playerRigidBody.AddForce(force * 50.0f);
         }
     }
@@ -135,11 +166,9 @@ public class PhysicsPlayerController : MonoBehaviour
         return _moveDirForward;
     }
 
-    public void ApplyForce(Vector3 force)
+    public void ApplyForce(Vector3 appliedForce)
     {
-        _velocity.z = force.z;
-        _velocity.x = force.x;
-        _velocity.y = force.y;
+        _playerRigidBody.velocity = appliedForce;
         _jumping = true;
     }
 
@@ -155,7 +184,8 @@ public class PhysicsPlayerController : MonoBehaviour
 
     public Vector3 GetVelocity()
     {
-        return _velocity;
+        return _playerRigidBody.velocity;
+
     }
     public void SetVelocity(Vector3 velocity)
     {

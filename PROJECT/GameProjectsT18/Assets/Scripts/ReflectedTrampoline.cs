@@ -23,8 +23,8 @@ public class ReflectedTrampoline : MonoBehaviour
         {
 
             var normal = this.transform.up;
-            var inVelocity = other.GetComponent<PlayerController>().GetVelocity();
-            var reflectedVector = Vector3.Reflect(inVelocity, normal);
+            var inVelocity = other.GetComponent<PhysicsPlayerController>().GetVelocity();
+            Vector3 reflectedVector;
             reflectedVector.x = inVelocity.x;
             reflectedVector.z = inVelocity.z;
             //only reflect y part of velocity over set threshold
@@ -43,7 +43,7 @@ public class ReflectedTrampoline : MonoBehaviour
             //        reflectedVector.y = threshold;
             //}
 
-            other.GetComponent<PlayerController>().ApplyForce(reflectedVector * TrampolinePower);
+            other.GetComponent<PhysicsPlayerController>().ApplyForce(reflectedVector * TrampolinePower);
         }
     }
 }
