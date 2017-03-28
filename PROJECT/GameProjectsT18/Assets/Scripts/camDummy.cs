@@ -5,9 +5,9 @@ using UnityEngine;
 public class camDummy : MonoBehaviour {
 
     // Use this for initialization
-    private PlayerController _player;
+    private PhysicsPlayerController _player;
 	void Start () {
-        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<PhysicsPlayerController>();
     }
 	
 	// Update is called once per frame
