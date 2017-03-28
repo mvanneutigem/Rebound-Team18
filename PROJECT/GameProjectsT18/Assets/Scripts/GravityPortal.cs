@@ -6,7 +6,7 @@ public class GravityPortal : MonoBehaviour
 {
     public Vector3 GravityDirectionVector = new Vector3(0, -1, 0);
     public Vector3 ChangeForwardVector = new Vector3(0, 0, 1);
-    private PlayerController _playerController;
+    private PhysicsPlayerController _playerController;
     private Transform _playerTransform;
     private Transform _transSelf;
     public float RotateDistance = 20.0f;
@@ -26,7 +26,7 @@ public class GravityPortal : MonoBehaviour
         if (playerGameObject != null)
         {
             _playerTransform = playerGameObject.transform;
-            _playerController = playerGameObject.GetComponent<PlayerController>();
+            _playerController = playerGameObject.GetComponent<PhysicsPlayerController>();
         }
     }
     void Update()
