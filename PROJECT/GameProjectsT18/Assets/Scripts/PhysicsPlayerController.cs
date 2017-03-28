@@ -136,11 +136,9 @@ public class PhysicsPlayerController : MonoBehaviour
         return _moveDirForward;
     }
 
-    public void ApplyForce(Vector3 force)
+    public void ApplyForce(Vector3 appliedForce)
     {
-        _velocity.z = force.z;
-        _velocity.x = force.x;
-        _velocity.y = force.y;
+        _playerRigidBody.velocity = appliedForce;
         _jumping = true;
     }
 
@@ -156,7 +154,8 @@ public class PhysicsPlayerController : MonoBehaviour
 
     public Vector3 GetVelocity()
     {
-        return _velocity;
+        return _playerRigidBody.velocity;
+
     }
     public void SetVelocity(Vector3 velocity)
     {
