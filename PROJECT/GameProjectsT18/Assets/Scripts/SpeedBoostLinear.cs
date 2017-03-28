@@ -38,9 +38,9 @@ public class SpeedBoostLinear : MonoBehaviour
         if (other.tag == "Player")
         {
             _player = other.GetComponent<PlayerController>();
-            _playerTransform = other.transform;
+            _playerTransform = _player.GetComponent<Transform>();
             _startPos = _playerTransform.position;
-            Vector3 forward = _playerTransform.forward;
+            Vector3 forward = _player.GetForwardDir();
             forward.y = 0;
             forward.Normalize();
             _endPos = _startPos + forward * Distance;
