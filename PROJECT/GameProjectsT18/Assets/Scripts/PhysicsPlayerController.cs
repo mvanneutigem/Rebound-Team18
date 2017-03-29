@@ -170,6 +170,7 @@ public class PhysicsPlayerController : MonoBehaviour
     public void SetForwardDir(Vector3 forward)
     {
         _moveDirForward = forward;
+        _playerRigidBody.velocity = _moveDirForward.normalized * _playerRigidBody.velocity.magnitude;
     }
 
     public Vector3 GetForwardDir()
