@@ -180,7 +180,13 @@ public class PhysicsPlayerController : MonoBehaviour
 
     public void ApplyForce(Vector3 appliedForce)
     {
-        _playerRigidBody.velocity = ToWorldSpace( appliedForce);
+        _playerRigidBody.velocity = appliedForce;
+        _jumping = true;
+    }
+
+    public void ApplyLocalForce(Vector3 appliedForce)
+    {
+        _playerRigidBody.velocity = ToWorldSpace(appliedForce);
         _jumping = true;
     }
 
@@ -197,6 +203,11 @@ public class PhysicsPlayerController : MonoBehaviour
     public Vector3 GetVelocity()
     {
         return _playerRigidBody.velocity;
+    }
+
+    public Vector3 GetLocalVelocity()
+    {
+        return _velocity;
     }
     public void SetVelocity(Vector3 velocity)
     {

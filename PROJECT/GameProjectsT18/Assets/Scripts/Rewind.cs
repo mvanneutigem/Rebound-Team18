@@ -39,7 +39,6 @@ public class Rewind : MonoBehaviour {
     {
         if (Time.timeScale > float.Epsilon)
         {
-
             if (_arrayIdx > _previousPositions.Count - 1 | _arrayIdx < 0)
             {
                 _arrayIdx = _previousPositions.Count;
