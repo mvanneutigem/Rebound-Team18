@@ -21,26 +21,28 @@ public class ReflectedTrampoline : MonoBehaviour
     {
         if (other.tag == "Player")
         {
+            if (other.GetComponent<PhysicsPlayerController>().materialstate == PhysicsPlayerController.Mat.RUBBER)
+            {
+                var normal = this.transform.up;
+                var inVelocity = other.GetComponent<PhysicsPlayerController>().GetLocalVelocity();
+                Vector3 reflectedVector = inVelocity;
+                //only reflect y part of velocity over set threshold
 
-            var normal = this.transform.up;
-            var inVelocity = other.GetComponent<PhysicsPlayerController>().GetLocalVelocity();
-            Vector3 reflectedVector = inVelocity;
-            //only reflect y part of velocity over set threshold
+                reflectedVector.y = UpPower;
 
-            reflectedVector.y = UpPower;
-
-            //if (reflectedVector.y < threshold)
-            //{
-            //    reflectedVector.y = UpPower;
-            //}
-            //else
-            //{
-            //    //rate of slowdown
-            //    reflectedVector.y *= SlowDownRate;
-            //    if (reflectedVector.y < threshold)
-            //        reflectedVector.y = threshold;
-            //}
-            other.GetComponent<PhysicsPlayerController>().ApplyLocalForce(reflectedVector * TrampolinePower);
+                //if (reflectedVector.y < threshold)
+                //{
+                //    reflectedVector.y = UpPower;
+                //}
+                //else
+                //{
+                //    //rate of slowdown
+                //    reflectedVector.y *= SlowDownRate;
+                //    if (reflectedVector.y < threshold)
+                //        reflectedVector.y = threshold;
+                //}
+                other.GetComponent<PhysicsPlayerController>().ApplyLocalForce(reflectedVector * TrampolinePower);
+            }
         }
     }
 }

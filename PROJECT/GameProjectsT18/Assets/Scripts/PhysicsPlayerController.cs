@@ -39,9 +39,24 @@ public class PhysicsPlayerController : MonoBehaviour
     private Animator myAnimator;
     private bool OnTrampoline = false;
 
+    public enum Mat
+    {
+        METAL,
+        RUBBER,
+        GLASS,
+        WOOD
+    }
+    public Mat materialstate;
+
+    public void SetState(int id)
+    {
+        materialstate = (Mat)id;
+    }
+
     //METHODS
     void Awake()
     {
+        materialstate = Mat.RUBBER;
         _transSelf = this.transform;
         _upVector3 = new Vector3(0, 1, 0);
         _velocity = Vector3.zero;

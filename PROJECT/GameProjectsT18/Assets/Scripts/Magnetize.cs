@@ -5,23 +5,24 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Magnetize : MonoBehaviour
 {
-    public enum Type { Attract, Repel }
-
     [SerializeField]
     private float RepelForce = 1000.0f;
 
     [SerializeField]
-    private float MinimumDistance = 1.0f;
+    private float AttractForce = 1000.0f;
 
     [SerializeField]
-    private Type MagnetizeType = Type.Repel;
+    private float MinimumDistance = 1.0f;
+
 
     private GameObject[] _magneticObject;
+    private GameObject[] _attractmagneticObject;
     private Rigidbody _rigidbody;
 
     void Awake()
     {
         _magneticObject = GameObject.FindGameObjectsWithTag("Magnetic");
+        _attractmagneticObject = GameObject.FindGameObjectsWithTag("Magnetic_Attract");
         _rigidbody = GetComponent<Rigidbody>();
     }
 
@@ -32,10 +33,8 @@ public class Magnetize : MonoBehaviour
             for(int i = 0; i < _magneticObject.Length; ++i)
             {
                 Vector3 difference;
-                if (MagnetizeType == Type.Repel)
-                    difference = transform.position - _magneticObject[i].transform.position;
-                else
-                    difference = _magneticObject[i].transform.position - transform.position;
+                difference = transform.position - _magneticObject[i].transform.position;
+
 
                 if (difference.magnitude <=  MinimumDistance)
                 {
@@ -45,6 +44,21 @@ public class Magnetize : MonoBehaviour
                 }
             }
            
+        }
+        if (_attractmagneticObject != null)
+        {
+            for (int i = 0; i < _attractmagneticObject.Length; ++i)
+            {
+                Vector3 difference;
+                difference = _attractmagneticObject[i].transform.position - transform.position;
+
+                if (difference.magnitude <= MinimumDistance)
+                {
+                    float scale = 1 - difference.magnitude / MinimumDistance;
+                    difference.Scale(new Vector3(scale, scale, scale));
+                    _rigidbody.AddForce(difference * AttractForce * 10 * Time.deltaTime);
+                }
+            }
         }
     }
 }
