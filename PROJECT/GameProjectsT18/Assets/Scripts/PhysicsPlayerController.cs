@@ -88,14 +88,17 @@ public class PhysicsPlayerController : MonoBehaviour
             }
             else
             {
-                //decceleration
-                if (_velocity.x > 0)
+                if (_grounded <= 0)
                 {
-                    force.x -= LateralDeceleration * Time.deltaTime;
-                }
-                if (_velocity.x < 0)
-                {
-                    force.x += LateralDeceleration * Time.deltaTime;
+                    //deceleration
+                    if (_velocity.x > 0)
+                    {
+                        force.x -= LateralDeceleration * Time.deltaTime;
+                    }
+                    if (_velocity.x < 0)
+                    {
+                        force.x += LateralDeceleration * Time.deltaTime;
+                    }
                 }
             }
 
@@ -113,14 +116,17 @@ public class PhysicsPlayerController : MonoBehaviour
             }
             else
             {
-                //decceleration
-                if (_velocity.z > 0)
+                //deceleration
+                if (_grounded <= 0)
                 {
-                    force.z -= LateralDeceleration * Time.deltaTime;
-                }
-                if (_velocity.z < 0)
-                {
-                    force.z += LateralDeceleration * Time.deltaTime;
+                    if (_velocity.z > 0)
+                    {
+                        force.z -= LateralDeceleration * Time.deltaTime;
+                    }
+                    if (_velocity.z < 0)
+                    {
+                        force.z += LateralDeceleration * Time.deltaTime;
+                    }
                 }
             }
             //jump
