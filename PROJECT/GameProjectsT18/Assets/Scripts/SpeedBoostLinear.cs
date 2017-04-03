@@ -7,7 +7,7 @@ public class SpeedBoostLinear : MonoBehaviour
 
     public float Distance;
     public float BoostTime;
-    private PlayerController _player;
+    private PhysicsPlayerController _player;
     private Transform _playerTransform;
     private float _timer = 0;
     private bool _enabled = false;
@@ -37,7 +37,7 @@ public class SpeedBoostLinear : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            _player = other.GetComponent<PlayerController>();
+            _player = other.GetComponent<PhysicsPlayerController>();
             _playerTransform = _player.GetComponent<Transform>();
             _startPos = _playerTransform.position;
             Vector3 forward = _player.GetForwardDir();
