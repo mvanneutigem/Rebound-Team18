@@ -31,9 +31,9 @@ public class GravityPortal : MonoBehaviour
     }
     void Update()
     {
-        DrawLine(_playerTransform.position, _playerTransform.position + (_playerController.GetUpVector() * 4), Color.green, .02f);
-        DrawLine(_playerTransform.position, _playerTransform.position + (_playerController.GetRightVector() * 4), Color.red, .02f);
-        DrawLine(_playerTransform.position, _playerTransform.position + (_playerController.GetForwardDir() * 4), Color.blue, .02f);
+        //DrawLine(_playerTransform.position, _playerTransform.position + (_playerController.GetUpVector() * 4), Color.green, .02f);
+        //DrawLine(_playerTransform.position, _playerTransform.position + (_playerController.GetRightVector() * 4), Color.red, .02f);
+        //DrawLine(_playerTransform.position, _playerTransform.position + (_playerController.GetForwardDir() * 4), Color.blue, .02f);
 
         if (_entered)
         {
