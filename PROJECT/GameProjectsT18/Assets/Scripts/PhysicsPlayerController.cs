@@ -36,7 +36,6 @@ public class PhysicsPlayerController : MonoBehaviour
     private Vector3 _lastSurfaceNormal;
 
     private Vector3 _camForward;
-    private Animator myAnimator;
     private bool OnTrampoline = false;
 
     public enum Mat
@@ -62,7 +61,6 @@ public class PhysicsPlayerController : MonoBehaviour
         _velocity = Vector3.zero;
         _playerRigidBody = this.GetComponent<Rigidbody>();
         PlayerPrefs.SetInt("Score", 0);
-        myAnimator = GetComponent<Animator>();
     }
 
     void Update()
