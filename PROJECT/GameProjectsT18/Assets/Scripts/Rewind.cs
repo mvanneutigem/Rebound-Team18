@@ -14,6 +14,7 @@ public class Rewind : MonoBehaviour {
     private ArrayList _previousVelocities = new ArrayList();
     private ArrayList _previousForward = new ArrayList();
     private ArrayList _previousUp = new ArrayList();
+    private ArrayList _previousMat = new ArrayList();
 
     private int _arrayIdx = 0;
 
@@ -25,9 +26,12 @@ public class Rewind : MonoBehaviour {
     private float _rewindAmount = 0;
     private const float MAX_REWIND_AMOUNT = 750.0f;
     private bool _rewinding = false;
+    private PhysicsPlayerController.Mat _material;
+    private GameObject _switcher;
 
-	void Start ()
+    void Start ()
     {
+        _switcher = GameObject.Find("MaterialChanger").gameObject;
         _playerGameObject = GameObject.FindWithTag("Player");
         _playerController = _playerGameObject.GetComponent<PhysicsPlayerController>();
         _playerTransform = _playerGameObject.GetComponent<Transform>();
@@ -55,7 +59,7 @@ public class Rewind : MonoBehaviour {
                 {
                     _rewindAmount = MAX_REWIND_AMOUNT;
                 }
-
+                _previousMat.Add(_playerController.materialstate);
                 _previousPositions.Add(_playerTransform.position);
                 _previousRotations.Add(_playerTransform.localRotation);
                 _previousVelocities.Add(_playerController.GetVelocity());
@@ -99,6 +103,16 @@ public class Rewind : MonoBehaviour {
         _arrayIdx--;
         if(_arrayIdx > 0)
         {
+            if (_switcher)
+            {
+                _material = (PhysicsPlayerController.Mat)_previousMat[_arrayIdx - 1];
+                if (_playerController.materialstate != _material)
+                {
+                    _playerController.materialstate = _material;
+                    _switcher.GetComponent<MaterialSwitcher>().ChangeMaterial(_material, _playerGameObject);
+                }
+            }
+            
             _playerTransform.position = (Vector3)_previousPositions[_arrayIdx-1];
             _playerTransform.localRotation = (Quaternion)_previousRotations[_arrayIdx-1];
             _playerController.SetForwardDir((Vector3)_previousForward[_arrayIdx - 1]);
