@@ -11,11 +11,11 @@ public class MaterialSwitcher : MonoBehaviour {
 
     public PhysicsPlayerController.Mat material;
 
-    public void ChangeMaterial(PhysicsPlayerController.Mat material, GameObject other)
+    public void ChangeMaterial(PhysicsPlayerController.Mat localMaterial, GameObject other)
     {
         if (other.tag == "Player")
         {
-            switch (material)
+            switch (localMaterial)
             {
                 case PhysicsPlayerController.Mat.METAL:
                     other.GetComponent<Renderer>().material = metalMaterialRef;
