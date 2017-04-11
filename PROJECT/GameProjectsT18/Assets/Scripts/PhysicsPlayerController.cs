@@ -24,7 +24,7 @@ public class PhysicsPlayerController : MonoBehaviour
     private Vector3 _moveDirRight;
     private Rigidbody _playerRigidBody;
     private Transform _transSelf;
-    public float JumpSpeed = 2.0f;
+    public float JumpSpeed = 10.0f;
     public float SlamSpeed = -30.0f;
     private bool _jumping = false;
     private float dragForce;
