@@ -38,7 +38,7 @@ public class CameraController : MonoBehaviour
         _camera = _camTransform.GetComponent<Camera>();
         _camera.fieldOfView = FOV;
 
-        _camTransform.localPosition = new Vector3(0, 0, -_camBoomLength);
+        _camTransform.localPosition = new Vector3(0, 2, -_camBoomLength);
 
         _playerTransform = _player.transform;
         //sphereGameObject = GameObject.FindWithTag("Player");

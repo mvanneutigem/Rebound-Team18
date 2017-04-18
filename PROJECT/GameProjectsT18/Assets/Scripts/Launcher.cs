@@ -10,6 +10,8 @@ public class Launcher : MonoBehaviour
     void Start()
     {
         _anim = GetComponent<Animation>();
+        GameObject.FindGameObjectWithTag("Player").GetComponent<PhysicsPlayerController>().SetLockMovement(true);
+
     }
 
     void Update()
@@ -22,7 +24,9 @@ public class Launcher : MonoBehaviour
     }
     private void Launch()
     {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<PhysicsPlayerController>().SetLockMovement(false);
         StartCoroutine(playanimation());
+
     }
 
     private IEnumerator playanimation()
