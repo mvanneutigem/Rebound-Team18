@@ -31,12 +31,12 @@ public class Rewind : MonoBehaviour {
 
     void Start ()
     {
-        _switcher = GameObject.Find("MaterialChanger").gameObject;
         _playerGameObject = GameObject.FindWithTag("Player");
         _playerController = _playerGameObject.GetComponent<PhysicsPlayerController>();
         _playerTransform = _playerGameObject.GetComponent<Transform>();
         _rewindBar = GameObject.Find("RewindBar").transform;
         _barLength = _rewindBar.localScale.x;
+        _switcher = GameObject.Find("MaterialChanger");
     }
 	
 	void Update ()
