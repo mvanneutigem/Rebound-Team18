@@ -31,13 +31,8 @@ public class GravityPortal : MonoBehaviour
     }
     void Update()
     {
-        //DrawLine(_playerTransform.position, _playerTransform.position + (_playerController.GetUpVector() * 4), Color.green, .02f);
-        //DrawLine(_playerTransform.position, _playerTransform.position + (_playerController.GetRightVector() * 4), Color.red, .02f);
-        //DrawLine(_playerTransform.position, _playerTransform.position + (_playerController.GetForwardDir() * 4), Color.blue, .02f);
-
         if (_entered)
         {
-
             // Creating a copy of it's transform to invisible change with the forward vector to get a static right and up vector to make calculations off.
             // *********
             GameObject pseudoObject = new GameObject();
@@ -72,7 +67,7 @@ public class GravityPortal : MonoBehaviour
                 _angle = Vector3.Angle(_playerController.GetUpVector(), -GravityDirectionVector);
 
                 // Incase the rotation is CCW the right vector becomes the left vector
-                if(GravityDirectionVector.x > 0)
+                if (GravityDirectionVector.x > 0)
                 {
                     pseudoObject.transform.right = -pseudoObject.transform.right;
                 }
@@ -98,37 +93,50 @@ public class GravityPortal : MonoBehaviour
                 }
 
             }
-            // Both the up Gravity direction and the Forward direction CAN change the upvector. so I calculate them twice, locally, and then lerp them 50/50
-            // 1st calculations is with the up
-            Vector3 upSecond = Vector3.zero;
+                // Both the up Gravity direction and the Forward direction CAN change the upvector. so I calculate them twice, locally, and then lerp them 50/50
+                // 1st calculations is with the up
+                Vector3 upSecond = Vector3.zero;
 
-            if (_playerController.GetForwardDir() != ChangeForwardVector)
-            {
-                forward = Vector3.RotateTowards(forward, ChangeForwardVector, Mathf.PI / 360 * (ChangeDirectionSpeed), Mathf.PI);
-                // second up calculations here
-                upSecond = Vector3.Cross(_playerController.GetForwardDir(), _playerController.GetRightVector());
-                forward.Normalize();
-                _playerController.SetForwardDir(forward);
-            }
+                if (_playerController.GetForwardDir() != ChangeForwardVector)
+                {
+                    forward = Vector3.RotateTowards(forward, ChangeForwardVector, Mathf.PI / 360 * (ChangeDirectionSpeed), Mathf.PI);
+                    // second up calculations here
+                    upSecond = Vector3.Cross(_playerController.GetForwardDir(), _playerController.GetRightVector());
+                    forward.Normalize();
+                    _playerController.SetForwardDir(forward);
+                }
 
-            // If both up vectors haven't been calculated thiss pass (equaling zero) then there is no need to update the up vector
-            if (up != Vector3.zero && upSecond != Vector3.zero)
-            {
-                // 50/50 lerp here
-                up = Vector3.Lerp(up, upSecond, 0.5f );
-                up.Normalize();
-                _playerController.SetUpVector(up);
-            }else if(up == Vector3.zero && upSecond != Vector3.zero){
-                upSecond.Normalize();
-                _playerController.SetUpVector(upSecond);
-            }else if(upSecond == Vector3.zero && up != Vector3.zero){
-                up.Normalize();
-                _playerController.SetUpVector(up);
-            }
+                // If both up vectors haven't been calculated thiss pass (equaling zero) then there is no need to update the up vector
+                if (up != Vector3.zero && upSecond != Vector3.zero)
+                {
+                    // 50/50 lerp here
+                    up = Vector3.Lerp(up, upSecond, 0.5f );
+                    up.Normalize();
+                    _playerController.SetUpVector(up);
+                }else if(up == Vector3.zero && upSecond != Vector3.zero){
+                    upSecond.Normalize();
+                    _playerController.SetUpVector(upSecond);
+                }else if(upSecond == Vector3.zero && up != Vector3.zero){
+                    up.Normalize();
+                    _playerController.SetUpVector(up);
+                }
 
             if (_playerController.GetUpVector() == -GravityDirectionVector && _playerController.GetForwardDir() == ChangeForwardVector)
             {
                 _entered = false;
+            }
+
+            if(_playerController.GetLockMovement())
+            {
+                _entered = false;
+            }
+
+            direction = _playerTransform.position - _transSelf.position;
+            distance = Vector3.Dot(direction, _playerController.GetForwardDir());
+            range = (distance / RotateDistance);
+            if(range > 0f && range < 1f && (_playerController.GetUpVector() != -GravityDirectionVector || _playerController.GetForwardDir() != ChangeForwardVector))
+            {
+                _entered = true;
             }
         }
     }
