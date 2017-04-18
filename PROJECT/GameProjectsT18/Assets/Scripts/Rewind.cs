@@ -53,12 +53,13 @@ public class Rewind : MonoBehaviour {
                 if (_rewindAmount < MAX_REWIND_AMOUNT)
                 {
                     _rewindAmount += RefillSpeed * Time.deltaTime;
-                   _rewindAmount = MAX_REWIND_AMOUNT;
+                   //_rewindAmount = MAX_REWIND_AMOUNT;
                 }
                 else
                 {
                     _rewindAmount = MAX_REWIND_AMOUNT;
                 }
+
                 _previousMat.Add(_playerController.materialstate);
                 _previousPositions.Add(_playerTransform.position);
                 _previousRotations.Add(_playerTransform.localRotation);
@@ -76,6 +77,7 @@ public class Rewind : MonoBehaviour {
                 }
                 else
                 {
+                    _playerController.SetLockMovement(false);
                     _rewindAmount = 0;
                 }
             }
@@ -84,7 +86,7 @@ public class Rewind : MonoBehaviour {
             _rewindBar.localScale = scale;
 
 
-            if (Input.GetAxisRaw("Rewind") > 0)
+            if (Input.GetAxisRaw("Rewind") > 0 && !_rewinding)
             {
                 _rewinding = true;
                 _playerController.SetLockMovement(true);
