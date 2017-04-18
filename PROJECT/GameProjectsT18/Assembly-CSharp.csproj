@@ -56,6 +56,9 @@
      <Compile Include="Assets\Scripts\GravityChoice.cs" />
      <Compile Include="Assets\Scripts\GravityPortal.cs" />
      <Compile Include="Assets\Scripts\HighScores.cs" />
+     <Compile Include="Assets\Scripts\Laser.cs" />
+     <Compile Include="Assets\Scripts\LaserScript.cs" />
+     <Compile Include="Assets\Scripts\Launcher.cs" />
      <Compile Include="Assets\Scripts\Magnetize.cs" />
      <Compile Include="Assets\Scripts\MaterialSwitcher.cs" />
      <Compile Include="Assets\Scripts\Movement.cs" />
