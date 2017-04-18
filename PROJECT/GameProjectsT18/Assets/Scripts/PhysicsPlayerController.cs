@@ -65,7 +65,12 @@ public class PhysicsPlayerController : MonoBehaviour
 
     void Update()
     {
-        _moveDirRight = Vector3.Cross( _upVector3.normalized, _moveDirForward.normalized);
+
+        DrawLine(_transSelf.position, _transSelf.position + (GetUpVector() * 4), Color.green, .02f);
+        DrawLine(_transSelf.position, _transSelf.position + (GetRightVector() * 4), Color.red, .02f);
+        DrawLine(_transSelf.position, _transSelf.position + (GetForwardDir() * 4), Color.blue, .02f);
+
+        _moveDirRight = Vector3.Cross(_upVector3.normalized, _moveDirForward.normalized);
         _velocity = ConvertToLocalSpace(_playerRigidBody.velocity);
 
 
@@ -89,12 +94,12 @@ public class PhysicsPlayerController : MonoBehaviour
 
             if (Mathf.Abs(hInput) > float.Epsilon)
             {
-                if ( _velocity.x < MaxLateralSpeed && hInput > 0)
+                if (_velocity.x < MaxLateralSpeed && hInput > 0)
                 {
                     force.x += hInput * LateralAcceleration * Time.deltaTime;
                 }
 
-                if ( _velocity.x > -MaxLateralSpeed && hInput < 0)
+                if (_velocity.x > -MaxLateralSpeed && hInput < 0)
                 {
                     force.x += hInput * LateralAcceleration * Time.deltaTime;
                 }
@@ -117,12 +122,12 @@ public class PhysicsPlayerController : MonoBehaviour
 
             if (Mathf.Abs(vInput) > float.Epsilon)
             {
-                if ( _velocity.z > -MaxForwardSpeed && vInput < 0)
+                if (_velocity.z > -MaxForwardSpeed && vInput < 0)
                 {
                     force.z += vInput * ForwardAcceleration * Time.deltaTime;
                 }
 
-                if ( _velocity.z < MaxForwardSpeed && vInput > 0)
+                if (_velocity.z < MaxForwardSpeed && vInput > 0)
                 {
                     force.z += vInput * ForwardAcceleration * Time.deltaTime;
                 }
@@ -157,7 +162,7 @@ public class PhysicsPlayerController : MonoBehaviour
             }
 
             //slam
-            if (Input.GetButtonDown("Slam") )
+            if (Input.GetButtonDown("Slam"))
             {
                 _playerRigidBody.AddForce(_upVector3 * SlamSpeed, ForceMode.Impulse);
             }
@@ -169,7 +174,7 @@ public class PhysicsPlayerController : MonoBehaviour
             force = ToWorldSpace(force);
 
             //Move
-            Debug.Log("up " + _upVector3);
+            //Debug.Log("up " + _upVector3);
             _playerRigidBody.AddForce(force * 50.0f);
         }
     }
@@ -230,7 +235,7 @@ public class PhysicsPlayerController : MonoBehaviour
     }
     public void SetVelocity(Vector3 velocity)
     {
-        _playerRigidBody.velocity = velocity; 
+        _playerRigidBody.velocity = velocity;
     }
     public void SetLockMovement(bool locked)
     {
@@ -282,5 +287,18 @@ public class PhysicsPlayerController : MonoBehaviour
     {
         _grounded -= 1;
     }
-}
 
+    void DrawLine(Vector3 start, Vector3 end, Color color, float duration = 0.2f)
+    {
+        GameObject myLine = new GameObject();
+        myLine.transform.position = start;
+        myLine.AddComponent<LineRenderer>();
+        LineRenderer lr = myLine.GetComponent<LineRenderer>();
+        lr.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
+        lr.SetColors(color, color);
+        lr.SetWidth(0.1f, 0.1f);
+        lr.SetPosition(0, start);
+        lr.SetPosition(1, end);
+        GameObject.Destroy(myLine, duration);
+    }
+}
