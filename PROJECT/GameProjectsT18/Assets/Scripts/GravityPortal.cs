@@ -19,6 +19,8 @@ public class GravityPortal : MonoBehaviour
     private float _timer = 0;
     private float _angle = 0;
     private float _switchAngle = 0;
+    private bool _hasBeenEntered = false;
+    private LayerMask mask;
     void Start()
     {
         _transSelf = this.transform;
@@ -28,12 +30,30 @@ public class GravityPortal : MonoBehaviour
             _playerTransform = playerGameObject.transform;
             _playerController = playerGameObject.GetComponent<PhysicsPlayerController>();
         }
-    }
+        mask = LayerMask.GetMask("Gravity Portal");
+
+}
     void Update()
     {
+        bool rayFound = Physics.Raycast(_playerTransform.position, _playerController.GetForwardDir(), 200f, mask.value);
+        Debug.DrawRay(_playerTransform.position, _playerController.GetForwardDir() * 5, Color.red);
+
+        //if(rayFound)
+        //{
+        //    _entered = false;
+        //}
+        //else
+        //{
+        //    _entered = true;
+        //}
+        //_entered = !rayFound;
+
+        Debug.Log("Ray: " + rayFound);
+        Debug.Log("Entered: " + _entered);
+
         if (_entered)
         {
-            // Creating a copy of it's transform to invisible change with the forward vector to get a static right and up vector to make calculations off.
+            // Creating a copy of the portal's transform to invisible change with the forward vector to get a static right and up vector to make calculations off.
             // *********
             GameObject pseudoObject = new GameObject();
             pseudoObject.transform.right = _transSelf.right;
@@ -43,18 +63,11 @@ public class GravityPortal : MonoBehaviour
             // *********
 
             _timer += Time.deltaTime;
-            Debug.Log("Time: " + _timer);
-            if (_playerTransform.forward == ChangeForwardVector)
-            {
-                Debug.Log("TRUE");
-            }
 
             Vector3 direction = _playerTransform.position - _transSelf.position;
             float distance = Vector3.Dot(direction, _playerController.GetForwardDir());
 
             float range = (distance / RotateDistance);
-            Debug.Log("distance" + distance + "Range" + range);
-
 
             // Local temporary variables
             Vector3 up = Vector3.zero;
@@ -93,51 +106,46 @@ public class GravityPortal : MonoBehaviour
                 }
 
             }
-                // Both the up Gravity direction and the Forward direction CAN change the upvector. so I calculate them twice, locally, and then lerp them 50/50
-                // 1st calculations is with the up
-                Vector3 upSecond = Vector3.zero;
+            // Both the up Gravity direction and the Forward direction CAN change the upvector. so I calculate them twice, locally, and then lerp them 50/50
+            // 1st calculations is with the up
+            Vector3 upSecond = Vector3.zero;
 
-                if (_playerController.GetForwardDir() != ChangeForwardVector)
-                {
-                    forward = Vector3.RotateTowards(forward, ChangeForwardVector, Mathf.PI / 360 * (ChangeDirectionSpeed), Mathf.PI);
-                    // second up calculations here
-                    upSecond = Vector3.Cross(_playerController.GetForwardDir(), _playerController.GetRightVector());
-                    forward.Normalize();
-                    _playerController.SetForwardDir(forward);
-                }
-
-                // If both up vectors haven't been calculated thiss pass (equaling zero) then there is no need to update the up vector
-                if (up != Vector3.zero && upSecond != Vector3.zero)
-                {
-                    // 50/50 lerp here
-                    up = Vector3.Lerp(up, upSecond, 0.5f );
-                    up.Normalize();
-                    _playerController.SetUpVector(up);
-                }else if(up == Vector3.zero && upSecond != Vector3.zero){
-                    upSecond.Normalize();
-                    _playerController.SetUpVector(upSecond);
-                }else if(upSecond == Vector3.zero && up != Vector3.zero){
-                    up.Normalize();
-                    _playerController.SetUpVector(up);
-                }
-
-            if (_playerController.GetUpVector() == -GravityDirectionVector && _playerController.GetForwardDir() == ChangeForwardVector)
+            if (_playerController.GetForwardDir() != ChangeForwardVector)
             {
-                _entered = false;
+                forward = Vector3.RotateTowards(forward, ChangeForwardVector, Mathf.PI / 360 * (ChangeDirectionSpeed), Mathf.PI);
+                // second up calculations here
+                upSecond = Vector3.Cross(_playerController.GetForwardDir(), _playerController.GetRightVector());
+                forward.Normalize();
+                _playerController.SetForwardDir(forward);
             }
 
-            if(_playerController.GetLockMovement())
+            // If both up vectors haven't been calculated thiss pass (equaling zero) then there is no need to update the up vector
+            if (up != Vector3.zero && upSecond != Vector3.zero)
             {
-                _entered = false;
+                // 50/50 lerp here
+                up = Vector3.Lerp(up, upSecond, 0.5f);
+                up.Normalize();
+                _playerController.SetUpVector(up);
+            }
+            else if (up == Vector3.zero && upSecond != Vector3.zero)
+            {
+                upSecond.Normalize();
+                _playerController.SetUpVector(upSecond);
+            }
+            else if (upSecond == Vector3.zero && up != Vector3.zero)
+            {
+                up.Normalize();
+                _playerController.SetUpVector(up);
             }
 
-            direction = _playerTransform.position - _transSelf.position;
-            distance = Vector3.Dot(direction, _playerController.GetForwardDir());
-            range = (distance / RotateDistance);
-            if(range > 0f && range < 1f && (_playerController.GetUpVector() != -GravityDirectionVector || _playerController.GetForwardDir() != ChangeForwardVector))
-            {
-                _entered = true;
-            }
+
+            //direction = _playerTransform.position - _transSelf.position;
+            //distance = Vector3.Dot(direction, _playerController.GetForwardDir());
+            //range = (distance / RotateDistance);
+            //if (range > 0f && range < 1f && (_playerController.GetUpVector() != -GravityDirectionVector || _playerController.GetForwardDir() != ChangeForwardVector))
+            //{
+            //    _entered = true;
+            //}
         }
     }
 
