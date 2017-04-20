@@ -8,22 +8,19 @@ public class GravityNew : MonoBehaviour {
             down,up,left,right,front,back
     }
     public Gravity_Direction GravityDirection;
+
     public Vector3 ChangeForwardVector = new Vector3(0, 0, 1);
+
     private PhysicsPlayerController _playerController;
     private Transform _playerTransform;
-    public float RotateDistance = 20.0f;
+
     public float ChangeDirectionSpeed = 20.0f;
     private bool _entered = false;
-    private Vector3 _playerStartUpVector;
-    private Vector3 _playerStartForwardVector;
-    private Vector3 _playerStartRightVector;
+
     private Vector3 _gravity;
-    private float _step = 0;
-    private float _timer = 0;
+
     private float _angleUp = 0;
-    private float _angleForward = 0;
-    private float _switchAngle = 0;
-    private bool _hasBeenEntered = false;
+
     private LayerMask mask;
 
     // Use this for initialization
@@ -94,7 +91,6 @@ public class GravityNew : MonoBehaviour {
 
             // ****** UP *******
             _angleUp = Vector3.Angle(_playerController.GetUpVector(), _gravity);
-            _angleForward = Vector3.Angle(_playerController.GetForwardDir(), ChangeForwardVector);
             // If Angle is bigger then 90 (meaning it's a 180 turn) it rotates around it's right vector. resulting in every 180 turn to be CW
             // Else just 
             if (_angleUp > 90)
