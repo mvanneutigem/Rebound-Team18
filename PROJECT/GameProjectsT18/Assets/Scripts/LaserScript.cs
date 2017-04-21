@@ -8,9 +8,10 @@ public class LaserScript : MonoBehaviour {
     public Transform StartPoint;
     public Transform EndPoint;
     LineRenderer laserLine;
+    public float LaserWidth = 0.2f;
     void Start () {
         laserLine = GetComponent<LineRenderer>();
-        laserLine.SetWidth(.2f, .2f);
+        laserLine.SetWidth(LaserWidth, LaserWidth);
 	}
 	
 	// Update is called once per frame
