@@ -65,7 +65,7 @@ public class PhysicsPlayerController : MonoBehaviour
 
     void Update()
     {
-
+        Debug.Log(_velocity);
         //DrawLine(_transSelf.position, _transSelf.position + (GetUpVector() * 4), Color.green, .02f);
         //DrawLine(_transSelf.position, _transSelf.position + (GetRightVector() * 4), Color.red, .02f);
         //DrawLine(_transSelf.position, _transSelf.position + (GetForwardDir() * 4), Color.blue, .02f);
@@ -135,7 +135,7 @@ public class PhysicsPlayerController : MonoBehaviour
             else
             {
                 //deceleration
-                if (_grounded <= 0)
+                if (_grounded <= 0 )
                 {
                     if (_velocity.z > 0)
                     {
@@ -147,6 +147,19 @@ public class PhysicsPlayerController : MonoBehaviour
                     }
                 }
             }
+            if (_velocity.z > MaxForwardSpeed)
+            {
+                //deceleration at max
+                if (_velocity.z > 0)
+                {
+                    force.z -= LateralDeceleration * Time.deltaTime;
+                }
+                if (_velocity.z < 0)
+                {
+                    force.z += LateralDeceleration * Time.deltaTime;
+                }
+            }
+
             //jump
             if (Input.GetAxis("Jump") > 0 && !_jumping)
             {
