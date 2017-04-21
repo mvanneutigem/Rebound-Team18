@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 9d8f9c8eda1fbc14ca8e25002fba7b36
-timeCreated: 1492597490
+guid: 5ca6b40ea15aee6419370d7519e6bbb4
+timeCreated: 1492767739
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Slide001
+    4300000: FullTwist
   materials:
     importMaterials: 1
     materialName: 0
