@@ -54,6 +54,7 @@
      <Compile Include="Assets\Scripts\Finish.cs" />
      <Compile Include="Assets\Scripts\GameController.cs" />
      <Compile Include="Assets\Scripts\GravityChoice.cs" />
+     <Compile Include="Assets\Scripts\GravityNew.cs" />
      <Compile Include="Assets\Scripts\GravityPortal.cs" />
      <Compile Include="Assets\Scripts\HighScores.cs" />
      <Compile Include="Assets\Scripts\Laser.cs" />
