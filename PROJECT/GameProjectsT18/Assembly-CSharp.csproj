@@ -72,6 +72,7 @@
      <Compile Include="Assets\Scripts\ScoreScreen.cs" />
      <Compile Include="Assets\Scripts\SpeedBoost.cs" />
      <Compile Include="Assets\Scripts\SpeedBoostLinear.cs" />
+     <Compile Include="Assets\Scripts\Tips.cs" />
      <Compile Include="Assets\Scripts\Trampoline.cs" />
      <Compile Include="Assets\Scripts\camDummy.cs" />
      <None Include="Assets\resources\highscores.txt" />
