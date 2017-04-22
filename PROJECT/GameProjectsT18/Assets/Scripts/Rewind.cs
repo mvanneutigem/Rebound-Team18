@@ -113,8 +113,9 @@ public class Rewind : MonoBehaviour {
                     _playerController.materialstate = _material;
                     _switcher.GetComponent<MaterialSwitcher>().ChangeMaterial(_material, _playerGameObject);
                 }
+                _previousMat.RemoveAt(_arrayIdx);
             }
-            
+
             _playerTransform.position = (Vector3)_previousPositions[_arrayIdx-1];
             _playerTransform.localRotation = (Quaternion)_previousRotations[_arrayIdx-1];
             _playerController.SetForwardDir((Vector3)_previousForward[_arrayIdx - 1]);
