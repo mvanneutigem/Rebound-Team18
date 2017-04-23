@@ -3,13 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GravityNew : MonoBehaviour {
+    public enum Forward_Direction
+    {
+        front, back, left, right, up, down
+    }
+    public Forward_Direction ForwardDirection;
 
-    public enum Gravity_Direction{
-            down,up,left,right,front,back
+    public enum Gravity_Direction
+    {
+        down, up, left, right, front, back
     }
     public Gravity_Direction GravityDirection;
 
-    public Vector3 ChangeForwardVector = new Vector3(0, 0, 1);
+
+    //public Vector3 ChangeGravityDirectionInWorld = new Vector3(0, -1, 0);
+    //public Vector3 ChangeForwardInWorld = new Vector3(0, 0, 1);
 
     private PhysicsPlayerController _playerController;
     private Transform _playerTransform;
@@ -17,14 +25,19 @@ public class GravityNew : MonoBehaviour {
     public float ChangeDirectionSpeed = 20.0f;
     private bool _entered = false;
 
-    private Vector3 _gravity;
+    private Vector3 _newUpVector;
+    private Vector3 _newForwardVector;
 
     private float _angleUp = 0;
+    private float _angleForward = 0;
 
     private LayerMask mask;
 
+    private GameObject _pseudo;
+
     // Use this for initialization
     void Start () {
+
         var playerGameObject = GameObject.FindWithTag("Player");
         if (playerGameObject != null)
         {
@@ -32,11 +45,21 @@ public class GravityNew : MonoBehaviour {
             _playerController = playerGameObject.GetComponent<PhysicsPlayerController>();
         }
         mask = LayerMask.GetMask("Gravity Portal");
+
+        _pseudo = new GameObject("pseudo portal");
+        _pseudo.transform.up = gameObject.transform.up;
+        _pseudo.transform.right = gameObject.transform.right;
+        _pseudo.transform.forward = gameObject.transform.forward;
+        _pseudo.transform.rotation = gameObject.transform.rotation;
+        _pseudo.transform.position = gameObject.transform.position;
+        _pseudo.transform.localScale = gameObject.transform.localScale;
+        
     }
 
     // Update is called once per frame
     void Update()
     {
+        //Debug.Log("new Forward: " +_newForwardVector);
 
         bool rayFound = Physics.Raycast(_playerTransform.position, _playerController.GetForwardDir(), 5f, mask.value);
         if (rayFound)
@@ -46,70 +69,60 @@ public class GravityNew : MonoBehaviour {
 
         if (_entered)
         {
-            // Set one of the local's axis's to the gravity direction
-            // Check all axis's manually
-            switch (GravityDirection)
-            {
-                case Gravity_Direction.up:
-                    _gravity = -transform.up;
-                    break;
-                case Gravity_Direction.down:
-                    _gravity = transform.up;
-                    break;
-                case Gravity_Direction.left:
-                    _gravity = transform.right;
-                    break;
-                case Gravity_Direction.right:
-                    _gravity = -transform.right;
-                    break;
-                case Gravity_Direction.front:
-                    _gravity = -transform.forward;
-                    break;
-                case Gravity_Direction.back:
-                    _gravity = transform.forward;
-                    break;
-                default:
-                    break;
-            }
-            Debug.Log("Gravity = " + -_gravity);
-
             //Local Variables
-            Vector3 up = Vector3.zero;
-            Vector3 upSecond = Vector3.zero;
-            Vector3 forward = Vector3.zero;
+            Vector3 up = _playerController.GetUpVector();
+            Vector3 forward = _playerController.GetForwardDir();
 
 
             // ****** FORWARD *******
-            if (_playerController.GetForwardDir() != ChangeForwardVector)
+            _angleForward = Vector3.Angle(_playerController.GetForwardDir(), _newForwardVector);
+            Debug.Log("current forward: " + _playerController.GetForwardDir());
+            Debug.Log("new forward: " + _newForwardVector);
+            Debug.Log("Angle PlayerForward/NewForward: " + _angleForward);
+            // Allow for some mistakes in this angle since this angle is only set upon entering and isn't updated every frame
+            if (_angleForward > 95)
             {
-                forward = Vector3.RotateTowards(_playerController.GetForwardDir(), ChangeForwardVector, Mathf.PI / 360 * (ChangeDirectionSpeed), Mathf.PI);
-                transform.forward = _playerController.GetForwardDir();
-
-                forward.Normalize();
-                _playerController.SetForwardDir(forward);
-            }
-
-            // ****** UP *******
-            _angleUp = Vector3.Angle(_playerController.GetUpVector(), _gravity);
-            // If Angle is bigger then 90 (meaning it's a 180 turn) it rotates around it's right vector. resulting in every 180 turn to be CW
-            // Else just 
-            if (_angleUp > 90)
-            {
-                up = Vector3.RotateTowards(_playerController.GetUpVector(), transform.parent.transform.right, Mathf.PI / 360 * (ChangeDirectionSpeed), Mathf.PI);
+                forward = Vector3.RotateTowards(_playerController.GetForwardDir(), -_pseudo.transform.right, Mathf.PI / 360 * (ChangeDirectionSpeed), Mathf.PI);
             }
             else
             {
-                up = Vector3.RotateTowards(_playerController.GetUpVector(), _gravity, Mathf.PI / 360 * (ChangeDirectionSpeed), Mathf.PI);
+                forward = Vector3.RotateTowards(_playerController.GetForwardDir(), _newForwardVector, Mathf.PI / 360 * (ChangeDirectionSpeed), Mathf.PI);
+            }
+
+            forward.Normalize();
+            _playerController.SetForwardDir(forward);
+            if (_angleForward > 0)
+            {
+                _pseudo.transform.forward = _playerController.GetForwardDir();
+            }
+
+
+            // ****** UP *******
+            _angleUp = Vector3.Angle(_playerController.GetUpVector(), _newUpVector);
+            Debug.Log("current Up: " + _playerController.GetUpVector());
+            Debug.Log("new Up: " + _newUpVector);
+            Debug.Log("Angle PlayerUp/NewUp: " + _angleUp);
+
+            // If Angle is bigger then 90 (meaning it's a 180 turn) it rotates around it's right vector. resulting in every 180 turn to be CW
+            // Else just 
+            if (_angleUp > 95)
+            {
+                up = Vector3.RotateTowards(_playerController.GetUpVector(), _pseudo.transform.right, Mathf.PI / 360 * (ChangeDirectionSpeed), Mathf.PI);
+            }
+            else
+            {
+                up = Vector3.RotateTowards(_playerController.GetUpVector(), _newUpVector, Mathf.PI / 360 * (ChangeDirectionSpeed), Mathf.PI);
             }
 
             Debug.DrawRay(transform.position, up * 10, Color.green);
 
             up.Normalize();
             _playerController.SetUpVector(up);
+
+
         }
-        //Debug.DrawRay(_transSelf.position, -GravityDirectionVector * 10, Color.yellow);
-        //Debug.DrawRay(transform.position, localRight * 100, Color.yellow);
-        Debug.DrawRay(transform.position, transform.right * 100, Color.yellow);
+
+        Debug.DrawRay(transform.position, _pseudo.transform.forward * 100, Color.yellow);
 
     }
 
@@ -117,6 +130,56 @@ public class GravityNew : MonoBehaviour {
     {
         if (other.tag == "Player")
         {
+            switch (ForwardDirection)
+            {
+                case Forward_Direction.front:
+                    _newForwardVector = new Vector3(0, 0, 1);
+                    break;
+                case Forward_Direction.back:
+                    _newForwardVector = new Vector3(0, 0, -1);
+                    break;
+                case Forward_Direction.left:
+                    _newForwardVector = new Vector3(-1, 0, 0);
+                    break;
+                case Forward_Direction.right:
+                    _newForwardVector = new Vector3(1, 0, 0);
+                    break;
+                case Forward_Direction.up:
+                    _newForwardVector = new Vector3(0, 1, 0);
+                    break;
+                case Forward_Direction.down:
+                    _newForwardVector = new Vector3(0, -1, 0);
+                    break;
+                default:
+                    break;
+            }
+
+            // Set one of the local's axis's to the gravity direction
+            // Check all axis's manually
+            switch (GravityDirection)
+            {
+                case Gravity_Direction.up:
+                    _newUpVector = new Vector3(0, -1, 0);
+                    break;
+                case Gravity_Direction.down:
+                    _newUpVector = new Vector3(0, 1, 0);
+                    break;
+                case Gravity_Direction.left:
+                    _newUpVector = new Vector3(1, 0, 0);
+                    break;
+                case Gravity_Direction.right:
+                    _newUpVector = new Vector3(-1, 0, 0);
+                    break;
+                case Gravity_Direction.front:
+                    _newUpVector = new Vector3(0, 0, -1);
+                    break;
+                case Gravity_Direction.back:
+                    _newUpVector = new Vector3(0, 0, 1);
+                    break;
+                default:
+                    break;
+            }
+
             _entered = true;
         }
     }
