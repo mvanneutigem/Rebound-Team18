@@ -15,6 +15,10 @@ public class Rewind : MonoBehaviour {
     private ArrayList _previousForward = new ArrayList();
     private ArrayList _previousUp = new ArrayList();
     private ArrayList _previousMat = new ArrayList();
+    private ArrayList _previousNewUp = new ArrayList();
+    private ArrayList _previousNewForward = new ArrayList();
+    private ArrayList _previousRotationSpeed = new ArrayList();
+    private ArrayList _previousPseudoRight = new ArrayList();
 
     private int _arrayIdx = 0;
 
@@ -28,6 +32,12 @@ public class Rewind : MonoBehaviour {
     private bool _rewinding = false;
     private PhysicsPlayerController.Mat _material;
     private GameObject _switcher;
+
+    private Vector3 _newUp = new Vector3(0, 1, 0);
+    private Vector3 _newForward = new Vector3(0, 0, 1);
+    private float _rotationSpeed;
+    private Vector3 _pseudoRight;
+    public GravityNew _gravityScript;
 
     void Start ()
     {
@@ -66,6 +76,15 @@ public class Rewind : MonoBehaviour {
                 _previousVelocities.Add(_playerController.GetVelocity());
                 _previousForward.Add(_playerController.GetForwardDir());
                 _previousUp.Add(_playerController.GetUpVector());
+                //Debug.Log("Forward in Rewind: " + _newForward);
+                _previousNewForward.Add(_newForward);
+                //Debug.Log("Up in Rewind: " + _newUp);
+                _previousNewUp.Add(_newUp);
+                _previousRotationSpeed.Add(_rotationSpeed);
+                //Debug.Log("Pseudo right in Rewind: " + _pseudoRight);
+                _previousPseudoRight.Add(_pseudoRight);
+                
+                
                 _arrayIdx++;
             }
             else
@@ -96,6 +115,7 @@ public class Rewind : MonoBehaviour {
                 _rewinding = false;
                 _playerController.SetLockMovement(false);
                 _playerController.SetVelocity((Vector3)_previousVelocities[_arrayIdx - 1]);
+                _gravityScript.SetEntered(true);
             }
         }
         
@@ -120,16 +140,44 @@ public class Rewind : MonoBehaviour {
             _playerTransform.localRotation = (Quaternion)_previousRotations[_arrayIdx-1];
             _playerController.SetForwardDir((Vector3)_previousForward[_arrayIdx - 1]);
             _playerController.SetUpVector((Vector3)_previousUp[_arrayIdx - 1]);
+            _gravityScript.SetNewForwardVector((Vector3)_previousNewForward[_arrayIdx - 1]);
+            _gravityScript.SetNewUpVector((Vector3)_previousNewUp[_arrayIdx - 1]);
+            _gravityScript.SetRotationSpeed((float)_previousRotationSpeed[_arrayIdx - 1]);
+            _gravityScript.SetPseudoRight((Vector3)_previousPseudoRight[_arrayIdx - 1]);
 
             _previousPositions.RemoveAt(_arrayIdx);
             _previousRotations.RemoveAt(_arrayIdx);
             _previousVelocities.RemoveAt(_arrayIdx);
             _previousForward.RemoveAt(_arrayIdx);
             _previousUp.RemoveAt(_arrayIdx);
+            _previousNewForward.RemoveAt(_arrayIdx);
+            _previousNewUp.RemoveAt(_arrayIdx);
+            _previousRotationSpeed.RemoveAt(_arrayIdx);
+            _previousPseudoRight.RemoveAt(_arrayIdx);
         }
     }
     public bool getRewinding()
     {
         return _rewinding;
+    }
+
+    public void SetNewForward(Vector3 vec)
+    {
+        _newForward = vec;
+    }
+
+    public void SetNewUp(Vector3 vec)
+    {
+        _newUp = vec;
+    }
+
+    public void SetRotationSpeed(float value)
+    {
+        _rotationSpeed = value;
+    }
+
+    public void SetPseudoRight(Vector3 right)
+    {
+        _pseudoRight = right;
     }
 }

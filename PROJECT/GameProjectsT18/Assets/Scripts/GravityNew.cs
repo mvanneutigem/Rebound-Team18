@@ -34,6 +34,7 @@ public class GravityNew : MonoBehaviour {
     private LayerMask mask;
 
     private GameObject _pseudo;
+    private Rewind _rewindScript;
 
     // Use this for initialization
     void Start () {
@@ -43,6 +44,7 @@ public class GravityNew : MonoBehaviour {
         {
             _playerTransform = playerGameObject.transform;
             _playerController = playerGameObject.GetComponent<PhysicsPlayerController>();
+            _rewindScript = playerGameObject.GetComponent<Rewind>();
         }
         mask = LayerMask.GetMask("Gravity Portal");
 
@@ -69,6 +71,13 @@ public class GravityNew : MonoBehaviour {
 
         if (_entered)
         {
+            //Debug.Log("new Forward in Gravity: " + _newForwardVector);
+            //Debug.Log("new Up in Gravity: " + _newUpVector);
+            _rewindScript.SetNewForward(_newForwardVector);
+            _rewindScript.SetNewUp(_newUpVector);
+            _rewindScript.SetRotationSpeed(ChangeDirectionSpeed);
+            _rewindScript.SetPseudoRight(_pseudo.transform.right);
+
             //Local Variables
             Vector3 up = _playerController.GetUpVector();
             Vector3 forward = _playerController.GetForwardDir();
@@ -76,9 +85,9 @@ public class GravityNew : MonoBehaviour {
 
             // ****** FORWARD *******
             _angleForward = Vector3.Angle(_playerController.GetForwardDir(), _newForwardVector);
-            Debug.Log("current forward: " + _playerController.GetForwardDir());
-            Debug.Log("new forward: " + _newForwardVector);
-            Debug.Log("Angle PlayerForward/NewForward: " + _angleForward);
+            //Debug.Log("current forward: " + _playerController.GetForwardDir());
+            //Debug.Log("new forward: " + _newForwardVector);
+            //Debug.Log("Angle PlayerForward/NewForward: " + _angleForward);
             // Allow for some mistakes in this angle since this angle is only set upon entering and isn't updated every frame
             if (_angleForward > 95)
             {
@@ -99,11 +108,12 @@ public class GravityNew : MonoBehaviour {
 
             // ****** UP *******
             _angleUp = Vector3.Angle(_playerController.GetUpVector(), _newUpVector);
-            Debug.Log("current Up: " + _playerController.GetUpVector());
-            Debug.Log("new Up: " + _newUpVector);
-            Debug.Log("Angle PlayerUp/NewUp: " + _angleUp);
+            //Debug.Log("current Up: " + _playerController.GetUpVector());
+            //Debug.Log("new Up: " + _newUpVector);
+            //Debug.Log("Angle PlayerUp/NewUp: " + _angleUp);
 
             // If Angle is bigger then 90 (meaning it's a 180 turn) it rotates around it's right vector. resulting in every 180 turn to be CW
+            //Debug.Log("Pseudo right in Gravity: " + _pseudo.transform.right);
             // Else just 
             if (_angleUp > 95)
             {
@@ -118,12 +128,9 @@ public class GravityNew : MonoBehaviour {
 
             up.Normalize();
             _playerController.SetUpVector(up);
-
-
         }
 
         Debug.DrawRay(transform.position, _pseudo.transform.forward * 100, Color.yellow);
-
     }
 
     void OnTriggerEnter(Collider other)
@@ -183,4 +190,29 @@ public class GravityNew : MonoBehaviour {
             _entered = true;
         }
     }
+
+    public void SetNewForwardVector(Vector3 vec)
+    {
+        _newForwardVector = vec;
+    }
+    public void SetNewUpVector (Vector3 vec)
+    {
+        _newUpVector = vec;
+    }
+
+    public void SetEntered(bool yup)
+    {
+        _entered = yup;
+    }
+
+    public void SetRotationSpeed(float value)
+    {
+        ChangeDirectionSpeed = value;
+    }
+
+    public void SetPseudoRight(Vector3 right)
+    {
+        _pseudo.transform.right = right;
+    }
 }
+

@@ -66,9 +66,9 @@ public class PhysicsPlayerController : MonoBehaviour
     void Update()
     {
         //Debug.Log(_velocity);
-        DrawLine(_transSelf.position, _transSelf.position + (GetUpVector() * 4), Color.green, .02f);
-        DrawLine(_transSelf.position, _transSelf.position + (GetRightVector() * 4), Color.red, .02f);
-        DrawLine(_transSelf.position, _transSelf.position + (GetForwardDir() * 4), Color.blue, .02f);
+        //DrawLine(_transSelf.position, _transSelf.position + (GetUpVector() * 4), Color.green, .02f);
+        //DrawLine(_transSelf.position, _transSelf.position + (GetRightVector() * 4), Color.red, .02f);
+        //DrawLine(_transSelf.position, _transSelf.position + (GetForwardDir() * 4), Color.blue, .02f);
 
         _moveDirRight = Vector3.Cross(_upVector3.normalized, _moveDirForward.normalized);
         _velocity = ConvertToLocalSpace(_playerRigidBody.velocity);
