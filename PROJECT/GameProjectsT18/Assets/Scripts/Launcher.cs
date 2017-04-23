@@ -6,18 +6,20 @@ public class Launcher : MonoBehaviour
 {
     public GameObject _coll;
     public float power = 1000;
+    private string slam;
     // Use this for initialization
     void Start()
     {
         GameObject.FindGameObjectWithTag("Player").GetComponent<PhysicsPlayerController>().SetLockMovement(true);
-
+        slam = PlayerPrefs.GetString("Slam");
     }
 
     void Update()
     {
-        if (Input.GetButtonDown("Slam"))
+        if (Input.GetKeyDown(slam))
         {
             Launch();
+            Debug.Log("Activated");
         }
 
     }
