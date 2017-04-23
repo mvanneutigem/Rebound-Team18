@@ -31,12 +31,16 @@ public class PhysicsPlayerController : MonoBehaviour
     private Vector3 _upVector3;
     private bool _movementLock = false;
     public float MaxFallForce = 50.0f;
+    public bool KillPlayer = false;
 
     private int _grounded = 0;
     private Vector3 _lastSurfaceNormal;
 
     private Vector3 _camForward;
     private bool OnTrampoline = false;
+
+    //keys
+    private string _slamKey;
 
     public enum Mat
     {
@@ -61,6 +65,8 @@ public class PhysicsPlayerController : MonoBehaviour
         _velocity = Vector3.zero;
         _playerRigidBody = this.GetComponent<Rigidbody>();
         PlayerPrefs.SetInt("Score", 0);
+        _slamKey = PlayerPrefs.GetString("Slam");
+        Debug.Log(_slamKey);
     }
 
     void Update()
@@ -73,11 +79,13 @@ public class PhysicsPlayerController : MonoBehaviour
         _moveDirRight = Vector3.Cross(_upVector3.normalized, _moveDirForward.normalized);
         _velocity = ConvertToLocalSpace(_playerRigidBody.velocity);
 
-
-        if (_velocity.y < -MaxFallForce) // Will change into Death planes 
+        if (KillPlayer)
         {
-            int currentScene = SceneManager.GetActiveScene().buildIndex;
-            SceneManager.LoadScene(currentScene);
+            if (_velocity.y < -MaxFallForce) // Will change into Death planes 
+            {
+                int currentScene = SceneManager.GetActiveScene().buildIndex;
+                SceneManager.LoadScene(currentScene);
+            }
         }
 
         if (!_movementLock)
@@ -161,7 +169,7 @@ public class PhysicsPlayerController : MonoBehaviour
             }
 
             //jump
-            if (Input.GetAxis("Jump") > 0 && !_jumping)
+            if ((Input.GetAxis("Jump") > 0 || Input.GetKeyDown(_slamKey)) && !_jumping )
             {
                 _playerRigidBody.AddForce(_lastSurfaceNormal * JumpSpeed, ForceMode.Impulse);
                 _jumping = true;
@@ -175,7 +183,7 @@ public class PhysicsPlayerController : MonoBehaviour
             }
 
             //slam
-            if (Input.GetButtonDown("Slam"))
+            if (Input.GetButtonDown("Slam") || Input.GetKeyDown(_slamKey))
             {
                 _playerRigidBody.AddForce(_upVector3 * SlamSpeed, ForceMode.Impulse);
             }

@@ -32,6 +32,7 @@ public class Rewind : MonoBehaviour {
     private bool _rewinding = false;
     private PhysicsPlayerController.Mat _material;
     private GameObject _switcher;
+    private string rewindString;
 
     private Vector3 _newUp = new Vector3(0, 1, 0);
     private Vector3 _newForward = new Vector3(0, 0, 1);
@@ -47,6 +48,8 @@ public class Rewind : MonoBehaviour {
         _rewindBar = GameObject.Find("RewindBar").transform;
         _barLength = _rewindBar.localScale.x;
         _switcher = GameObject.Find("MaterialChanger");
+        rewindString = PlayerPrefs.GetString("Rewind");
+        Debug.Log(rewindString);
     }
 	
 	void Update ()
@@ -105,13 +108,16 @@ public class Rewind : MonoBehaviour {
             _rewindBar.localScale = scale;
 
 
-            if (Input.GetAxisRaw("Rewind") > 0 && !_rewinding)
+            if ((Input.GetAxisRaw("Rewind") > 0  || Input.GetKeyDown(rewindString))&& !_rewinding)
             {
+                Debug.Log("Rewinding");
                 _rewinding = true;
                 _playerController.SetLockMovement(true);
             }
-            if (Input.GetAxisRaw("Rewind") == 0 && _rewinding)
+  
+            if ((Input.GetAxisRaw("Rewind") == 0 && !Input.GetKey(rewindString)) && _rewinding)
             {
+                Debug.Log("unwinding");
                 _rewinding = false;
                 _playerController.SetLockMovement(false);
                 _playerController.SetVelocity((Vector3)_previousVelocities[_arrayIdx - 1]);
