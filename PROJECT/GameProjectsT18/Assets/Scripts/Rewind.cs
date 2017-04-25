@@ -173,7 +173,7 @@ public class Rewind : MonoBehaviour {
             _previousPseudoRight.RemoveAt(_arrayIdx);
         }
     }
-    public bool getRewinding()
+    public bool IsRewinding()
     {
         return _rewinding;
     }

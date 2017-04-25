@@ -62,19 +62,23 @@ public class GravityNew : MonoBehaviour {
     void Update()
     {
         //Debug.Log("new Forward: " +_newForwardVector);
+        Vector3 origin = _playerTransform.position;
+        var playerRadius = 1.0f;
+        origin += _playerController.GetForwardDir() * playerRadius;
+        bool rayFound = Physics.Raycast(origin, _playerController.GetForwardDir(), 5f, mask.value);
+        if (rayFound)
+        {
+            _entered = false;
+        }
 
-        //bool rayFound = Physics.Raycast(_playerTransform.position, _playerController.GetForwardDir(), 5f, mask.value);
-        //if (rayFound)
+        //if (_rewindScript.IsRewinding())
         //{
         //    _entered = false;
         //}
+        //Debug.Log(_rewindScript.IsRewinding());
 
         if (_entered)
         {
-            if (_playerController.GetLockMovement())
-            {
-                _entered = false;
-            }
 
             //Debug.Log("new Forward in Gravity: " + _newForwardVector);
             //Debug.Log("new Up in Gravity: " + _newUpVector);
@@ -142,6 +146,7 @@ public class GravityNew : MonoBehaviour {
     {
         if (other.tag == "Player")
         {
+            Debug.Log("Portal Encountered");
             switch (ForwardDirection)
             {
                 case Forward_Direction.front:
