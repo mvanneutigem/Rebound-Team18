@@ -15,6 +15,9 @@ public class Tips : MonoBehaviour
     void Start ()
     {
         _player = GameObject.FindWithTag("Player");
+
+        textArray[3].text = "Use " + PlayerPrefs.GetString("Slam") + "/A button to slam";
+        textArray[4].text = "Use " + PlayerPrefs.GetString("Rewind") + "/X button to rewind";
     }
 	
 	// Update is called once per frame
