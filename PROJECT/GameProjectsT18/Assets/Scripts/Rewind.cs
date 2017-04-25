@@ -6,8 +6,7 @@ using UnityEngine.UI;
 public class Rewind : MonoBehaviour {
 
     // Array Lists
-    public float RefillSpeed = 10.0f;
-    public float DrainSpeed = 20.0f;
+    public float RefillMultiplier = 0.5f;
 
     private ArrayList _previousPositions = new ArrayList();
     private ArrayList _previousRotations = new ArrayList();
@@ -28,7 +27,7 @@ public class Rewind : MonoBehaviour {
     private PhysicsPlayerController _playerController;
     private Transform _playerTransform;
     private float _rewindAmount = 0;
-    private const float MAX_REWIND_AMOUNT = 750.0f;
+    public float MaxRewindTime = 4.0f;
     private bool _rewinding = false;
     private PhysicsPlayerController.Mat _material;
     private GameObject _switcher;
@@ -38,10 +37,23 @@ public class Rewind : MonoBehaviour {
     private Vector3 _newForward = new Vector3(0, 0, 1);
     private float _rotationSpeed;
     private Vector3 _pseudoRight;
-    public GravityNew _gravityScript;
+    private GravityNew _gravityScript;
 
     void Start ()
     {
+        GameObject origPortal = GameObject.Find("GravityPortal");
+        GameObject dummyPortal = Instantiate(origPortal);
+        dummyPortal.transform.position = new Vector3(float.MaxValue / 2.0f, float.MaxValue / 2.0f, float.MaxValue / 2.0f);
+        Renderer[] r = dummyPortal.GetComponentsInChildren<Renderer>();
+
+        for (int i = 0; i < r.Length; i++)
+        {
+            r[i].enabled = false;
+        }
+
+        dummyPortal.name = "dummyPortal";
+        _gravityScript = dummyPortal.GetComponentInChildren<GravityNew>();
+
         _playerGameObject = GameObject.FindWithTag("Player");
         _playerController = _playerGameObject.GetComponent<PhysicsPlayerController>();
         _playerTransform = _playerGameObject.GetComponent<Transform>();
@@ -63,14 +75,13 @@ public class Rewind : MonoBehaviour {
 
             if (!_rewinding)
             {
-                if (_rewindAmount < MAX_REWIND_AMOUNT)
+                if (_rewindAmount < MaxRewindTime)
                 {
-                    _rewindAmount += RefillSpeed * Time.deltaTime;
-                   _rewindAmount = MAX_REWIND_AMOUNT;
+                    _rewindAmount += RefillMultiplier * Time.deltaTime;
                 }
                 else
                 {
-                    _rewindAmount = MAX_REWIND_AMOUNT;
+                    _rewindAmount = MaxRewindTime;
                 }
 
                 _previousMat.Add(_playerController.materialstate);
@@ -92,7 +103,7 @@ public class Rewind : MonoBehaviour {
             }
             else
             {
-                _rewindAmount -= DrainSpeed * Time.deltaTime; ;
+                _rewindAmount -= Time.deltaTime; ;
                 if (_rewindAmount > 0)
                 {
                     RewindTime();
@@ -104,7 +115,7 @@ public class Rewind : MonoBehaviour {
                 }
             }
             Vector3 scale = _rewindBar.localScale;
-            scale.x = (_rewindAmount / MAX_REWIND_AMOUNT) * _barLength;
+            scale.x = (_rewindAmount / MaxRewindTime) * _barLength;
             _rewindBar.localScale = scale;
 
 

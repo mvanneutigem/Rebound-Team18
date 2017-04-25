@@ -16,8 +16,7 @@ public class CameraController : MonoBehaviour
     private float _controllerSpeedH = 1f;
     [SerializeField]
     private float _controllerSpeedV = 1f;
-    [SerializeField]
-    private PlayerController _player;
+    private PhysicsPlayerController _player;
     private Transform _playerTransform;
     [SerializeField]
     private float _camBoomLength = 10f;
@@ -30,6 +29,7 @@ public class CameraController : MonoBehaviour
 
     void Awake()
     {
+        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<PhysicsPlayerController>();
         _transSelf = transform;
         _camTransform = _camera.transform;
         _camTransform.SetParent(this.transform);
