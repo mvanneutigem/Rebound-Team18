@@ -6,12 +6,44 @@ using UnityEngine.UI;
 public class Menu_Controls : MonoBehaviour
 {
 
-    public Dropdown DropdownInput;
-	// Update is called once per frame
+    public Dropdown DropdownInputRewind;
+    public Dropdown DropdownInputSlam;
+    // Update is called once per frame
+    void Start()
+    {
+        Debug.Log("start");
+        var i = PlayerPrefs.GetString("Slam");
+        switch (i)
+        {
+            case "space":
+                DropdownInputSlam.value = 0;
+                break;
+            case "left shift":
+                DropdownInputSlam.value = 1;
+                break;
+            case "e":
+                DropdownInputSlam.value = 2;
+                break;
+        }
+
+        var j = PlayerPrefs.GetString("Rewind");
+        switch (j)
+        {
+            case "r":
+                DropdownInputRewind.value = 0;
+                break;
+            case "left shift":
+                DropdownInputRewind.value = 1;
+                break;
+            case "e":
+                DropdownInputRewind.value = 2;
+                break;
+        }
+    }
 
 	public void SlamChange ()
 	{
-	    int i = DropdownInput.value;
+	    int i = DropdownInputSlam.value;
 	    switch (i)
 	    {
             case 0: PlayerPrefs.SetString("Slam", "space" );
@@ -31,7 +63,7 @@ public class Menu_Controls : MonoBehaviour
 
     public void rewindChange()
     {
-        int i = DropdownInput.value;
+        int i = DropdownInputRewind.value;
         switch (i)
         {
             case 0:

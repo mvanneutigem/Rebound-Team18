@@ -35,8 +35,8 @@ public class GravityPortal : MonoBehaviour
 }
     void Update()
     {
-        bool rayFound = Physics.Raycast(_playerTransform.position, _playerController.GetForwardDir(), 200f, mask.value);
-        Debug.DrawRay(_playerTransform.position, _playerController.GetForwardDir() * 5, Color.red);
+        //bool rayFound = Physics.Raycast(_playerTransform.position, _playerController.GetForwardDir(), 200f, mask.value);
+        //Debug.DrawRay(_playerTransform.position, _playerController.GetForwardDir() * 5, Color.red);
 
         //if(rayFound)
         //{
@@ -48,7 +48,7 @@ public class GravityPortal : MonoBehaviour
         //}
         //_entered = !rayFound;
 
-        Debug.Log("Ray: " + rayFound);
+       // Debug.Log("Ray: " + rayFound);
         Debug.Log("Entered: " + _entered);
 
         if (_entered)
