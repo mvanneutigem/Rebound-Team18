@@ -63,14 +63,19 @@ public class GravityNew : MonoBehaviour {
     {
         //Debug.Log("new Forward: " +_newForwardVector);
 
-        bool rayFound = Physics.Raycast(_playerTransform.position, _playerController.GetForwardDir(), 5f, mask.value);
-        if (rayFound)
-        {
-            _entered = false;
-        }
+        //bool rayFound = Physics.Raycast(_playerTransform.position, _playerController.GetForwardDir(), 5f, mask.value);
+        //if (rayFound)
+        //{
+        //    _entered = false;
+        //}
 
         if (_entered)
         {
+            if (_playerController.GetLockMovement())
+            {
+                _entered = false;
+            }
+
             //Debug.Log("new Forward in Gravity: " + _newForwardVector);
             //Debug.Log("new Up in Gravity: " + _newUpVector);
             _rewindScript.SetNewForward(_newForwardVector);
