@@ -16,7 +16,7 @@ public class Launcher : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(slam))
+        if (Input.GetButtonDown("Slam") || Input.GetKeyDown(slam))
         {
             Launch();
             Debug.Log("Activated");
