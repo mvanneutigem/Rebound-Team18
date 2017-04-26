@@ -4,7 +4,6 @@ using System.Collections;
 public class PickUp : MonoBehaviour {
 
     //FIELDS
-    private PlayerController _playerController;
     private Transform _playerTransform;
     private float _angle = 0;
     public float Speed = 1;
@@ -27,7 +26,6 @@ public class PickUp : MonoBehaviour {
         _originalPos = _transSelf.position;
         if (gameControllerObj != null)
         {
-            _playerController = gameControllerObj.GetComponent<PlayerController>();
             _playerTransform = gameControllerObj.transform;
         }
 
