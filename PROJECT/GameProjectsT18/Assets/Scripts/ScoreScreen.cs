@@ -10,30 +10,29 @@ using System.IO;
 public class ScoreScreen : MonoBehaviour
 {
     public Text NameText;
-    public Text scoreText;
+    public Text _scoreText;
 
     private int _score;
     private int _count;
     private int _offset = 100;
     private bool _baseScore = false;
-    private HighScores highScoreManager;
+    private HighScores _highScoreManager;
     public int _levelIndex;
-    private bool highscore = false;
+    private bool _highscore = false;
     private string lowestUser = "";
-    private string name = "";
-    private int NrOfNames = 0;
-    private Highscore[] list;
+    private string _name = "";
+    private Highscore[] _list;
     // Use this for initialization
     void Start ()
     {
-        highscore = true;
+        _highscore = true;
         _levelIndex = PlayerPrefs.GetInt("Scene");
         
         _score = PlayerPrefs.GetInt("Score");
         _score += (int)(PlayerPrefs.GetFloat("time") * 100.0f);
         PlayerPrefs.SetInt("Score", 0);
 
-        highScoreManager = GetComponent<HighScores>();
+        _highScoreManager = GetComponent<HighScores>();
         //list = highScoreManager.GetHighscoreslist();
 	    /*highScoreManager.SetLeaderboard(_levelIndex - 3);*///tutorial is at index 3
         print(_levelIndex);
@@ -72,12 +71,12 @@ public class ScoreScreen : MonoBehaviour
 	    {
 	        if (_count < _score)
 	        {
-                scoreText.GetComponent<Text>().text = _count.ToString();
+                _scoreText.GetComponent<Text>().text = _count.ToString();
 	            _count += _offset;
 	        }
 	        else
 	        {
-                scoreText.GetComponent<Text>().text = _score.ToString();
+                _scoreText.GetComponent<Text>().text = _score.ToString();
 	            _baseScore = true;
 	        }   
         }
@@ -111,11 +110,11 @@ public class ScoreScreen : MonoBehaviour
 
     public void NameEntered()
     {
-        if (highscore)
+        if (_highscore)
         {
-            name = NameText.text;
-            highScoreManager.AddNewHighscore(name, _score);
-            highscore = false;
+            _name = NameText.text;
+            _highScoreManager.AddNewHighscore(_name, _score);
+            _highscore = false;
         }
     }
 }
