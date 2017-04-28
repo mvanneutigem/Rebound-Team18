@@ -66,7 +66,6 @@ public class PhysicsPlayerController : MonoBehaviour
         _playerRigidBody = this.GetComponent<Rigidbody>();
         PlayerPrefs.SetInt("Score", 0);
         _slamKey = PlayerPrefs.GetString("Slam");
-        Debug.Log(_slamKey);
     }
 
     void Update()
