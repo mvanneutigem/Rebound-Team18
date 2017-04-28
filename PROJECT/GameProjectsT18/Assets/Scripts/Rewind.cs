@@ -61,7 +61,6 @@ public class Rewind : MonoBehaviour {
         _barLength = _rewindBar.localScale.x;
         _switcher = GameObject.Find("MaterialChanger");
         rewindString = PlayerPrefs.GetString("Rewind");
-        Debug.Log(rewindString);
     }
 	
 	void Update ()
@@ -111,6 +110,7 @@ public class Rewind : MonoBehaviour {
                 else
                 {
                     _playerController.SetLockMovement(false);
+
                     _rewindAmount = 0;
                 }
             }
@@ -121,11 +121,11 @@ public class Rewind : MonoBehaviour {
 
             if ((Input.GetAxisRaw("Rewind") > 0  || Input.GetKeyDown(rewindString))&& !_rewinding)
             {
-                Debug.Log("Rewinding");
                 _rewinding = true;
                 _playerController.SetLockMovement(true);
+
             }
-  
+
             if ((Input.GetAxisRaw("Rewind") == 0 && !Input.GetKey(rewindString)) && _rewinding)
             {
                 Debug.Log("unwinding");

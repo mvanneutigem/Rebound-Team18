@@ -12,6 +12,7 @@ public class Launcher : MonoBehaviour
     void Start()
     {
         GameObject.FindGameObjectWithTag("Player").GetComponent<PhysicsPlayerController>().SetLockMovement(true);
+
         slam = PlayerPrefs.GetString("Slam");
         _activated = false;
     }
@@ -21,15 +22,14 @@ public class Launcher : MonoBehaviour
         if ((Input.GetButtonUp("Slam") || Input.GetKeyUp(slam)) && !_activated)
         {
             Launch();
-            Debug.Log("Activated");
             _activated = true;
         }
 
     }
     private void Launch()
     {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<PhysicsPlayerController>().SetLockMovement(false);
         StartCoroutine(playanimation());
-
     }
 
     private IEnumerator playanimation()
@@ -44,6 +44,5 @@ public class Launcher : MonoBehaviour
         _coll.GetComponent<Rigidbody>().velocity = Vector3.zero;
         _coll.transform.position = pos;
         _coll.transform.rotation = rot;
-        GameObject.FindGameObjectWithTag("Player").GetComponent<PhysicsPlayerController>().SetLockMovement(false);
     }
 }
