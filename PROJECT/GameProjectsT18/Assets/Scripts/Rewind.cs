@@ -21,6 +21,7 @@ public class Rewind : MonoBehaviour {
 
     private int _arrayIdx = 0;
 
+    private GameObject _glow;
     private GameObject _playerGameObject;
     private Transform _rewindBar;
     private float _barLength;
@@ -54,6 +55,8 @@ public class Rewind : MonoBehaviour {
         dummyPortal.name = "dummyPortal";
         _gravityScript = dummyPortal.GetComponentInChildren<GravityNew>();
 
+        _glow = GameObject.Find("uiglow");
+        _glow.SetActive(false);
         _playerGameObject = GameObject.FindWithTag("Player");
         _playerController = _playerGameObject.GetComponent<PhysicsPlayerController>();
         _playerTransform = _playerGameObject.GetComponent<Transform>();
@@ -110,7 +113,6 @@ public class Rewind : MonoBehaviour {
                 else
                 {
                     _playerController.SetLockMovement(false);
-
                     _rewindAmount = 0;
                 }
             }
@@ -119,16 +121,16 @@ public class Rewind : MonoBehaviour {
             _rewindBar.localScale = scale;
 
 
-            if ((Input.GetAxisRaw("Rewind") > 0  || Input.GetKeyDown(rewindString))&& !_rewinding)
+            if ((Input.GetAxisRaw("Rewind") > 0  || Input.GetKeyDown(rewindString)) && !_rewinding)
             {
+                _glow.SetActive(true);
                 _rewinding = true;
                 _playerController.SetLockMovement(true);
-
             }
 
             if ((Input.GetAxisRaw("Rewind") == 0 && !Input.GetKey(rewindString)) && _rewinding)
             {
-                Debug.Log("unwinding");
+                _glow.SetActive(false);
                 _rewinding = false;
                 _playerController.SetLockMovement(false);
                 _playerController.SetVelocity((Vector3)_previousVelocities[_arrayIdx - 1]);
