@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class PhysicsPlayerController : MonoBehaviour
 {
     //PROPERTIES
+    public float MovementSnappiness = 1.0f;
     public float MaxForwardSpeed = 15.0f;
     public float MaxLateralSpeed = 10.0f;
     //FIELDS
@@ -146,11 +147,11 @@ public class PhysicsPlayerController : MonoBehaviour
                 {
                     if (_velocity.z > 0)
                     {
-                        force.z -= LateralDeceleration * Time.deltaTime;
+                        force.z -= ForwardDeceleration * Time.deltaTime;
                     }
                     if (_velocity.z < 0)
                     {
-                        force.z += LateralDeceleration * Time.deltaTime;
+                        force.z += ForwardDeceleration * Time.deltaTime;
                     }
                 }
             }
@@ -159,11 +160,11 @@ public class PhysicsPlayerController : MonoBehaviour
                 //deceleration at max
                 if (_velocity.z > 0)
                 {
-                    force.z -= LateralDeceleration * Time.deltaTime;
+                    force.z -= ForwardDeceleration * Time.deltaTime;
                 }
                 if (_velocity.z < 0)
                 {
-                    force.z += LateralDeceleration * Time.deltaTime;
+                    force.z += ForwardDeceleration * Time.deltaTime;
                 }
             }
 
@@ -195,7 +196,7 @@ public class PhysicsPlayerController : MonoBehaviour
 
             //Move
             //Debug.Log("up " + _upVector3);
-            _playerRigidBody.AddForce(force * 50.0f);
+            _playerRigidBody.AddForce(force * MovementSnappiness, ForceMode.VelocityChange);
         }
     }
 
