@@ -124,6 +124,15 @@
     <Reference Include="Mono.Cecil">
       <HintPath>Library\UnityAssemblies\Mono.Cecil.dll</HintPath>
     </Reference>
+    <Reference Include="Facebook.Unity">
+      <HintPath>Assets\FacebookSDK\Plugins\Facebook.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Facebook.Unity.Settings">
+      <HintPath>Assets\FacebookSDK\Plugins\Settings\Facebook.Unity.Settings.dll</HintPath>
+    </Reference>
+    <Reference Include="Facebook.Unity.Editor">
+      <HintPath>Assets\FacebookSDK\Plugins\Editor\Facebook.Unity.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Assembly-UnityScript-firstpass">
       <HintPath>Library\ScriptAssemblies\Assembly-UnityScript-firstpass.dll</HintPath>
     </Reference>
@@ -155,6 +164,7 @@
     <Compile Include="Assets\Standard Assets\Editor\ImageEffects\VignetteAndChromaticAberrationEditor.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\FacebookSDK\link.xml" />
     <None Include="Assets\Materials\ToonShading.shader" />
     <None Include="Assets\Materials\ToonShadingFlatColor.shader" />
     <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\BlendModesOverlay.shader" />
