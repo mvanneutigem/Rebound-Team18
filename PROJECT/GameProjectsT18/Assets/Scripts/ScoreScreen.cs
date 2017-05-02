@@ -26,8 +26,8 @@ public class ScoreScreen : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        _FacebookManager.GetComponent<FBScript>().Init();
-        _FacebookManager.GetComponent<FBScript>().FBloginWithPermissions();
+        //_FacebookManager.GetComponent<FBScript>().Init();
+        //_FacebookManager.GetComponent<FBScript>().FBloginWithPermissions();
         _highscore = true;
         _levelIndex = PlayerPrefs.GetInt("Scene");
         

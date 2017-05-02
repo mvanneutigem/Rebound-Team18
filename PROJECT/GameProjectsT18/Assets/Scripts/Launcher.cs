@@ -22,6 +22,7 @@ public class Launcher : MonoBehaviour
         if ((Input.GetButtonUp("Slam") || Input.GetKeyUp(slam)) && !_activated)
         {
             Launch();
+            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().StartGame();
             _activated = true;
         }
 
