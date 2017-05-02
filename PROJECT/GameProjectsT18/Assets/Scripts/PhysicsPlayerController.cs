@@ -40,6 +40,9 @@ public class PhysicsPlayerController : MonoBehaviour
     private Vector3 _camForward;
     private bool OnTrampoline = false;
 
+    private const float SLAM_CD_TIME = 0.1f;
+    private float _slamTimer = SLAM_CD_TIME;
+
     //keys
     private string _slamKey;
 
@@ -183,9 +186,17 @@ public class PhysicsPlayerController : MonoBehaviour
             }
 
             //slam
-            if (Input.GetButtonDown("Slam") || Input.GetKeyDown(_slamKey))
+            if (_slamTimer >= SLAM_CD_TIME)
             {
-                _playerRigidBody.AddForce(_upVector3 * SlamSpeed, ForceMode.Impulse);
+                if (Input.GetButtonDown("Slam") || Input.GetKeyDown(_slamKey))
+                {
+                    _slamTimer = 0.0f;
+                    _playerRigidBody.AddForce(_upVector3 * SlamSpeed, ForceMode.Impulse);
+                }
+            }
+            else
+            {
+                _slamTimer += Time.deltaTime;
             }
 
             //from local to worlspace
