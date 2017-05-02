@@ -15,5 +15,6 @@ public class camDummy : MonoBehaviour {
         transform.position = _player.transform.position;
         Quaternion rotation = Quaternion.LookRotation(_player.GetForwardDir(), _player.GetUpVector());
         transform.rotation = rotation;
+
     }
 }

@@ -9,7 +9,12 @@ public class GameController : MonoBehaviour {
     private Text _timeText;
     private int _score;
     private float _timer;
+    private bool _gameStarted = false;
 
+    public void StartGame()
+    {
+        _gameStarted = true;
+    }
     // Use this for initialization
     void Start ()
     {
@@ -21,8 +26,12 @@ public class GameController : MonoBehaviour {
 
     void Update()
     {
-        _timer -= Time.deltaTime;
+        if (_gameStarted)
+        {
+            _timer -= Time.deltaTime;
+        }
         _timeText.text = _timer.ToString("n2");
+
     }
     void UpdateScore()
     {
