@@ -15,15 +15,30 @@ public class FBScript : MonoBehaviour
     public GameObject DialogProfilePic;
     public GameObject ScoreEntryPanel;
     public GameObject ScoreScrollList;
+    public GameObject Highscores;
+
+    public int myScore = 0;
 
     public Text ScoresDebug;
 
     private List<object> Scorelist = null;
     private string AppLinkURL = "https://apps.facebook.com/rebound_";
 
+    private bool _Init = false;
+
     void Awake()
     {
-        FB.Init(SetInit, OnHideUnity);
+        Init();
+    }
+
+    public void Init()
+    {
+        if (!_Init)
+        {
+            FB.Init(SetInit, OnHideUnity);
+            _Init = true;
+        }
+            
     }
 
     private void SetInit()
@@ -48,9 +63,28 @@ public class FBScript : MonoBehaviour
     {
         List<string> permissions = new List<string>();
         permissions.Add("public_profile");
+        FB.LogInWithReadPermissions(permissions, AuthCallBack);
+    }
+
+    public void FBloginWithPermissions()
+    {
+        List<string> permissions = new List<string>();
+        permissions.Add("public_profile");
         permissions.Add("user_friends");
         permissions.Add("publish_actions");
-        FB.LogInWithReadPermissions(permissions, AuthCallBack);
+        FB.LogInWithReadPermissions(permissions, AuthCallBackScores);
+    }
+    void AuthCallBackScores(IResult result)
+    {
+        if (result.Error != null)
+        {
+            Debug.Log(result.Error);
+        }
+        else
+        {
+            DealWithFBMenus(FB.IsLoggedIn);
+            DisplayScore();
+        }
     }
 
     void AuthCallBack(IResult result)
@@ -186,8 +220,25 @@ public class FBScript : MonoBehaviour
     public void QueryScores()
     {
         FB.API("/app/scores?fields=score,user.limit(30)",HttpMethod.GET, ScoresCallback);
+        FB.API("/me/scores?fields=score", HttpMethod.GET, GetCurrentScore);
     }
+    void GetCurrentScore(IResult result)
+    {
+        IDictionary<string, object> data = result.ResultDictionary;
+        var list = (List<object>)data["data"];
 
+        Debug.Log(list);
+
+        string score = "";
+        foreach (object obj in list)
+        {
+            var entry = (Dictionary<string, object>)obj;
+            score = entry["score"].ToString();
+            Debug.Log(score);
+        }
+            
+        myScore = int.Parse(score);
+    }
     private void ScoresCallback(IResult result)
     {
         IDictionary<string, object> data = result.ResultDictionary;
@@ -220,6 +271,19 @@ public class FBScript : MonoBehaviour
             scoreName.text = user["name"].ToString();
             scoreScore.text = entry["score"].ToString();
 
+            //string userID = "";
+            //FB.API("/me?fields=id", HttpMethod.GET, delegate (IGraphResult pictureResult)
+            //{
+            //    userID = result.ResultDictionary["id"].ToString();
+            //});
+
+            //if (user["id"].ToString() == userID)
+            //{
+            //    myScore = int.Parse(entry["score"].ToString());
+            //}
+
+
+
             Transform ThisScoreAvatar = scorePanel.transform.Find("avatar");
             Image ScoreAvatar = ThisScoreAvatar.GetComponent<Image>();
 
@@ -231,15 +295,41 @@ public class FBScript : MonoBehaviour
                     ScoreAvatar.sprite = Sprite.Create(pictureResult.Texture, new Rect(0,0,128,128), new Vector2()); 
                 });
         }
+        Highscores.GetComponent<ScoreScreen>().AddScore();
+
     }
 
-    public void SetScore()
+    public void SetScore(int score)
     {
-        var scoreData = new Dictionary<string, string>();
-        scoreData["score"] = UnityEngine.Random.Range(0,250).ToString();
-        FB.API("/me/scores", HttpMethod.POST, delegate(IGraphResult result)
+        if (myScore < score)
         {
-            Debug.Log("Score submit result: " + result.RawResult);
-        }, scoreData);
+            var scoreData = new Dictionary<string, string>();
+            scoreData["score"] = score.ToString();
+
+            FB.API("/me/scores", HttpMethod.POST, delegate (IGraphResult result)
+            {
+                Debug.Log("Score submit result: " + result.RawResult);
+            }, scoreData);
+        }
+    }
+
+    public void DisplayScore()
+    {
+        StartCoroutine(Query());
+        //scores loading
+        //QueryScores();
+
+        //if (Highscores.GetComponent<ScoreScreen>().scoreSet)
+        //{
+        //    QueryScores();
+        //}
+
+    }
+
+    IEnumerator Query()
+    {
+        QueryScores();
+        yield return new WaitForSeconds(3);//give time to fetch data
+        QueryScores();
     }
 }
