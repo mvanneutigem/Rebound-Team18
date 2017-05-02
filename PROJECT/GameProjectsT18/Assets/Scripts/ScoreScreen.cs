@@ -17,6 +17,7 @@ public class ScoreScreen : MonoBehaviour
     private int _offset = 100;
     private bool _baseScore = false;
     private HighScores _highScoreManager;
+    public GameObject _FacebookManager;
     public int _levelIndex;
     private bool _highscore = false;
     private string lowestUser = "";
@@ -25,6 +26,8 @@ public class ScoreScreen : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
+        _FacebookManager.GetComponent<FBScript>().Init();
+        _FacebookManager.GetComponent<FBScript>().FBloginWithPermissions();
         _highscore = true;
         _levelIndex = PlayerPrefs.GetInt("Scene");
         
@@ -37,37 +40,38 @@ public class ScoreScreen : MonoBehaviour
 	    /*highScoreManager.SetLeaderboard(_levelIndex - 3);*///tutorial is at index 3
         print(_levelIndex);
 
-	    //   int lowestScore = 10000000;
+        //   int lowestScore = 10000000;
 
-	    //int length = list.Length;
-	    //   for (int i = 0; i < length; ++i)
-	    //   {
-	    //       if (list[i].levelIndex == _levelIndex)
-	    //       {
-	    //           ++NrOfNames;
-	    //           if (list[i].score < lowestScore)
-	    //           {
-	    //               lowestScore = list[i].score;
-	    //               lowestUser = list[i].username;
-	    //           }
-	    //           if (list[i].score < _score)
-	    //           {
-	    //               highscore = true;
-	    //           }
-	    //       }
-	    //   }
+        //int length = list.Length;
+        //   for (int i = 0; i < length; ++i)
+        //   {
+        //       if (list[i].levelIndex == _levelIndex)
+        //       {
+        //           ++NrOfNames;
+        //           if (list[i].score < lowestScore)
+        //           {
+        //               lowestScore = list[i].score;
+        //               lowestUser = list[i].username;
+        //           }
+        //           if (list[i].score < _score)
+        //           {
+        //               highscore = true;
+        //           }
+        //       }
+        //   }
 
-	    //if (NrOfNames < 5)
-	    //{
-	    //       highscore = true;
-	    //   }
+        //if (NrOfNames < 5)
+        //{
+        //       highscore = true;
+        //   }
 
-	}
+    }
 	
 	// Update is called once per frame
 	void Update ()
 	{
-	    if (!_baseScore)
+
+        if (!_baseScore)
 	    {
 	        if (_count < _score)
 	        {
@@ -108,13 +112,16 @@ public class ScoreScreen : MonoBehaviour
         SceneManager.LoadScene(index);
     }
 
-    public void NameEntered()
+    public void AddScore()
     {
-        if (_highscore)
-        {
-            _name = NameText.text;
-            _highScoreManager.AddNewHighscore(_name, _score);
-            _highscore = false;
-        }
+        _FacebookManager.GetComponent<FBScript>().SetScore(_score);
+        //if (_highscore)
+        //{
+        //    _name = NameText.text;
+        //    {
+        //        _FacebookManager.GetComponent<FBScript>().SetScore(_score);
+        //    }
+        //    _highscore = false;
+        //}
     }
 }
