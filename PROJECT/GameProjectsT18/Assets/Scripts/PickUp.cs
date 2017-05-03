@@ -7,7 +7,7 @@ public class PickUp : MonoBehaviour {
     private Transform _playerTransform;
     private float _angle = 0;
     public float Speed = 1;
-    public float Amplitude=0.5f;
+    public float Amplitude=0.2f;
     public float PickupRange = 3.0f;
     public float MoveTime = 0.5f;
     private float _timer = 0;
