@@ -60,6 +60,13 @@ public class PhysicsPlayerController : MonoBehaviour
         materialstate = (Mat)id;
     }
 
+    void Start()
+    {
+        //QualitySettings.vSyncCount = 0;
+        //Application.targetFrameRate = 5;
+
+    }
+
     //METHODS
     void Awake()
     {
