@@ -23,6 +23,7 @@ public class Launcher : MonoBehaviour
         {
             Launch();
             GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().StartGame();
+            GameObject.FindGameObjectWithTag("Player").GetComponent<Rewind>().enabled = true;
             _activated = true;
         }
 
