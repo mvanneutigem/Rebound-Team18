@@ -100,11 +100,11 @@ public class GravityNew : MonoBehaviour {
             // Allow for some mistakes in this angle since this angle is only set upon entering and isn't updated every frame
             if (_angleForward > 95)
             {
-                forward = Vector3.RotateTowards(_playerController.GetForwardDir(), -_pseudo.transform.right, Mathf.PI / 360 * (ChangeDirectionSpeed), Mathf.PI);
+                forward = Vector3.RotateTowards(_playerController.GetForwardDir(), -_pseudo.transform.right, Mathf.PI / 360 * (ChangeDirectionSpeed * 47 * Time.deltaTime), Mathf.PI);
             }
             else
             {
-                forward = Vector3.RotateTowards(_playerController.GetForwardDir(), _newForwardVector, Mathf.PI / 360 * (ChangeDirectionSpeed), Mathf.PI);
+                forward = Vector3.RotateTowards(_playerController.GetForwardDir(), _newForwardVector, Mathf.PI / 360 * (ChangeDirectionSpeed * 47 * Time.deltaTime), Mathf.PI);
             }
 
             forward.Normalize();
@@ -126,11 +126,11 @@ public class GravityNew : MonoBehaviour {
             // Else just 
             if (_angleUp > 95)
             {
-                up = Vector3.RotateTowards(_playerController.GetUpVector(), _pseudo.transform.right, Mathf.PI / 360 * (ChangeDirectionSpeed), Mathf.PI);
+                up = Vector3.RotateTowards(_playerController.GetUpVector(), _pseudo.transform.right, Mathf.PI / 360 * (ChangeDirectionSpeed * 47 * Time.deltaTime), Mathf.PI);
             }
             else
             {
-                up = Vector3.RotateTowards(_playerController.GetUpVector(), _newUpVector, Mathf.PI / 360 * (ChangeDirectionSpeed), Mathf.PI);
+                up = Vector3.RotateTowards(_playerController.GetUpVector(), _newUpVector, Mathf.PI / 360 * (ChangeDirectionSpeed * 47 * Time.deltaTime), Mathf.PI);
             }
 
             Debug.DrawRay(transform.position, up * 10, Color.green);
