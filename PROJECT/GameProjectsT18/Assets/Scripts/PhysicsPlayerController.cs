@@ -42,6 +42,9 @@ public class PhysicsPlayerController : MonoBehaviour
 
     private const float SLAM_CD_TIME = 0.1f;
     private float _slamTimer = SLAM_CD_TIME;
+    private Vector3 _prevVelocity = Vector3.zero;
+    public float StretchAmount = 10;
+    public float SquashAmount = 30;
 
     //keys
     private string _slamKey;
@@ -203,7 +206,6 @@ public class PhysicsPlayerController : MonoBehaviour
             }
             else
             {
-
                 _slamTimer += Time.deltaTime;
             }
 
@@ -216,6 +218,45 @@ public class PhysicsPlayerController : MonoBehaviour
             //Move
             //Debug.Log("up " + _upVector3);
             _playerRigidBody.AddForce(force * MovementSnappiness, ForceMode.VelocityChange);
+
+            if (materialstate == Mat.RUBBER)
+            {
+                var velocity = _playerRigidBody.velocity;
+                var diff = velocity - _prevVelocity;
+                diff.x *= _upVector3.x;
+                diff.y *= _upVector3.y;
+                diff.z *= _upVector3.z;
+
+                var vel = velocity;
+                vel.x *= _upVector3.x;
+                vel.y *= _upVector3.y;
+                vel.z *= _upVector3.z;
+
+                var scale = this.transform.localScale;
+                scale = new Vector3(1.2f, 1.2f, 1.2f);
+                if (diff.magnitude > 1)
+                {
+                    var targetscale = scale - _upVector3 * SquashAmount * Time.deltaTime;
+                    targetscale += _moveDirForward * SquashAmount * Time.deltaTime;
+                    targetscale += _moveDirRight * SquashAmount * Time.deltaTime;
+                    this.transform.localScale = Vector3.Lerp(this.transform.localScale, targetscale, 0.3f);
+                }
+                else if (Mathf.Abs(vel.magnitude) > 9.0f)
+                {
+                    var targetscale = scale + _upVector3 * StretchAmount * Time.deltaTime;
+                    targetscale -= _moveDirForward * StretchAmount * Time.deltaTime;
+                    targetscale -= _moveDirRight * StretchAmount * Time.deltaTime;
+                    this.transform.localScale = Vector3.Lerp(this.transform.localScale, targetscale, 0.1f);
+                }
+                else
+                {
+                    var targetscale = scale;
+                    this.transform.localScale = Vector3.Lerp(this.transform.localScale, targetscale, 0.4f);
+                }
+
+                _prevVelocity = velocity;
+            }
+            
         }
     }
 
