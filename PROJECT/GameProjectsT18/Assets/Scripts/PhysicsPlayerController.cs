@@ -203,6 +203,7 @@ public class PhysicsPlayerController : MonoBehaviour
             }
             else
             {
+
                 _slamTimer += Time.deltaTime;
             }
 
