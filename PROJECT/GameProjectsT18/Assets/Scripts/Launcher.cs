@@ -7,29 +7,25 @@ public class Launcher : MonoBehaviour
     public GameObject _coll;
     public float power = 1000;
     private string slam;
-    private bool _activated = false;
     // Use this for initialization
     void Start()
     {
         GameObject.FindGameObjectWithTag("Player").GetComponent<PhysicsPlayerController>().SetLockMovement(true);
-
         slam = PlayerPrefs.GetString("Slam");
-        _activated = false;
     }
 
     void Update()
     {
-        if ((Input.GetButtonUp("Slam") || Input.GetKeyUp(slam)) && !_activated)
+        if ((Input.GetButtonUp("Slam") || Input.GetKeyUp(slam)))
         {
             Launch();
-            _activated = true;
         }
-
     }
     private void Launch()
     {
         GameObject.FindGameObjectWithTag("Player").GetComponent<PhysicsPlayerController>().SetLockMovement(false);
         StartCoroutine(playanimation());
+        this.GetComponent<Launcher>().enabled = false;
     }
 
     private IEnumerator playanimation()
