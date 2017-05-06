@@ -64,6 +64,13 @@ public class Rewind : MonoBehaviour {
         _barLength = _rewindBar.localScale.x;
         _switcher = GameObject.Find("MaterialChanger");
         rewindString = PlayerPrefs.GetString("Rewind");
+
+
+        Vector3 scale = _rewindBar.localScale;
+        scale.x = 0;
+        _rewindBar.localScale = scale;
+
+        this.enabled = false;
     }
 	
 	void Update ()
