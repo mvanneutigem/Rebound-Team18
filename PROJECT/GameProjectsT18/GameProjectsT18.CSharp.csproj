@@ -92,6 +92,7 @@
   <ItemGroup>
     <Compile Include="Assets\AudioManager.cs" />
     <Compile Include="Assets\LoadScene.cs" />
+    <Compile Include="Assets\PlayerDummy.cs" />
     <Compile Include="Assets\Scripts\Buttons.cs" />
     <Compile Include="Assets\Scripts\CamFade.cs" />
     <Compile Include="Assets\Scripts\CameraController.cs" />
