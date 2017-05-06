@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class ReflectedTrampoline : MonoBehaviour
 {
+    private AudioManager _audioManager;
     private float TrampolinePower = 1f;
     public float UpPower = 10;
     private float threshold = 10;
     private float SlowDownRate = 0.8f;
     //pass up direction of trampoline as jumpvector
+    void Start()
+    {
+        _audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
@@ -22,18 +28,8 @@ public class ReflectedTrampoline : MonoBehaviour
 
                 reflectedVector.y = UpPower;
 
-                //if (reflectedVector.y < threshold)
-                //{
-                //    reflectedVector.y = UpPower;
-                //}
-                //else
-                //{
-                //    //rate of slowdown
-                //    reflectedVector.y *= SlowDownRate;
-                //    if (reflectedVector.y < threshold)
-                //        reflectedVector.y = threshold;
-                //}
                 other.GetComponent<PhysicsPlayerController>().ApplyLocalForce(reflectedVector * TrampolinePower);
+                _audioManager.PlaySound("bounce");
             }
         }
     }
