@@ -11,13 +11,32 @@ public class AudioManager : MonoBehaviour
         _sources = GetComponents<AudioSource>();
 	}
 
-    public void PlaySound(string name)
+    //for quick sounds that may layer over the top of each other
+    public void PlaySFX(string name)
     {
         for (int i = 0; i < _sources.Length; i++)
         {
-            if (name == _sources[i].clip.name)
+            if (_sources[i].clip)
             {
-                _sources[i].Play();
+                if (name == _sources[i].clip.name)
+                {
+                    _sources[i].PlayOneShot(_sources[i].clip);
+                }
+            }
+        }
+    }
+
+    //for longer sounds, like music or ambient noise
+    public void PlayLong(string name)
+    {
+        for (int i = 0; i < _sources.Length; i++)
+        {
+            if (_sources[i].clip)
+            {
+                if (name == _sources[i].clip.name)
+                {
+                    _sources[i].Play();
+                }
             }
         }
     }

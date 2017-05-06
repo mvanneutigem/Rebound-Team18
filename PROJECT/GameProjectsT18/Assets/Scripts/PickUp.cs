@@ -16,6 +16,7 @@ public class PickUp : MonoBehaviour {
 
     private bool _followPlayer = false;
     private GameController _gameController;
+    private AudioManager _audioManager;
 
     //METHODs
 	
@@ -34,6 +35,7 @@ public class PickUp : MonoBehaviour {
         {
             _gameController = gameControllerObj.GetComponent<GameController>();
         }
+        _audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
     }
 
 	void Update () {
@@ -61,6 +63,7 @@ public class PickUp : MonoBehaviour {
         if (other.tag == "Player")
         {
             _gameController.AddScore(100);
+            _audioManager.PlaySFX("pop");
             Destroy(gameObject);  
         }
     }

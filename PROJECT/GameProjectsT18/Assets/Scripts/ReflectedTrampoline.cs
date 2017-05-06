@@ -29,7 +29,7 @@ public class ReflectedTrampoline : MonoBehaviour
                 reflectedVector.y = UpPower;
 
                 other.GetComponent<PhysicsPlayerController>().ApplyLocalForce(reflectedVector * TrampolinePower);
-                _audioManager.PlaySound("bounce");
+                _audioManager.PlaySFX("bounce");
             }
         }
     }
