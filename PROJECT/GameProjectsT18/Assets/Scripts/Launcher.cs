@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Launcher : MonoBehaviour
 {
+    private AudioManager _audioManager;
     public GameObject _coll;
     public float power = 1000;
     private string slam;
@@ -12,9 +13,9 @@ public class Launcher : MonoBehaviour
     void Start()
     {
         GameObject.FindGameObjectWithTag("Player").GetComponent<PhysicsPlayerController>().SetLockMovement(true);
-
         slam = PlayerPrefs.GetString("Slam");
         _activated = false;
+        _audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
     }
 
     void Update()
@@ -31,6 +32,7 @@ public class Launcher : MonoBehaviour
     private void Launch()
     {
         GameObject.FindGameObjectWithTag("Player").GetComponent<PhysicsPlayerController>().SetLockMovement(false);
+        _audioManager.PlayLong("ambient");
         StartCoroutine(playanimation());
     }
 
