@@ -5,6 +5,7 @@ using System.Net.Mime;
 using System.Security.Cryptography;
 using UnityEngine;
 using Facebook.Unity;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class FBScript : MonoBehaviour
@@ -19,16 +20,20 @@ public class FBScript : MonoBehaviour
 
     public int myScore = 100000;
 
-    public Text ScoresDebug;
-
     private List<object> Scorelist = null;
     private string AppLinkURL = "https://apps.facebook.com/rebound_";
 
     private bool _Init = false;
+    private bool _AllPermissions = false;
 
     void Awake()
     {
         Init();
+    }
+
+    void Start()
+    {
+        DealWithFBMenus(FB.IsLoggedIn);
     }
 
     public void Init()
@@ -57,6 +62,12 @@ public class FBScript : MonoBehaviour
         {
             Time.timeScale = 1;
         }
+    }
+
+    public void FBlogout()
+    {
+        FB.LogOut();
+        DealWithFBMenus(FB.IsLoggedIn);
     }
 
     public void FBlogin()
@@ -101,21 +112,76 @@ public class FBScript : MonoBehaviour
 
     void DealWithFBMenus(bool isLoggedIn)
     {
+
         if (isLoggedIn)
         {
-            //fb is logged in
-            LoggedInCanvas.gameObject.SetActive(true);
-            LoggedOutCanvas.gameObject.SetActive(false);
-            FB.API("/me?fields=first_name", HttpMethod.GET, DisplayUsername);
-            FB.API("/me/picture?type=square&height=128&width=128", HttpMethod.GET, DisplayProfilePic);
+            Debug.Log("Logged in");
+            if (SceneManager.GetActiveScene().buildIndex == 2) //scorescreen needs more permissions
+            {
+                Debug.Log("checking permissions");
+                FB.API("/me/permissions",
+                    HttpMethod.GET,
+                    CheckPermissions
+                    );
+            }
+            else
+            {
+                //fb is logged in
+                LoggedInCanvas.gameObject.SetActive(true);
+                LoggedOutCanvas.gameObject.SetActive(false);
+                FB.API("/me?fields=first_name", HttpMethod.GET, DisplayUsername);
+                FB.API("/me/picture?type=square&height=128&width=128", HttpMethod.GET, DisplayProfilePic);
+            }
+
+            
         }
         else
         {
+            Debug.Log("Not logged in");
             //fb not logged in
             LoggedInCanvas.gameObject.SetActive(false);
             LoggedOutCanvas.gameObject.SetActive(true);
         }
     }
+
+    private void CheckPermissions(IGraphResult result)
+    {
+        IDictionary<string, object> data = result.ResultDictionary;
+        Debug.Log(result.RawResult);
+        List<object> permissionsList = (List<object>) data["data"];
+        bool grantedFriends = false;
+        bool grantedPublish = false;
+
+        foreach (object obj in permissionsList)
+        {
+            var entry = (Dictionary<string, object>) obj;
+            var permission = entry["permission"];
+            var status = entry["status"];
+            if (permission.ToString() == "user_friends" && status.ToString() == "granted")
+            {
+                grantedFriends = true;
+            }
+            if (permission.ToString() == "publish_actions" && status.ToString() == "granted")
+            {
+                grantedPublish = true;
+            }
+        }
+        if (grantedPublish && grantedFriends)
+        {
+            //fb is logged in
+            Debug.Log("permissions accepted");
+            LoggedInCanvas.gameObject.SetActive(true);
+            LoggedOutCanvas.gameObject.SetActive(false);
+            FB.API("/me?fields=first_name", HttpMethod.GET, DisplayUsername);
+            FB.API("/me/picture?type=square&height=128&width=128", HttpMethod.GET, DisplayProfilePic);
+
+        }
+        else
+        {
+            Debug.Log("permissions declined");
+        }
+    }
+
 
     void DisplayProfilePic(IGraphResult result)
     {
@@ -244,8 +310,6 @@ public class FBScript : MonoBehaviour
         IDictionary<string, object> data = result.ResultDictionary;
         Scorelist = (List<object>) data["data"];
 
-        ScoresDebug.text = "";
-
         foreach (Transform child in ScoreScrollList.transform)
         {
             GameObject.Destroy(child.gameObject);
@@ -255,8 +319,6 @@ public class FBScript : MonoBehaviour
         {
             var entry = (Dictionary<string, object>) obj;
             var user = (Dictionary<string, object>) entry["user"];
-
-            ScoresDebug.text = ScoresDebug.text + "UN: " + user["name"] + " - " + entry["score"] + "\n";
 
             GameObject scorePanel;
             scorePanel = Instantiate(ScoreEntryPanel) as GameObject;

@@ -40,6 +40,13 @@ public class Buttons : MonoBehaviour
         SceneManager.LoadScene(sceneIndex);
     }
 
+    public void RestartLevel()
+    {
+        Time.timeScale = 1;
+        PlayerPrefs.SetInt("Scene", PlayerPrefs.GetInt("Scene") -1);
+        SceneManager.LoadScene(4);
+    }
+
     public void ResumeGame()
     {
         Time.timeScale = 1;
