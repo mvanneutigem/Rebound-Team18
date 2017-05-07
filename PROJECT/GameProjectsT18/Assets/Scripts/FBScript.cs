@@ -168,6 +168,7 @@ public class FBScript : MonoBehaviour
         }
         if (grantedPublish && grantedFriends)
         {
+            DisplayScore();
             //fb is logged in
             Debug.Log("permissions accepted");
             LoggedInCanvas.gameObject.SetActive(true);

@@ -124,6 +124,7 @@
     <Compile Include="Assets\Scripts\ScoreScreen.cs" />
     <Compile Include="Assets\Scripts\SpeedBoostLinear.cs" />
     <Compile Include="Assets\Scripts\SquashScript.cs" />
+    <Compile Include="Assets\Scripts\SwitchWorlds.cs" />
     <Compile Include="Assets\Scripts\Tips.cs" />
     <Compile Include="Assets\Scripts\camDummy.cs" />
   </ItemGroup>
