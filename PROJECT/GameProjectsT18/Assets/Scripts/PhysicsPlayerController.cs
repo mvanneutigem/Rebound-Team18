@@ -43,8 +43,11 @@ public class PhysicsPlayerController : MonoBehaviour
     private const float SLAM_CD_TIME = 0.1f;
     private float _slamTimer = SLAM_CD_TIME;
     private Vector3 _prevVelocity = Vector3.zero;
-    public float StretchAmount = 10;
-    public float SquashAmount = 30;
+    private PlayerDummy _dummy;
+    public float MaxSquash = 0.7f;
+    public float MaxStretch = 1.5f;
+    private float _squashValue = 0;
+    private Vector3 _squashDirection;
 
     //keys
     private string _slamKey;
@@ -63,12 +66,6 @@ public class PhysicsPlayerController : MonoBehaviour
         materialstate = (Mat)id;
     }
 
-    void Start()
-    {
-        //QualitySettings.vSyncCount = 0;
-        //Application.targetFrameRate = 5;
-
-    }
 
     //METHODS
     void Awake()
@@ -78,17 +75,14 @@ public class PhysicsPlayerController : MonoBehaviour
         _upVector3 = new Vector3(0, 1, 0);
         _velocity = Vector3.zero;
         _playerRigidBody = this.GetComponent<Rigidbody>();
+        _playerRigidBody.maxAngularVelocity = 50;
         PlayerPrefs.SetInt("Score", 0);
         _slamKey = PlayerPrefs.GetString("Slam");
+        _dummy = GameObject.Find("PlayerDummy").GetComponent<PlayerDummy>();
     }
 
     void Update()
     {
-        //Debug.Log(_velocity);
-        //DrawLine(_transSelf.position, _transSelf.position + (GetUpVector() * 4), Color.green, .02f);
-        //DrawLine(_transSelf.position, _transSelf.position + (GetRightVector() * 4), Color.red, .02f);
-        //DrawLine(_transSelf.position, _transSelf.position + (GetForwardDir() * 4), Color.blue, .02f);
-
         _moveDirRight = Vector3.Cross(_upVector3.normalized, _moveDirForward.normalized);
         _velocity = ConvertToLocalSpace(_playerRigidBody.velocity);
 
@@ -200,6 +194,7 @@ public class PhysicsPlayerController : MonoBehaviour
             {
                 if (Input.GetButtonDown("Slam") || Input.GetKeyDown(_slamKey))
                 {
+                    _squashValue = MaxStretch;
                     _slamTimer = 0.0f;
                     _playerRigidBody.AddForce(_upVector3 * SlamSpeed, ForceMode.Impulse);
                 }
@@ -221,42 +216,25 @@ public class PhysicsPlayerController : MonoBehaviour
 
             if (materialstate == Mat.RUBBER)
             {
-                var velocity = _playerRigidBody.velocity;
-                var diff = velocity - _prevVelocity;
-                diff.x *= _upVector3.x;
-                diff.y *= _upVector3.y;
-                diff.z *= _upVector3.z;
-
-                var vel = velocity;
-                vel.x *= _upVector3.x;
-                vel.y *= _upVector3.y;
-                vel.z *= _upVector3.z;
-
-                var scale = this.transform.localScale;
-                scale = new Vector3(1.2f, 1.2f, 1.2f);
-                if (diff.magnitude > 1)
+                if (_squashValue > 0)
                 {
-                    var targetscale = scale - _upVector3 * SquashAmount * Time.deltaTime;
-                    targetscale += _moveDirForward * SquashAmount * Time.deltaTime;
-                    targetscale += _moveDirRight * SquashAmount * Time.deltaTime;
-                    this.transform.localScale = Vector3.Lerp(this.transform.localScale, targetscale, 0.3f);
-                }
-                else if (Mathf.Abs(vel.magnitude) > 9.0f)
-                {
-                    var targetscale = scale + _upVector3 * StretchAmount * Time.deltaTime;
-                    targetscale -= _moveDirForward * StretchAmount * Time.deltaTime;
-                    targetscale -= _moveDirRight * StretchAmount * Time.deltaTime;
-                    this.transform.localScale = Vector3.Lerp(this.transform.localScale, targetscale, 0.1f);
+                    if (_squashValue > MaxStretch)
+                    {
+                        _squashValue = MaxStretch;
+                    }
                 }
                 else
                 {
-                    var targetscale = scale;
-                    this.transform.localScale = Vector3.Lerp(this.transform.localScale, targetscale, 0.4f);
+                    if (_squashValue < -MaxSquash)
+                    {
+                        _squashValue = -MaxSquash;
+                    }
                 }
 
-                _prevVelocity = velocity;
+                _squashValue -= (_squashValue * 10.0f) * Time.deltaTime;
+
+                _dummy.SetSquash(_upVector3, _squashValue);
             }
-            
         }
     }
 
@@ -285,12 +263,14 @@ public class PhysicsPlayerController : MonoBehaviour
 
     public void ApplyForce(Vector3 appliedForce)
     {
+        _squashValue = -MaxSquash;
         _playerRigidBody.velocity = appliedForce;
         _jumping = true;
     }
 
     public void ApplyLocalForce(Vector3 appliedForce)
     {
+        _squashValue = -MaxSquash;
         _playerRigidBody.velocity = ToWorldSpace(appliedForce);
         _jumping = true;
     }
@@ -381,5 +361,10 @@ public class PhysicsPlayerController : MonoBehaviour
         lr.SetPosition(0, start);
         lr.SetPosition(1, end);
         GameObject.Destroy(myLine, duration);
+    }
+
+    public void SetMaterial(Material mat)
+    {
+        _dummy.SetMaterial(mat);
     }
 }
