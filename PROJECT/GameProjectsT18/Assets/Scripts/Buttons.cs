@@ -43,8 +43,7 @@ public class Buttons : MonoBehaviour
     public void RestartLevel()
     {
         Time.timeScale = 1;
-        PlayerPrefs.SetInt("Scene", PlayerPrefs.GetInt("Scene") -1);
-        SceneManager.LoadScene(4);
+        SceneManager.LoadScene(PlayerPrefs.GetInt("Scene"));
     }
 
     public void ResumeGame()
