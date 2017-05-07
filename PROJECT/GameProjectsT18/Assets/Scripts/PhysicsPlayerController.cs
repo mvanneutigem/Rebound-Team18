@@ -75,6 +75,7 @@ public class PhysicsPlayerController : MonoBehaviour
         _upVector3 = new Vector3(0, 1, 0);
         _velocity = Vector3.zero;
         _playerRigidBody = this.GetComponent<Rigidbody>();
+        _playerRigidBody.maxAngularVelocity = 50;
         PlayerPrefs.SetInt("Score", 0);
         _slamKey = PlayerPrefs.GetString("Slam");
         _dummy = GameObject.Find("PlayerDummy").GetComponent<PlayerDummy>();
