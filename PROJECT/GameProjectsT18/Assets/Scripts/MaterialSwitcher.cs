@@ -18,22 +18,22 @@ public class MaterialSwitcher : MonoBehaviour {
             switch (localMaterial)
             {
                 case PhysicsPlayerController.Mat.METAL:
-                    other.GetComponent<Renderer>().material = metalMaterialRef;
+                    other.GetComponent<PhysicsPlayerController>().SetMaterial(metalMaterialRef);
                     other.GetComponent<Magnetize>().enabled = true;
                     other.GetComponent<PhysicsPlayerController>().SetState((int)PhysicsPlayerController.Mat.METAL);
                     break;
                 case PhysicsPlayerController.Mat.RUBBER:
-                    other.GetComponent<Renderer>().material = bouncyMaterialRef;
+                    other.GetComponent<PhysicsPlayerController>().SetMaterial(bouncyMaterialRef);
                     other.GetComponent<Magnetize>().enabled = false;
                     other.GetComponent<PhysicsPlayerController>().SetState((int)PhysicsPlayerController.Mat.RUBBER);
                     break;
                 case PhysicsPlayerController.Mat.GLASS:
-                    other.GetComponent<Renderer>().material = glassMaterialRef;
+                    other.GetComponent<PhysicsPlayerController>().SetMaterial(glassMaterialRef);
                     other.GetComponent<Magnetize>().enabled = false;
                     other.GetComponent<PhysicsPlayerController>().SetState((int)PhysicsPlayerController.Mat.GLASS);
                     break;
                 case PhysicsPlayerController.Mat.WOOD:
-                    other.GetComponent<Renderer>().material = woodMaterialRef;
+                    other.GetComponent<PhysicsPlayerController>().SetMaterial(woodMaterialRef);
                     other.GetComponent<Magnetize>().enabled = false;
                     other.GetComponent<PhysicsPlayerController>().SetState((int)PhysicsPlayerController.Mat.WOOD);
                     break;

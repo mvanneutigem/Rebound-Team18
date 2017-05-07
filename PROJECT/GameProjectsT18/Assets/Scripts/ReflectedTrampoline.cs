@@ -15,20 +15,20 @@ public class ReflectedTrampoline : MonoBehaviour
         _audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnCollisionEnter(Collision other)
     {
-        if (other.tag == "Player")
+        if (other.gameObject.tag == "Player")
         {
-            if (other.GetComponent<PhysicsPlayerController>().materialstate == PhysicsPlayerController.Mat.RUBBER)
+            if (other.gameObject.GetComponent<PhysicsPlayerController>().materialstate == PhysicsPlayerController.Mat.RUBBER)
             {
                 var normal = this.transform.up;
-                var inVelocity = other.GetComponent<PhysicsPlayerController>().GetLocalVelocity();
+                var inVelocity = other.gameObject.GetComponent<PhysicsPlayerController>().GetLocalVelocity();
                 Vector3 reflectedVector = inVelocity;
                 //only reflect y part of velocity over set threshold
 
                 reflectedVector.y = UpPower;
 
-                other.GetComponent<PhysicsPlayerController>().ApplyLocalForce(reflectedVector * TrampolinePower);
+                other.gameObject.GetComponent<PhysicsPlayerController>().ApplyLocalForce(reflectedVector * TrampolinePower);
                 _audioManager.PlaySFX("bounce");
             }
         }
