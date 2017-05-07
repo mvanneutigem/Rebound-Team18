@@ -93,6 +93,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\AudioManager.cs" />
+    <Compile Include="Assets\LoadScene.cs" />
+    <Compile Include="Assets\PlayerDummy.cs" />
     <Compile Include="Assets\Scripts\Buttons.cs" />
     <Compile Include="Assets\Scripts\CamFade.cs" />
     <Compile Include="Assets\Scripts\CameraController.cs" />
@@ -117,6 +120,7 @@
     <Compile Include="Assets\Scripts\PickUp.cs" />
     <Compile Include="Assets\Scripts\ReflectedTrampoline.cs" />
     <Compile Include="Assets\Scripts\Rewind.cs" />
+    <Compile Include="Assets\Scripts\SceneLoader.cs" />
     <Compile Include="Assets\Scripts\ScoreScreen.cs" />
     <Compile Include="Assets\Scripts\SpeedBoostLinear.cs" />
     <Compile Include="Assets\Scripts\SquashScript.cs" />

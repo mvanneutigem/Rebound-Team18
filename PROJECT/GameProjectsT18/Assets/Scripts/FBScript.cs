@@ -17,7 +17,7 @@ public class FBScript : MonoBehaviour
     public GameObject ScoreScrollList;
     public GameObject Highscores;
 
-    public int myScore = 0;
+    public int myScore = 100000;
 
     public Text ScoresDebug;
 
@@ -111,7 +111,7 @@ public class FBScript : MonoBehaviour
         }
         else
         {
-            //fb not logged out
+            //fb not logged in
             LoggedInCanvas.gameObject.SetActive(false);
             LoggedOutCanvas.gameObject.SetActive(true);
         }
@@ -149,7 +149,7 @@ public class FBScript : MonoBehaviour
             new Uri(AppLinkURL),
             string.Empty,
             string.Empty,
-            string.Empty,
+            "Check out this game!",
             new Uri("http://mariekevanneutigem.nl/projects/images/rebound_image.png"),
             string.Empty,
             ShareCallBack
@@ -199,7 +199,7 @@ public class FBScript : MonoBehaviour
     public void ShareWithUsers()
     {
         FB.AppRequest(
-            null,
+            "Bet you can't beat my score!",
             null,
             new List<object>() { "app_users"},
             null,
