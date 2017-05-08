@@ -32,7 +32,7 @@ public class Launcher : MonoBehaviour
     private void Launch()
     {
         GameObject.FindGameObjectWithTag("Player").GetComponent<PhysicsPlayerController>().SetLockMovement(false);
-        _audioManager.PlayLong("ambient");
+        _audioManager.PlayLong("Start Up");
         StartCoroutine(playanimation());
     }
 
