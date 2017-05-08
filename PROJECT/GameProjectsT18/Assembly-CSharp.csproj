@@ -46,6 +46,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\AudioManager.cs" />
+     <Compile Include="Assets\LoadScene.cs" />
      <Compile Include="Assets\Scripts\Buttons.cs" />
      <Compile Include="Assets\Scripts\CamFade.cs" />
      <Compile Include="Assets\Scripts\CameraController.cs" />
@@ -68,10 +70,14 @@
      <Compile Include="Assets\Scripts\PauseGame.cs" />
      <Compile Include="Assets\Scripts\PhysicsPlayerController.cs" />
      <Compile Include="Assets\Scripts\PickUp.cs" />
+     <Compile Include="Assets\Scripts\PlayerDummy.cs" />
      <Compile Include="Assets\Scripts\ReflectedTrampoline.cs" />
      <Compile Include="Assets\Scripts\Rewind.cs" />
+     <Compile Include="Assets\Scripts\SceneLoader.cs" />
      <Compile Include="Assets\Scripts\ScoreScreen.cs" />
      <Compile Include="Assets\Scripts\SpeedBoostLinear.cs" />
+     <Compile Include="Assets\Scripts\SquashScript.cs" />
+     <Compile Include="Assets\Scripts\SwitchWorlds.cs" />
      <Compile Include="Assets\Scripts\Tips.cs" />
      <Compile Include="Assets\Scripts\camDummy.cs" />
      <None Include="Assets\resources\highscores.txt" />
