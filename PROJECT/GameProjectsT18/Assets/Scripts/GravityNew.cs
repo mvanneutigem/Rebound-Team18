@@ -61,6 +61,8 @@ public class GravityNew : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+        //DrawLine(_playerTransform.position, _playerTransform.position + 10 * _playerController.GetForwardDir(), Color.red,0.01f);
+        //DrawLine(_playerTransform.position, _playerTransform.position + 10 * _newForwardVector, Color.green,0.01f);
         //Debug.Log("new Forward: " +_newForwardVector);
         Vector3 origin = _playerTransform.position;
         var playerRadius = 1.0f;
@@ -79,7 +81,6 @@ public class GravityNew : MonoBehaviour {
 
         if (_entered)
         {
-
             //Debug.Log("new Forward in Gravity: " + _newForwardVector);
             //Debug.Log("new Up in Gravity: " + _newUpVector);
             _rewindScript.SetNewForward(_newForwardVector);
@@ -98,7 +99,7 @@ public class GravityNew : MonoBehaviour {
             //Debug.Log("new forward: " + _newForwardVector);
             //Debug.Log("Angle PlayerForward/NewForward: " + _angleForward);
             // Allow for some mistakes in this angle since this angle is only set upon entering and isn't updated every frame
-            if (_angleForward > 95)
+            if (_angleForward > 120)
             {
                 forward = Vector3.RotateTowards(_playerController.GetForwardDir(), -_pseudo.transform.right, Mathf.PI / 360 * (ChangeDirectionSpeed * 47 * Time.deltaTime), Mathf.PI);
             }
@@ -223,6 +224,20 @@ public class GravityNew : MonoBehaviour {
     public void SetPseudoRight(Vector3 right)
     {
         _pseudo.transform.right = right;
+    }
+
+    void DrawLine(Vector3 start, Vector3 end, Color color, float duration = 0.2f)
+    {
+        GameObject myLine = new GameObject();
+        myLine.transform.position = start;
+        myLine.AddComponent<LineRenderer>();
+        LineRenderer lr = myLine.GetComponent<LineRenderer>();
+        lr.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
+        lr.SetColors(color, color);
+        lr.SetWidth(0.1f, 0.1f);
+        lr.SetPosition(0, start);
+        lr.SetPosition(1, end);
+        GameObject.Destroy(myLine, duration);
     }
 }
 
