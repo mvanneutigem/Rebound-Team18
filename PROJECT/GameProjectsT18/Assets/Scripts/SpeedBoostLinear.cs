@@ -44,7 +44,6 @@ public class SpeedBoostLinear : MonoBehaviour
                 _playerTransform = _player.GetComponent<Transform>();
                 _startPos = _playerTransform.position;
                 Vector3 forward = _player.GetForwardDir();
-                forward.y = 0;
                 forward.Normalize();
                 _endPos = _startPos + forward * Distance;
                 _player.SetLockMovement(true);
