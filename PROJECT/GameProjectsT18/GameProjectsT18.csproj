@@ -127,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\FacebookSDK\link.xml" />
+    <None Include="Assets\Materials\Outlined-Silhouette Only.shader" />
     <None Include="Assets\Materials\ToonShading.shader" />
     <None Include="Assets\Materials\ToonShadingFlatColor.shader" />
     <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
