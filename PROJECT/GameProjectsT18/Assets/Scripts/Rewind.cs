@@ -103,6 +103,7 @@ public class Rewind : MonoBehaviour {
                 _previousNewForward.Add(_newForward);
                 //Debug.Log("Up in Rewind: " + _newUp);
                 _previousNewUp.Add(_newUp);
+                //Debug.Log("changeSpeed in Rewind: " + _rotationSpeed);
                 _previousRotationSpeed.Add(_rotationSpeed);
                 //Debug.Log("Pseudo right in Rewind: " + _pseudoRight);
                 _previousPseudoRight.Add(_pseudoRight);
@@ -141,7 +142,7 @@ public class Rewind : MonoBehaviour {
                 _rewinding = false;
                 _playerController.SetLockMovement(false);
                 _playerController.SetVelocity((Vector3)_previousVelocities[_arrayIdx - 1]);
-                _gravityScript.SetEntered(true);
+                //_gravityScript.SetEntered(true); 
             }
         }
         
