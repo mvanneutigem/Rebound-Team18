@@ -15,37 +15,46 @@ public class CamFade : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-	    var direction = Player.transform.position - transform.position;
-
-        Ray ray = new Ray(transform.position, direction);
+        Vector3 direction = Player.transform.position - transform.position;
         RaycastHit hit;
-        int distance = 15;
-        if (Physics.Raycast(ray, out hit, distance))
+        bool rayFound = Physics.Raycast(transform.position, direction, out hit);
+
+        if (rayFound)
         {
-
-            if (hit.collider != Player)
+            if (hit.distance < direction.magnitude)
             {
-                GameObject removeGameObject = new GameObject();
-                bool remove = false;
-                foreach (GameObject o in hitObjects)
-                {
-                    if (hit.collider != o)
-                    {
-                        Color col = o.GetComponent<Renderer>().material.color;
-                        col.a = 1.0f;
-                        o.GetComponent<Renderer>().material.color = col;
-                        remove = true;
-                        removeGameObject = o;
-                    }
-                }
-                if (remove)
-                    hitObjects.Remove(removeGameObject);
+                GameObject hitObj = hit.transform.gameObject;
 
-                Color c = hit.collider.GetComponent<Renderer>().material.color;
-                c.a = 0.2f;
-                hit.collider.GetComponent<Renderer>().material.color = c;
-                hitObjects.Add(hit.collider.gameObject);
+                if (hitObj.tag != "Player")
+                {
+                    hitObjects.Add(hitObj);
+                    // Change Alpha value
+                    Color c = hitObj.GetComponent<Renderer>().material.color;
+                    c.a = 0.2f;
+                    hit.transform.gameObject.GetComponent<Renderer>().material.color = c;
+                    // ****
+                    hitObjects.Add(hitObj);
+                }
             }
         }
+        if (hitObjects.Count != 0)
+        {
+            GameObject remover = new GameObject();
+            foreach (GameObject o in hitObjects)
+            {
+                if (hit.transform.gameObject != o)
+                {
+                    Color c = o.GetComponent<Renderer>().material.color;
+                    // Change Alpha value
+                    c.a = 1.0f;
+                    o.GetComponent<Renderer>().material.color = c;
+                    // ***
+
+                    // Delete outside of the foreach, so store locally
+                    remover = o;
+                }
+            }
+            hitObjects.Remove(remover);
+        }
     }
-}
+    }
