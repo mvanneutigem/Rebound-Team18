@@ -30,9 +30,11 @@ public class ScoreScreen : MonoBehaviour
        // _FacebookManager.GetComponent<FBScript>().FBloginWithPermissions();
         _highscore = true;
         _levelIndex = PlayerPrefs.GetInt("Scene");
+        var scoreMultiplier = _levelIndex - 4;
         
         _score = PlayerPrefs.GetInt("Score");
         _score += (int)(PlayerPrefs.GetFloat("time") * 100.0f);
+        _score *= scoreMultiplier;
         PlayerPrefs.SetInt("Score", 0);
 
         _highScoreManager = GetComponent<HighScores>();

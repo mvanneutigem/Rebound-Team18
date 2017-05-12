@@ -26,6 +26,7 @@ public class FBScript : MonoBehaviour
     private bool _Init = false;
     private bool _gotScore = false;
     private bool _AllPermissions = false;
+    private string _myID = "";
 
     void Awake()
     {
@@ -286,6 +287,7 @@ public class FBScript : MonoBehaviour
     }
 
     //scores API stuff
+    //----------------
 
     public void QueryScores()
     {
@@ -296,11 +298,10 @@ public class FBScript : MonoBehaviour
     {
         Debug.Log("called get current score method");
         IDictionary<string, object> data = result.ResultDictionary;
-        var id = data["id"];
+        _myID = data["id"].ToString();
+        //Debug.Log(list);
 
-        Debug.Log(list);
-
-        string score = "";
+        //string score = "";
         //foreach (object obj in list)
         //{
         //    var entry = (Dictionary<string, object>)obj;
@@ -308,10 +309,9 @@ public class FBScript : MonoBehaviour
         //    Debug.Log("Score string:");
         //    Debug.Log(score);
         //}
-        Debug.Log(score);
-        myScore = int.Parse(score);
-        Debug.Log("Got new score");
-        _gotScore = true;
+        //Debug.Log(score);
+        // myScore = int.Parse(score);
+
     }
     private void ScoresCallback(IResult result)
     {
@@ -340,6 +340,10 @@ public class FBScript : MonoBehaviour
 
             scoreName.text = user["name"].ToString();
             scoreScore.text = entry["score"].ToString();
+            if (_myID == user["id"].ToString())
+            {
+                myScore = int.Parse(scoreScore.text);
+            }
 
             //string userID = "";
             //FB.API("/me?fields=id", HttpMethod.GET, delegate (IGraphResult pictureResult)
@@ -365,6 +369,9 @@ public class FBScript : MonoBehaviour
                 });
         }
         Highscores.GetComponent<ScoreScreen>().AddScore();
+
+        Debug.Log("Got user ID");
+        _gotScore = true;
     }
 
     public void SetScore(int score)
@@ -397,7 +404,7 @@ public class FBScript : MonoBehaviour
     IEnumerator Query()
     {
         QueryScores();
-        yield return new WaitForSeconds(3);//give time to fetch data
+        yield return new WaitForSeconds(3.0f);//give time to fetch data
         //QueryScores();
         StartCoroutine(UpdateScore());
     }
@@ -405,8 +412,14 @@ public class FBScript : MonoBehaviour
     IEnumerator UpdateScore()
     {
         while(!_gotScore)
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(3.0f);
         QueryScores();
         Debug.Log("Score updated");
     }
+
+    //Achievements
+    //------------
+
+
+
 }
