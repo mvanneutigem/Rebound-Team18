@@ -24,6 +24,7 @@ public class FBScript : MonoBehaviour
     private string AppLinkURL = "https://apps.facebook.com/rebound_";
 
     private bool _Init = false;
+    private bool _gotScore = false;
     private bool _AllPermissions = false;
 
     void Awake()
@@ -91,9 +92,12 @@ public class FBScript : MonoBehaviour
         {
             Debug.Log(result.Error);
         }
-        else
+        else if (!string.IsNullOrEmpty(result.RawResult))
         {
-            DealWithFBMenus(FB.IsLoggedIn);
+            LoggedInCanvas.gameObject.SetActive(true);
+            LoggedOutCanvas.gameObject.SetActive(false);
+            FB.API("/me?fields=first_name", HttpMethod.GET, DisplayUsername);
+            FB.API("/me/picture?type=square&height=128&width=128", HttpMethod.GET, DisplayProfilePic);
             DisplayScore();
         }
     }
@@ -168,13 +172,12 @@ public class FBScript : MonoBehaviour
         }
         if (grantedPublish && grantedFriends)
         {
-            DisplayScore();
             //fb is logged in
-            Debug.Log("permissions accepted");
             LoggedInCanvas.gameObject.SetActive(true);
             LoggedOutCanvas.gameObject.SetActive(false);
             FB.API("/me?fields=first_name", HttpMethod.GET, DisplayUsername);
             FB.API("/me/picture?type=square&height=128&width=128", HttpMethod.GET, DisplayProfilePic);
+            DisplayScore();
 
         }
         else
@@ -287,24 +290,28 @@ public class FBScript : MonoBehaviour
     public void QueryScores()
     {
         FB.API("/app/scores?fields=score,user.limit(30)",HttpMethod.GET, ScoresCallback);
-        FB.API("/me/scores?fields=score", HttpMethod.GET, GetCurrentScore);
+        FB.API("/me?fields=score", HttpMethod.GET, GetCurrentScore);
     }
     void GetCurrentScore(IResult result)
     {
+        Debug.Log("called get current score method");
         IDictionary<string, object> data = result.ResultDictionary;
-        var list = (List<object>)data["data"];
+        var id = data["id"];
 
         Debug.Log(list);
 
         string score = "";
-        foreach (object obj in list)
-        {
-            var entry = (Dictionary<string, object>)obj;
-            score = entry["score"].ToString();
-            Debug.Log(score);
-        }
-            
+        //foreach (object obj in list)
+        //{
+        //    var entry = (Dictionary<string, object>)obj;
+        //    score = entry["score"].ToString();
+        //    Debug.Log("Score string:");
+        //    Debug.Log(score);
+        //}
+        Debug.Log(score);
         myScore = int.Parse(score);
+        Debug.Log("Got new score");
+        _gotScore = true;
     }
     private void ScoresCallback(IResult result)
     {
@@ -346,7 +353,6 @@ public class FBScript : MonoBehaviour
             //}
 
 
-
             Transform ThisScoreAvatar = scorePanel.transform.Find("avatar");
             Image ScoreAvatar = ThisScoreAvatar.GetComponent<Image>();
 
@@ -359,7 +365,6 @@ public class FBScript : MonoBehaviour
                 });
         }
         Highscores.GetComponent<ScoreScreen>().AddScore();
-
     }
 
     public void SetScore(int score)
@@ -393,6 +398,15 @@ public class FBScript : MonoBehaviour
     {
         QueryScores();
         yield return new WaitForSeconds(3);//give time to fetch data
+        //QueryScores();
+        StartCoroutine(UpdateScore());
+    }
+
+    IEnumerator UpdateScore()
+    {
+        while(!_gotScore)
+            yield return new WaitForSeconds(0.1f);
         QueryScores();
+        Debug.Log("Score updated");
     }
 }

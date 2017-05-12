@@ -34,6 +34,13 @@ public class Buttons : MonoBehaviour
         Application.Quit();
     }
 
+    public void StartSession(int sceneIndex)
+    {
+        PlayerPrefs.SetInt("Scene", 4);
+        Time.timeScale = 1;
+        SceneManager.LoadScene(sceneIndex);
+    }
+
     public void loadScene(int sceneIndex)
     {
         Time.timeScale = 1;
