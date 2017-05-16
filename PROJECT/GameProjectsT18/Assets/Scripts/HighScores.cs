@@ -89,10 +89,15 @@ public class HighScores : MonoBehaviour
         for (int i = 0; i < entries.Length; ++i)
         {
             string[] entryInfo = entries[i].Split(new char[] {'|'});
-            string username = entryInfo[0];
-            username = username.Replace("+", " ");
-            int score = int.Parse(entryInfo[1]);
-            Highscoreslist[i] = new Highscore(username, score);
+           
+            if (entryInfo.Length > 1)
+            {
+                string username = entryInfo[0];
+                username = username.Replace("+", " ");
+                int score = int.Parse(entryInfo[1]);
+                Highscoreslist[i] = new Highscore(username, score);
+            }
+            
         }
     }
 
