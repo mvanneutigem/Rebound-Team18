@@ -34,7 +34,7 @@ public class PlayerDummy : MonoBehaviour
         dir.y = Mathf.Abs(dir.y);
         dir.z = Mathf.Abs(dir.z);
         _transSelf.localScale = new Vector3(1, 1, 1) + amount * dir;
-        _transChild.localPosition = new Vector3(0, 0, 0) + amount * direction / 2.0f;
+        _transChild.localPosition = new Vector3(0, 0, 0) - amount * direction / 2.0f;
     }
 
     public void SetMaterial(Material mat)
