@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 8db508fac6e1a4c46b3ed623b77fb42a
-timeCreated: 1493971156
+guid: 8a97a3778857c744d875b547cf141c93
+timeCreated: 1494963415
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,9 +9,11 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Object001
+    4300000: BuildingSide003
+    7400000: Take 001
+    9500000: //RootNode
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:
@@ -72,7 +74,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 0
+  animationType: 2
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
