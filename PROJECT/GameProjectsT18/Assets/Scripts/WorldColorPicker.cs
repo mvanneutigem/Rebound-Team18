@@ -11,7 +11,7 @@ public class WorldColorPicker : MonoBehaviour {
 	{
 	    int Id = SceneManager.GetActiveScene().buildIndex;
         Debug.Log(Id);
-        if ( Id < 10)
+        if (Id < 10)
         {
             Color col = mat.color;
             col.r = 0;
@@ -19,12 +19,28 @@ public class WorldColorPicker : MonoBehaviour {
             col.b = 0.8f;
             mat.color = col;
         }
-        else if (Id > 9 && Id < 14)
+        else if (Id > 9 && Id < 15)
         {
             Color col = mat.color;
             col.r = 0;
             col.g = 0.85f;
             col.b = 0.1f;
+            mat.color = col;
+        }
+        else if (Id > 14 && Id < 20)
+        {
+            Color col = mat.color;
+            col.r = 0.9f;
+            col.g = 0.45f;
+            col.b = 0;
+            mat.color = col;
+        }
+        else if (Id > 19 && Id < 25)
+        {
+            Color col = mat.color;
+            col.r = 0;
+            col.g = 0;
+            col.b = 0;
             mat.color = col;
         }
 	}
