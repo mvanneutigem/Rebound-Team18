@@ -70,6 +70,9 @@ public class PhysicsPlayerController : MonoBehaviour
     //METHODS
     void Awake()
     {
+        Application.targetFrameRate = 500;
+        QualitySettings.vSyncCount = 0;
+
         materialstate = Mat.RUBBER;
         _transSelf = this.transform;
         _upVector3 = new Vector3(0, 1, 0);
