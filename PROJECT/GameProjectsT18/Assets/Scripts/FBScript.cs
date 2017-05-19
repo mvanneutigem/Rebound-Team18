@@ -35,6 +35,7 @@ public class FBScript : MonoBehaviour
 
     void Start()
     {
+
         DealWithFBMenus(FB.IsLoggedIn);
     }
 
@@ -184,6 +185,8 @@ public class FBScript : MonoBehaviour
         else
         {
             Debug.Log("permissions declined");
+            LoggedInCanvas.gameObject.SetActive(false);
+            LoggedOutCanvas.gameObject.SetActive(true);
         }
     }
 
@@ -384,6 +387,8 @@ public class FBScript : MonoBehaviour
             FB.API("/me/scores", HttpMethod.POST, delegate (IGraphResult result)
             {
                 Debug.Log("Score submit result: " + result.RawResult);
+                QueryScores();
+
             }, scoreData);
         }
     }
@@ -413,7 +418,7 @@ public class FBScript : MonoBehaviour
     {
         while(!_gotScore)
             yield return new WaitForSeconds(5.0f);
-        QueryScores();
+        //QueryScores();
         Debug.Log("Score updated");
     }
 
