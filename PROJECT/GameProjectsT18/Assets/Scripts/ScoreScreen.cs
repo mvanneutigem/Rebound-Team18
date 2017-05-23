@@ -23,6 +23,12 @@ public class ScoreScreen : MonoBehaviour
     private string lowestUser = "";
     private string _name = "";
     private Highscore[] _list;
+    public Button continueButton;
+    public Button continueButton2;
+    public Text continueText;
+    public Text continueText2;
+    private int minScore = 10000;
+
     // Use this for initialization
     void Start ()
     {
@@ -67,6 +73,18 @@ public class ScoreScreen : MonoBehaviour
         //       highscore = true;
         //   }
 
+        minScore *= scoreMultiplier;
+        continueText.text = "Get " + minScore + "Points\n to unlock the next level!";
+        continueText2.text = "Get " + minScore + "Points\n to unlock the next level!";
+        //unlock level:
+        //-------------
+        if (_score > minScore)
+        {
+            continueText.enabled = false;
+            continueText2.enabled = false;
+            continueButton.interactable = true;
+            continueButton2.interactable = true;
+        }
     }
 	
 	// Update is called once per frame
@@ -125,5 +143,18 @@ public class ScoreScreen : MonoBehaviour
         //    }
         //    _highscore = false;
         //}
+    }
+
+    public void UnlockLevel(int score)
+    {
+        //unlock level:
+        //-------------
+        if (score > minScore)
+        {
+            continueText.enabled = false;
+            continueText2.enabled = false;
+            continueButton.interactable = true;
+            continueButton2.interactable = true;
+        }
     }
 }
