@@ -1,40 +1,55 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Facebook.Unity;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SwitchWorlds : MonoBehaviour
 {
 
-    public GameObject panel1;
-    public GameObject panel2;
+    public GameObject[] panelArr;
+    public GameObject FB;
     private int currentWorld = 1;
-    private int maxworld = 2;
+    private int maxworld = 3;
 
     void Start()
     {
-        SetButtons(panel1);
+        StartCoroutine(Query());
+    }
+
+    IEnumerator Query()
+    {
+        int score = FB.GetComponent<FBScript>().getScore();
+        yield return new WaitForSeconds(2.0f);//needs improvement!
+        score = FB.GetComponent<FBScript>().getScore();
+        if (score != -1)
+        {
+            Debug.Log("retrieved highscore!");
+            PlayerPrefs.SetInt("Highscore", score);
+        }
+
+        SetButtons(0);
     }
 
     public void UnlockAll()
     {
         PlayerPrefs.SetInt("Highscore", 1000000);
-        SetButtons(panel1);
+        SetButtons(0);
     }
 
-    void SetButtons(GameObject panel)
+    void SetButtons(int id)
     {
         int baseScore = 10000;
         for (int i = 0; i < 5; ++i)
         {
             if (PlayerPrefs.GetInt("Highscore") < baseScore * (i + (currentWorld-1) * 5))
             {
-                panel.transform.GetChild(i+2).GetComponent<Button>().interactable = false;
+                panelArr[id].transform.GetChild(i+2).GetComponent<Button>().interactable = false;
             }
             else
             {
-                panel.transform.GetChild(i+2).GetComponent<Button>().interactable = true;
+                panelArr[id].transform.GetChild(i+2).GetComponent<Button>().interactable = true;
             }
         }
     }
@@ -43,14 +58,22 @@ public class SwitchWorlds : MonoBehaviour
         switch (currentWorld)
         {
             case 1:
-                panel1.SetActive(true);
-                panel2.SetActive(false);
-                SetButtons(panel1);
+                panelArr[0].SetActive(true);
+                panelArr[1].SetActive(false);
+                panelArr[2].SetActive(false);
+                SetButtons(0);
                 break;
             case 2:
-                panel1.SetActive(false);
-                panel2.SetActive(true);
-                SetButtons(panel2);
+                panelArr[0].SetActive(false);
+                panelArr[1].SetActive(true);
+                panelArr[2].SetActive(false);
+                SetButtons(1);
+                break;
+            case 3:
+                panelArr[0].SetActive(false);
+                panelArr[1].SetActive(false);
+                panelArr[2].SetActive(true);
+                SetButtons(2);
                 break;
         }
     }
