@@ -78,11 +78,11 @@ public class ScoreScreen : MonoBehaviour
         //   }
 
         minScore *= scoreMultiplier;
-        continueText.text = "Get " + minScore + "Points\n to unlock the next level!";
-        continueText2.text = "Get " + minScore + "Points\n to unlock the next level!";
+        continueText.text = "Get " + minScore + " Points\n to unlock the next level!";
+        continueText2.text = "Get " + minScore + " Points\n to unlock the next level!";
         //unlock level:
         //-------------
-        if (_score > minScore)
+        if (PlayerPrefs.GetInt("Highscore") > minScore)
         {
             continueText.enabled = false;
             continueText2.enabled = false;

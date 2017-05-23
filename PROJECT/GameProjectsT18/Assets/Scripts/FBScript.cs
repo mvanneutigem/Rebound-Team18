@@ -118,36 +118,39 @@ public class FBScript : MonoBehaviour
 
     void DealWithFBMenus(bool isLoggedIn)
     {
-
-        if (isLoggedIn)
+        if (LoggedInCanvas)
         {
-            Debug.Log("Logged in");
-            if (SceneManager.GetActiveScene().buildIndex == 2) //scorescreen needs more permissions
+            if (isLoggedIn)
             {
-                Debug.Log("checking permissions");
-                FB.API("/me/permissions",
-                    HttpMethod.GET,
-                    CheckPermissions
-                    );
+                Debug.Log("Logged in");
+                if (SceneManager.GetActiveScene().buildIndex == 2) //scorescreen needs more permissions
+                {
+                    Debug.Log("checking permissions");
+                    FB.API("/me/permissions",
+                        HttpMethod.GET,
+                        CheckPermissions
+                        );
+                }
+                else
+                {
+                    //fb is logged in
+                    LoggedInCanvas.gameObject.SetActive(true);
+                    LoggedOutCanvas.gameObject.SetActive(false);
+                    FB.API("/me?fields=first_name", HttpMethod.GET, DisplayUsername);
+                    FB.API("/me/picture?type=square&height=128&width=128", HttpMethod.GET, DisplayProfilePic);
+                }
+
+
             }
             else
             {
-                //fb is logged in
-                LoggedInCanvas.gameObject.SetActive(true);
-                LoggedOutCanvas.gameObject.SetActive(false);
-                FB.API("/me?fields=first_name", HttpMethod.GET, DisplayUsername);
-                FB.API("/me/picture?type=square&height=128&width=128", HttpMethod.GET, DisplayProfilePic);
+                Debug.Log("Not logged in");
+                //fb not logged in
+                LoggedInCanvas.gameObject.SetActive(false);
+                LoggedOutCanvas.gameObject.SetActive(true);
             }
-
-            
         }
-        else
-        {
-            Debug.Log("Not logged in");
-            //fb not logged in
-            LoggedInCanvas.gameObject.SetActive(false);
-            LoggedOutCanvas.gameObject.SetActive(true);
-        }
+       
     }
 
     private void CheckPermissions(IGraphResult result)
@@ -291,7 +294,21 @@ public class FBScript : MonoBehaviour
 
     //scores API stuff
     //----------------
+    public int getScore()
+    {
+        if (FB.IsLoggedIn)
+        {
+            Debug.Log("Logged in!");
+            QueryScores();
+            return myScore;
+        }
+        else
+        {
+            Debug.Log("Not logged in");
+            return -1;
+        }
 
+    }
     public void QueryScores()
     {
         FB.API("/app/scores?fields=score,user.limit(30)",HttpMethod.GET, ScoresCallback);
