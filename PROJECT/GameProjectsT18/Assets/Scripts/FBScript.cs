@@ -379,6 +379,7 @@ public class FBScript : MonoBehaviour
 
     public void SetScore(int score)
     {
+        Highscores.GetComponent<ScoreScreen>().UnlockLevel(myScore);
         if (myScore < score)
         {
             var scoreData = new Dictionary<string, string>();
