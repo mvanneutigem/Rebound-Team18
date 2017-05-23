@@ -12,6 +12,7 @@ public class Buttons : MonoBehaviour
     {
         PlayerPrefs.SetString("Slam", "space");
         PlayerPrefs.SetString("Rewind", "r");
+        PlayerPrefs.SetInt("Highscore", 0);
     }
     //void Start()
     //{

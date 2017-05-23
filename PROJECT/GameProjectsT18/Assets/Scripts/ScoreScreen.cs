@@ -42,6 +42,10 @@ public class ScoreScreen : MonoBehaviour
         _score += (int)(PlayerPrefs.GetFloat("time") * 100.0f);
         _score *= scoreMultiplier;
         PlayerPrefs.SetInt("Score", 0);
+        if (_score > PlayerPrefs.GetInt("Highscore"))
+        {
+            PlayerPrefs.SetInt("Highscore", _score);
+        }
 
         _highScoreManager = GetComponent<HighScores>();
         //list = highScoreManager.GetHighscoreslist();
