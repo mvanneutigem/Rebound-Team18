@@ -14,7 +14,7 @@ public class Magnetize : MonoBehaviour
     [SerializeField]
     private float MinimumDistance = 1.0f;
 
-
+    public bool UseNormal = false;
     private GameObject[] _magneticObject;
     private GameObject[] _attractmagneticObject;
     private Rigidbody _rigidbody;
@@ -45,7 +45,14 @@ public class Magnetize : MonoBehaviour
                 {
                     float scale = 1 - difference.magnitude / MinimumDistance;
                     difference.Scale(new Vector3( scale,scale,scale));
-                    _rigidbody.AddForce(Multiply(difference, _magneticObject[i].transform.forward) * RepelForce * 10* Time.deltaTime);
+                    if (UseNormal)
+                    {
+                        _rigidbody.AddForce(Multiply(difference, _magneticObject[i].transform.forward) * RepelForce * 10 * Time.deltaTime);
+                    }
+                    else
+                    {
+                        _rigidbody.AddForce(difference * RepelForce * 10 * Time.deltaTime);
+                    }
                 }
             }
            
