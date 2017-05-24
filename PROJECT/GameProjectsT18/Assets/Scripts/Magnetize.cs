@@ -26,6 +26,11 @@ public class Magnetize : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
     }
 
+    Vector3 Multiply(Vector3 a, Vector3 b)
+    {
+        return new Vector3(a.x * b.x, a.y * b.y, a.z *b.z);
+    }
+
     void Update()
     {
         if (_magneticObject != null)
@@ -40,7 +45,7 @@ public class Magnetize : MonoBehaviour
                 {
                     float scale = 1 - difference.magnitude / MinimumDistance;
                     difference.Scale(new Vector3( scale,scale,scale));
-                    _rigidbody.AddForce(difference * RepelForce * 10* Time.deltaTime);
+                    _rigidbody.AddForce(Multiply(difference, _magneticObject[i].transform.forward) * RepelForce * 10* Time.deltaTime);
                 }
             }
            
