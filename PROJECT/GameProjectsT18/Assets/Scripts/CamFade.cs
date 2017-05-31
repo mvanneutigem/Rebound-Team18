@@ -16,7 +16,7 @@ public class CamFade : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(hitObjects.Count);
+        //Debug.Log(hitObjects.Count);
 
         Vector3 direction = Player.transform.position - transform.position;
         RaycastHit hit;
@@ -35,9 +35,12 @@ public class CamFade : MonoBehaviour
                         hitObjects.Add(hitObj);
                 }
                 // Change Alpha value
-                Color c = hitObj.GetComponent<Renderer>().material.color;
-                c.a = 0.2f;
-                hit.transform.gameObject.GetComponent<Renderer>().material.color = c;
+                if (hitObj.GetComponent<Renderer>())
+                {
+                    Color c = hitObj.GetComponent<Renderer>().material.color;
+                    c.a = 0.2f;
+                    hit.transform.gameObject.GetComponent<Renderer>().material.color = c;
+                }
                 // ****
             }
         }
@@ -45,14 +48,20 @@ public class CamFade : MonoBehaviour
         {
             if (hit.transform.gameObject != o)
             {
-                Color c = o.GetComponent<Renderer>().material.color;
-                // Change Alpha value
-                c.a = 1.0f;
-                o.GetComponent<Renderer>().material.color = c;
-                // ***
+                if (o.GetComponent<Renderer>())
+                {
+                    Color c = o.GetComponent<Renderer>().material.color;
+                    // Change Alpha value
+                    c.a = 1.0f;
+                    o.GetComponent<Renderer>().material.color = c;
+                    // ***
+                }
 
                 // Delete outside of the foreach, so store locally
-                hitObjects.Remove(o);
+                if (hitObjects.Count != 0)
+                {
+                    hitObjects.Remove(o);
+                }
             }
         }
     }

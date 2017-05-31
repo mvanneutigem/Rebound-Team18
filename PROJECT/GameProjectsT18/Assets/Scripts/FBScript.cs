@@ -93,7 +93,7 @@ public class FBScript : MonoBehaviour
     {
         if (result.Error != null)
         {
-            Debug.Log(result.Error);
+            //Debug.Log(result.Error);
         }
         else if (!string.IsNullOrEmpty(result.RawResult))
         {
@@ -124,7 +124,7 @@ public class FBScript : MonoBehaviour
     {
         if (result.Error != null)
         {
-            Debug.Log(result.Error);
+            //Debug.Log(result.Error);
         }
         else
         {
@@ -172,7 +172,7 @@ public class FBScript : MonoBehaviour
     private void CheckPermissions(IGraphResult result)
     {
         IDictionary<string, object> data = result.ResultDictionary;
-        Debug.Log(result.RawResult);
+        //Debug.Log(result.RawResult);
         List<object> permissionsList = (List<object>) data["data"];
         bool grantedFriends = false;
         bool grantedPublish = false;
@@ -231,7 +231,7 @@ public class FBScript : MonoBehaviour
         }
         else
         {
-            Debug.Log(result.Error);
+            //Debug.Log(result.Error);
         }
     }
 
@@ -305,7 +305,7 @@ public class FBScript : MonoBehaviour
 
     void SharewWithUsersCallback(IAppRequestResult result)
     {
-        Debug.Log(result.RawResult);
+        //Debug.Log(result.RawResult);
     }
 
     //scores API stuff

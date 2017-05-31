@@ -10,7 +10,7 @@ public class WorldColorPicker : MonoBehaviour {
 	void Start ()
 	{
 	    int Id = SceneManager.GetActiveScene().buildIndex;
-        Debug.Log(Id);
+        //Debug.Log(Id);
         if (Id < 10)
         {
             Color col = mat.color;
