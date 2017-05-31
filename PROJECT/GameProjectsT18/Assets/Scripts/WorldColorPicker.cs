@@ -17,7 +17,7 @@ public class WorldColorPicker : MonoBehaviour {
             col.r = 0;
             col.g = 0.31f;
             col.b = 0.8f;
-            mat.color = col;
+            mat.color = col; 
         }
         else if (Id > 9 && Id < 15)
         {

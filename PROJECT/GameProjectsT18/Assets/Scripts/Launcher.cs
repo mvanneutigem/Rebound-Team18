@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Launcher : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class Launcher : MonoBehaviour
         slam = PlayerPrefs.GetString("Slam");
         _activated = false;
         _audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+
+
     }
 
     void Update()
@@ -32,9 +35,24 @@ public class Launcher : MonoBehaviour
     private void Launch()
     {
         GameObject.FindGameObjectWithTag("Player").GetComponent<PhysicsPlayerController>().SetLockMovement(false);
-        _audioManager.PlayLong("startupshort");
+        int Id = SceneManager.GetActiveScene().buildIndex;
+        Debug.Log(Id);
+        if (Id < 10)
+        {
+            _audioManager.PlayLong("startupshort");
+        }
+        else if (Id > 9 && Id < 15)
+        {
+            _audioManager.PlayLong("dillon");
+        }
+        else if (Id > 14 && Id < 25)
+        {
+            _audioManager.PlayLong("neonstorm");
+        }
         _audioManager.PlaySFX("spring");
         StartCoroutine(playanimation());
+
+
     }
 
     private IEnumerator playanimation()

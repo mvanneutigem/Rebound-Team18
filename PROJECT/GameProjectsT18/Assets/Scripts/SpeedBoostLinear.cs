@@ -15,6 +15,13 @@ public class SpeedBoostLinear : MonoBehaviour
     private Vector3 _endPos;
     private GameObject _trailObj;
     private TrailRenderer _trail;
+    private AudioManager _audioManager;
+
+    void Start()
+    {
+        _audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+    }
+
     void Update()
     {
         if (_enabled)
@@ -37,6 +44,7 @@ public class SpeedBoostLinear : MonoBehaviour
     {
         if (other.tag == "Player" && !_enabled)
         {
+            _audioManager.PlaySFX("laser");
             _player = other.GetComponent<PhysicsPlayerController>();
             if (!_player.GetLockMovement())
             {

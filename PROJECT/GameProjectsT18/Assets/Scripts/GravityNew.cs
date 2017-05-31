@@ -35,7 +35,7 @@ public class GravityNew : MonoBehaviour {
 
     private GameObject _pseudo;
     private Rewind _rewindScript;
-
+    private AudioManager _audioManager;
     // Use this for initialization
     void Start () {
 
@@ -55,7 +55,8 @@ public class GravityNew : MonoBehaviour {
         _pseudo.transform.rotation = gameObject.transform.rotation;
         _pseudo.transform.position = gameObject.transform.position;
         _pseudo.transform.localScale = gameObject.transform.localScale;
-        
+
+        _audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
     }
 
     // Update is called once per frame
@@ -161,6 +162,7 @@ public class GravityNew : MonoBehaviour {
     {
         if (other.tag == "Player")
         {
+            _audioManager.PlaySFX("gravityportal");
             Debug.Log("Portal Encountered");
             switch (ForwardDirection)
             {
@@ -225,9 +227,9 @@ public class GravityNew : MonoBehaviour {
         _newUpVector = vec;
     }
 
-    public void SetEntered(bool yup)
+    public void SetEntered(bool entered)
     {
-        _entered = yup;
+        _entered = entered;
     }
 
     public void SetRotationSpeed(float value)

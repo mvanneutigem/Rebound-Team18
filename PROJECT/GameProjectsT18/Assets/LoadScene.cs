@@ -12,11 +12,15 @@ public class LoadScene : MonoBehaviour {
     private const float LOAD_TIME = 4.0f;
     private Text _text;
     private float _timer = 0.0f;
-	void Start ()
+    private AsyncOperation _operation;
+    void Start ()
 	{
 	    _nextScene = PlayerPrefs.GetInt("Scene") + 1;
         _text = GameObject.Find("Text").GetComponent<Text>();
-    }
+        _operation = SceneManager.LoadSceneAsync(_nextScene, LoadSceneMode.Single);
+        _operation.allowSceneActivation = false;
+        StartLoading();
+	}
 	
 	// Update is called once per frame
 	void Update ()
@@ -31,8 +35,23 @@ public class LoadScene : MonoBehaviour {
 
 	        if (_timer > LOAD_TIME)
 	        {
-	            SceneManager.LoadScene(_nextScene);
+	            ActivateScene();
+	            SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(_nextScene));
 	        }
 	    }
-	}
+    }
+    private void StartLoading()
+    {
+        StartCoroutine("load");
+    }
+
+    IEnumerator load()
+    {
+        yield return _operation;
+    }
+
+    private void ActivateScene()
+    {
+        _operation.allowSceneActivation = true;
+    }
 }
