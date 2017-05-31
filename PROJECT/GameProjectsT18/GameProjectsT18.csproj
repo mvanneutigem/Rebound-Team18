@@ -109,6 +109,7 @@
     <Compile Include="Assets\Scripts\Launcher.cs" />
     <Compile Include="Assets\Scripts\Magnetize.cs" />
     <Compile Include="Assets\Scripts\MaterialSwitcher.cs" />
+    <Compile Include="Assets\Scripts\MenuMusic.cs" />
     <Compile Include="Assets\Scripts\Menu_Controls.cs" />
     <Compile Include="Assets\Scripts\Movement.cs" />
     <Compile Include="Assets\Scripts\PauseGame.cs" />
