@@ -17,6 +17,7 @@ public class FBScript : MonoBehaviour
     public GameObject ScoreEntryPanel;
     public GameObject ScoreScrollList;
     public GameObject Highscores;
+    public GameObject switchScript;
 
     public int myScore = 100000;
 
@@ -96,12 +97,27 @@ public class FBScript : MonoBehaviour
         }
         else if (!string.IsNullOrEmpty(result.RawResult))
         {
-            LoggedInCanvas.gameObject.SetActive(true);
-            LoggedOutCanvas.gameObject.SetActive(false);
-            FB.API("/me?fields=first_name", HttpMethod.GET, DisplayUsername);
-            FB.API("/me/picture?type=square&height=128&width=128", HttpMethod.GET, DisplayProfilePic);
-            DisplayScore();
+            if (LoggedInCanvas)
+            {
+                LoggedInCanvas.gameObject.SetActive(true);
+                LoggedOutCanvas.gameObject.SetActive(false);
+                FB.API("/me?fields=first_name", HttpMethod.GET, DisplayUsername);
+                FB.API("/me/picture?type=square&height=128&width=128", HttpMethod.GET, DisplayProfilePic);
+                DisplayScore();
+            }
+            else
+            {
+                Debug.Log("Called log in on non canvas");
+                //FB.API("/me?fields=score", HttpMethod.GET, GetCurrentScore);
+            }
         }
+    }
+
+    public void WorldSwitcher()
+    {
+        Debug.Log("Called logged in on switcher");
+        if(FB.IsLoggedIn)
+            FB.API("/me/scores", HttpMethod.GET, GetCurrentScore);
     }
 
     void AuthCallBack(IResult result)
@@ -312,25 +328,22 @@ public class FBScript : MonoBehaviour
     public void QueryScores()
     {
         FB.API("/app/scores?fields=score,user.limit(30)",HttpMethod.GET, ScoresCallback);
-        FB.API("/me?fields=score", HttpMethod.GET, GetCurrentScore);
+        FB.API("/me/scores?fields=score", HttpMethod.GET, GetCurrentScore);
     }
     void GetCurrentScore(IResult result)
     {
         Debug.Log("called get current score method");
         IDictionary<string, object> data = result.ResultDictionary;
-        _myID = data["id"].ToString();
-        //Debug.Log(list);
+        Scorelist = (List<object>)data["data"];
 
-        //string score = "";
-        //foreach (object obj in list)
-        //{
-        //    var entry = (Dictionary<string, object>)obj;
-        //    score = entry["score"].ToString();
-        //    Debug.Log("Score string:");
-        //    Debug.Log(score);
-        //}
-        //Debug.Log(score);
-        // myScore = int.Parse(score);
+        var entry = (Dictionary<string, object>)Scorelist[0];
+        var user = (Dictionary<string, object>)entry["user"];
+        _myID = user["id"].ToString();
+        string scorestring = entry["score"].ToString();
+        int sc = int.Parse(scorestring);
+        PlayerPrefs.SetInt("Highscore", sc);
+        if (switchScript)
+            switchScript.GetComponent<SwitchWorlds>().SetButtons(0);
 
     }
     private void ScoresCallback(IResult result)
@@ -364,18 +377,6 @@ public class FBScript : MonoBehaviour
             {
                 myScore = int.Parse(scoreScore.text);
             }
-
-            //string userID = "";
-            //FB.API("/me?fields=id", HttpMethod.GET, delegate (IGraphResult pictureResult)
-            //{
-            //    userID = result.ResultDictionary["id"].ToString();
-            //});
-
-            //if (user["id"].ToString() == userID)
-            //{
-            //    myScore = int.Parse(entry["score"].ToString());
-            //}
-
 
             Transform ThisScoreAvatar = scorePanel.transform.Find("avatar");
             Image ScoreAvatar = ThisScoreAvatar.GetComponent<Image>();
@@ -413,32 +414,9 @@ public class FBScript : MonoBehaviour
 
     public void DisplayScore()
     {
-        StartCoroutine(Query());
-        //scores loading
-        //QueryScores();
-
-        //if (Highscores.GetComponent<ScoreScreen>().scoreSet)
-        //{
-        //    QueryScores();
-        //}
-
-    }
-
-    IEnumerator Query()
-    {
         QueryScores();
-        yield return new WaitForSeconds(3.0f);//give time to fetch data
-        //QueryScores();
-        StartCoroutine(UpdateScore());
     }
 
-    IEnumerator UpdateScore()
-    {
-        while(!_gotScore)
-            yield return new WaitForSeconds(5.0f);
-        //QueryScores();
-        Debug.Log("Score updated");
-    }
 
     //Achievements
     //------------
