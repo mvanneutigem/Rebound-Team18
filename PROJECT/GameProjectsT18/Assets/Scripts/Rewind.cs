@@ -39,21 +39,22 @@ public class Rewind : MonoBehaviour {
     private float _rotationSpeed;
     private Vector3 _pseudoRight;
     private GravityNew _gravityScript;
+    private GameObject _dummyPortal;
 
     void Start ()
     {
         GameObject origPortal = GameObject.Find("GravityPortal");
-        GameObject dummyPortal = Instantiate(origPortal);
-        dummyPortal.transform.position = new Vector3(float.MaxValue / 2.0f, float.MaxValue / 2.0f, float.MaxValue / 2.0f);
-        Renderer[] r = dummyPortal.GetComponentsInChildren<Renderer>();
+        _dummyPortal = Instantiate(origPortal);
+        _dummyPortal.transform.position = new Vector3(float.MaxValue / 2.0f, float.MaxValue / 2.0f, float.MaxValue / 2.0f);
+        Renderer[] r = _dummyPortal.GetComponentsInChildren<Renderer>();
 
         for (int i = 0; i < r.Length; i++)
         {
             r[i].enabled = false;
         }
 
-        dummyPortal.name = "dummyPortal";
-        _gravityScript = dummyPortal.GetComponentInChildren<GravityNew>();
+        _dummyPortal.name = "dummyPortal";
+        _gravityScript = _dummyPortal.GetComponentInChildren<GravityNew>();
 
         _glow = GameObject.Find("uiglow");
         _glow.SetActive(false);
@@ -142,7 +143,7 @@ public class Rewind : MonoBehaviour {
                 _rewinding = false;
                 _playerController.SetLockMovement(false);
                 _playerController.SetVelocity((Vector3)_previousVelocities[_arrayIdx - 1]);
-                //_gravityScript.SetEntered(true); 
+                _gravityScript.SetEntered(true);
             }
         }
         
@@ -169,6 +170,7 @@ public class Rewind : MonoBehaviour {
             _playerController.SetUpVector((Vector3)_previousUp[_arrayIdx - 1]);
             _gravityScript.SetNewForwardVector((Vector3)_previousNewForward[_arrayIdx - 1]);
             _gravityScript.SetNewUpVector((Vector3)_previousNewUp[_arrayIdx - 1]);
+            //Debug.Log("setting changeSpeed while Rewinding: " + (float)_previousRotationSpeed[_arrayIdx - 1]);
             _gravityScript.SetRotationSpeed((float)_previousRotationSpeed[_arrayIdx - 1]);
             _gravityScript.SetPseudoRight((Vector3)_previousPseudoRight[_arrayIdx - 1]);
 
@@ -190,21 +192,30 @@ public class Rewind : MonoBehaviour {
 
     public void SetNewForward(Vector3 vec)
     {
+        _gravityScript.SetNewForwardVector(vec);
         _newForward = vec;
     }
 
     public void SetNewUp(Vector3 vec)
     {
+        _gravityScript.SetNewUpVector(vec);
         _newUp = vec;
     }
 
     public void SetRotationSpeed(float value)
     {
         _rotationSpeed = value;
+        _gravityScript.SetRotationSpeed(value);
     }
 
     public void SetPseudoRight(Vector3 right)
     {
+        _gravityScript.SetPseudoRight(right);
         _pseudoRight = right;
+    }
+
+    public void EnableDummy(bool yup)
+    {
+        _dummyPortal.SetActive(yup);
     }
 }

@@ -25,8 +25,8 @@ public class GravityNew : MonoBehaviour {
     public float ChangeDirectionSpeed = 20.0f;
     private bool _entered = false;
 
-    private Vector3 _newUpVector;
-    private Vector3 _newForwardVector;
+    private Vector3 _newUpVector = new Vector3(0, 1, 0);
+    private Vector3 _newForwardVector = new Vector3(0, 0, 1);
 
     private float _angleUp = 0;
     private float _angleForward = 0;
@@ -73,14 +73,15 @@ public class GravityNew : MonoBehaviour {
             _entered = false;
         }
 
-        //if (_rewindScript.IsRewinding())
-        //{
-        //    _entered = false;
-        //}
+        if (_rewindScript.IsRewinding())
+        {
+            _entered = false;
+        }
         //Debug.Log(_rewindScript.IsRewinding());
 
         if (_entered)
         {
+            //Debug.Log(Time.deltaTime);
             //DrawLine(_playerTransform.position, _playerTransform.position + 10 * _playerController.GetForwardDir(), Color.red, 0.1f);
             //DrawLine(_playerTransform.position, _playerTransform.position + 10 * _newForwardVector, Color.green, 0.1f);
 
@@ -92,6 +93,7 @@ public class GravityNew : MonoBehaviour {
 
             _rewindScript.SetNewForward(_newForwardVector);
             _rewindScript.SetNewUp(_newUpVector);
+            //Debug.Log("Setting Rotation Speed in the Gravity Update: " + ChangeDirectionSpeed);
             _rewindScript.SetRotationSpeed(ChangeDirectionSpeed);
             _rewindScript.SetPseudoRight(_pseudo.transform.right);
 
@@ -234,6 +236,7 @@ public class GravityNew : MonoBehaviour {
 
     public void SetRotationSpeed(float value)
     {
+        //Debug.Log("Setting Rotation in Gravity Method" + value);
         ChangeDirectionSpeed = value;
     }
 
