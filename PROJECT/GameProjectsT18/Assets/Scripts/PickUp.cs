@@ -11,6 +11,7 @@ public class PickUp : MonoBehaviour {
     public float PickupRange = 3.0f;
     public float MoveTime = 0.5f;
     private float _timer = 0;
+    public int Score = 100;
     private Vector3 _originalPos;
     private Transform _transSelf;
 
@@ -62,7 +63,7 @@ public class PickUp : MonoBehaviour {
     {
         if (other.tag == "Player")
         {
-            _gameController.AddScore(100);
+            _gameController.AddScore(Score);
             _audioManager.PlaySFX("pop");
             Destroy(gameObject);  
         }
