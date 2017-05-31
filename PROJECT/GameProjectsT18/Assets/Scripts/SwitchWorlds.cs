@@ -15,22 +15,21 @@ public class SwitchWorlds : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(Query());
+        FB.GetComponent<FBScript>().WorldSwitcher();
     }
 
-    IEnumerator Query()
-    {
-        int score = FB.GetComponent<FBScript>().getScore();
-        yield return new WaitForSeconds(2.0f);//needs improvement!
-        score = FB.GetComponent<FBScript>().getScore();
-        if (score != -1)
-        {
-            Debug.Log("retrieved highscore!");
-            PlayerPrefs.SetInt("Highscore", score);
-        }
+    //IEnumerator Query()
+    //{
+    //    int score = FB.GetComponent<FBScript>().getScore();
+    //    yield return new WaitForSeconds(0.0f);
+    //    if (score != -1)
+    //    {
+    //        Debug.Log("retrieved highscore!");
+    //        PlayerPrefs.SetInt("Highscore", score);
+    //    }
 
-        SetButtons(0);
-    }
+    //    SetButtons(0);
+    //}
 
     public void UnlockAll()
     {
@@ -38,7 +37,7 @@ public class SwitchWorlds : MonoBehaviour
         SetButtons(0);
     }
 
-    void SetButtons(int id)
+    public void SetButtons(int id)
     {
         int baseScore = 10000;
         for (int i = 0; i < 5; ++i)
