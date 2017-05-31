@@ -139,14 +139,6 @@ public class ScoreScreen : MonoBehaviour
     public void AddScore()
     {
         _FacebookManager.GetComponent<FBScript>().SetScore(_score);
-        //if (_highscore)
-        //{
-        //    _name = NameText.text;
-        //    {
-        //        _FacebookManager.GetComponent<FBScript>().SetScore(_score);
-        //    }
-        //    _highscore = false;
-        //}
     }
 
     public void UnlockLevel(int score)
