@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Tips : MonoBehaviour
@@ -15,9 +16,13 @@ public class Tips : MonoBehaviour
     void Start ()
     {
         _player = GameObject.FindWithTag("Player");
-        textArray[0].text = "Press " + PlayerPrefs.GetString("Slam") + "/A button to launch";
-        textArray[3].text = "Use " + PlayerPrefs.GetString("Slam") + "/A button to slam";
-        textArray[4].text = "Use " + PlayerPrefs.GetString("Rewind") + "/X button to rewind";
+        if (SceneManager.GetActiveScene().buildIndex == 5)
+        {
+            textArray[0].text = "Press " + PlayerPrefs.GetString("Slam") + "/A button to launch";
+            textArray[3].text = "Use " + PlayerPrefs.GetString("Slam") + "/A button to slam";
+            textArray[4].text = "Use " + PlayerPrefs.GetString("Rewind") + "/X button to rewind";
+        }
+
     }
 	
 	// Update is called once per frame
