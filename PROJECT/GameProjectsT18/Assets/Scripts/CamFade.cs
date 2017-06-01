@@ -48,20 +48,14 @@ public class CamFade : MonoBehaviour
         {
             if (hit.transform.gameObject != o)
             {
-                if (o.GetComponent<Renderer>())
-                {
                     Color c = o.GetComponent<Renderer>().material.color;
                     // Change Alpha value
                     c.a = 1.0f;
                     o.GetComponent<Renderer>().material.color = c;
                     // ***
-                }
 
                 // Delete outside of the foreach, so store locally
-                if (hitObjects.Count != 0)
-                {
                     hitObjects.Remove(o);
-                }
             }
         }
     }
