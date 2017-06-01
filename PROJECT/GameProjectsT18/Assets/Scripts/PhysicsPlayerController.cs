@@ -104,7 +104,7 @@ public class PhysicsPlayerController : MonoBehaviour
             // input
             float hInput = Input.GetAxisRaw("Horizontal") + Input.GetAxisRaw("Controller X");
             //float vInput = Input.GetAxisRaw("Vertical") + Input.GetAxisRaw("Controller Y");
-            float vInput = Input.GetAxisRaw("Vertical") + Input.GetAxisRaw("ControllerForward");
+            float vInput = Input.GetAxisRaw("Vertical") + -Input.GetAxisRaw("ControllerForward");
 
             //set the speed
             //rotate character in the direction it's moving in
