@@ -18,6 +18,5 @@ public class LaserScript : MonoBehaviour {
 	void Update () {
         laserLine.SetPosition(0, StartPoint.position);
         laserLine.SetPosition(1, EndPoint.position);
-
     }
 }

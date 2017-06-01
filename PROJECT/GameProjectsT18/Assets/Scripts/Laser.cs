@@ -11,7 +11,6 @@ public class Laser : MonoBehaviour {
     {
         _playerController = GameObject.FindWithTag("Player").GetComponent<PhysicsPlayerController>();
     }
-	
 
 	void Update ()
     {

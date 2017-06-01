@@ -123,6 +123,7 @@
     <Compile Include="Assets\Scripts\SpeedBoostLinear.cs" />
     <Compile Include="Assets\Scripts\SquashScript.cs" />
     <Compile Include="Assets\Scripts\SwitchWorlds.cs" />
+    <Compile Include="Assets\Scripts\ThrusterRotate.cs" />
     <Compile Include="Assets\Scripts\Tips.cs" />
     <Compile Include="Assets\Scripts\WorldColorPicker.cs" />
     <Compile Include="Assets\Scripts\camDummy.cs" />
