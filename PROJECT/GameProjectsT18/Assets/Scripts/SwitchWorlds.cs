@@ -11,25 +11,13 @@ public class SwitchWorlds : MonoBehaviour
     public GameObject[] panelArr;
     public GameObject FB;
     private int currentWorld = 1;
-    private int maxworld = 3;
+    private int maxworld = 4;
 
     void Start()
     {
+        SetButtons(0);
         FB.GetComponent<FBScript>().WorldSwitcher();
     }
-
-    //IEnumerator Query()
-    //{
-    //    int score = FB.GetComponent<FBScript>().getScore();
-    //    yield return new WaitForSeconds(0.0f);
-    //    if (score != -1)
-    //    {
-    //        Debug.Log("retrieved highscore!");
-    //        PlayerPrefs.SetInt("Highscore", score);
-    //    }
-
-    //    SetButtons(0);
-    //}
 
     public void UnlockAll()
     {
@@ -60,19 +48,29 @@ public class SwitchWorlds : MonoBehaviour
                 panelArr[0].SetActive(true);
                 panelArr[1].SetActive(false);
                 panelArr[2].SetActive(false);
+                panelArr[3].SetActive(false);
                 SetButtons(0);
                 break;
             case 2:
                 panelArr[0].SetActive(false);
                 panelArr[1].SetActive(true);
                 panelArr[2].SetActive(false);
+                panelArr[3].SetActive(false);
                 SetButtons(1);
                 break;
             case 3:
                 panelArr[0].SetActive(false);
                 panelArr[1].SetActive(false);
                 panelArr[2].SetActive(true);
+                panelArr[3].SetActive(false);
                 SetButtons(2);
+                break;
+            case 4:
+                panelArr[0].SetActive(false);
+                panelArr[1].SetActive(false);
+                panelArr[2].SetActive(false);
+                panelArr[3].SetActive(true);
+                SetButtons(3);
                 break;
         }
     }
