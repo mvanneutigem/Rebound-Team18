@@ -18,6 +18,7 @@ public class FBScript : MonoBehaviour
     public GameObject ScoreScrollList;
     public GameObject Highscores;
     public GameObject switchScript;
+    public GameObject SelectedButtonLogin;
 
     public int myScore = 100000;
 
@@ -99,6 +100,9 @@ public class FBScript : MonoBehaviour
         {
             if (LoggedInCanvas)
             {
+                GameObject myEventSystem = GameObject.Find("EventSystem");
+                myEventSystem.GetComponent<UnityEngine.EventSystems.EventSystem>().SetSelectedGameObject(SelectedButtonLogin);
+
                 LoggedInCanvas.gameObject.SetActive(true);
                 LoggedOutCanvas.gameObject.SetActive(false);
                 FB.API("/me?fields=first_name", HttpMethod.GET, DisplayUsername);
@@ -138,6 +142,10 @@ public class FBScript : MonoBehaviour
         {
             if (isLoggedIn)
             {
+                
+                GameObject myEventSystem = GameObject.Find("EventSystem");
+                myEventSystem.GetComponent<UnityEngine.EventSystems.EventSystem>().SetSelectedGameObject(SelectedButtonLogin);
+                
                 Debug.Log("Logged in");
                 if (SceneManager.GetActiveScene().buildIndex == 2) //scorescreen needs more permissions
                 {
