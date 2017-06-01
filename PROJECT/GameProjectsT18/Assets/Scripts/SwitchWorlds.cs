@@ -13,6 +13,11 @@ public class SwitchWorlds : MonoBehaviour
     private int currentWorld = 1;
     private int maxworld = 4;
 
+    public GameObject button1;
+    public GameObject button2;
+    public GameObject button3;
+    public GameObject button4;
+
     void Start()
     {
         SetButtons(0);
@@ -42,9 +47,11 @@ public class SwitchWorlds : MonoBehaviour
     }
     private void SwitchWorld()
     {
+        GameObject myEventSystem = GameObject.Find("EventSystem");
         switch (currentWorld)
         {
             case 1:
+                myEventSystem.GetComponent<UnityEngine.EventSystems.EventSystem>().SetSelectedGameObject(button1);
                 panelArr[0].SetActive(true);
                 panelArr[1].SetActive(false);
                 panelArr[2].SetActive(false);
@@ -52,6 +59,7 @@ public class SwitchWorlds : MonoBehaviour
                 SetButtons(0);
                 break;
             case 2:
+                myEventSystem.GetComponent<UnityEngine.EventSystems.EventSystem>().SetSelectedGameObject(button2);
                 panelArr[0].SetActive(false);
                 panelArr[1].SetActive(true);
                 panelArr[2].SetActive(false);
@@ -59,6 +67,7 @@ public class SwitchWorlds : MonoBehaviour
                 SetButtons(1);
                 break;
             case 3:
+                myEventSystem.GetComponent<UnityEngine.EventSystems.EventSystem>().SetSelectedGameObject(button3);
                 panelArr[0].SetActive(false);
                 panelArr[1].SetActive(false);
                 panelArr[2].SetActive(true);
@@ -66,6 +75,7 @@ public class SwitchWorlds : MonoBehaviour
                 SetButtons(2);
                 break;
             case 4:
+                myEventSystem.GetComponent<UnityEngine.EventSystems.EventSystem>().SetSelectedGameObject(button4);
                 panelArr[0].SetActive(false);
                 panelArr[1].SetActive(false);
                 panelArr[2].SetActive(false);
