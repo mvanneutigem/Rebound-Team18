@@ -98,7 +98,7 @@ public class PhysicsPlayerController : MonoBehaviour
             }
         }
 
-        if (!_movementLock)
+        if (!_movementLock && Time.timeScale >0.5f)
         {
 
             // input
