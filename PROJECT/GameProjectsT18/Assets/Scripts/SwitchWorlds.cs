@@ -22,6 +22,7 @@ public class SwitchWorlds : MonoBehaviour
     {
         SetButtons(0);
         FB.GetComponent<FBScript>().WorldSwitcher();
+        SetButtons(0);
     }
 
     public void UnlockAll()
