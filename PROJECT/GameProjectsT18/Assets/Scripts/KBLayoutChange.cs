@@ -18,4 +18,3 @@ public class KBLayoutChange : MonoBehaviour {
         PlayerPrefs.SetInt("qwerty", 1 - _dd.value);
     }
 }
-aaa
