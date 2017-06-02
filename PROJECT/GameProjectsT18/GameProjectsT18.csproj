@@ -107,6 +107,7 @@
     <Compile Include="Assets\Scripts\GravityNew.cs" />
     <Compile Include="Assets\Scripts\GravityPortal.cs" />
     <Compile Include="Assets\Scripts\HighScores.cs" />
+    <Compile Include="Assets\Scripts\KBLayoutChange.cs" />
     <Compile Include="Assets\Scripts\Laser.cs" />
     <Compile Include="Assets\Scripts\LaserScript.cs" />
     <Compile Include="Assets\Scripts\Launcher.cs" />

@@ -155,7 +155,18 @@ public class ScoreScreen : MonoBehaviour
     {
         //unlock level:
         //-------------
-        if (score > minScore)
+        if (_levelIndex == 24)
+        {
+            continueText.text = "Game Completed!";
+            continueText2.text = "Game Completed!";
+        }
+        else
+        {
+            continueText.text = "Get " + minScore + " Points\n to unlock the next level!";
+            continueText2.text = "Get " + minScore + " Points\n to unlock the next level!";
+        }
+
+        if (score > minScore && _levelIndex < 24)
         {
             continueText.enabled = false;
             continueText2.enabled = false;

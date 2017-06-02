@@ -140,12 +140,12 @@ public class PhysicsPlayerController : MonoBehaviour
             if (_qwerty)
             {
                 hInput = Input.GetAxisRaw("Horizontal") + Input.GetAxisRaw("Controller X");
-                vInput = Input.GetAxisRaw("Vertical") + -Input.GetAxisRaw("ControllerForward");
+                vInput = Input.GetAxisRaw("Vertical") + Input.GetAxisRaw("ControllerForward") - Input.GetAxisRaw("ControllerBackward");
             }
             else
             {
                 hInput = Input.GetAxisRaw("AzHorizontal") + Input.GetAxisRaw("Controller X");
-                vInput = Input.GetAxisRaw("AzVertical") + -Input.GetAxisRaw("ControllerForward");
+                vInput = Input.GetAxisRaw("AzVertical") + Input.GetAxisRaw("ControllerForward") - Input.GetAxisRaw("ControllerBackward");
             }
  
 

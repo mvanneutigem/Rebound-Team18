@@ -112,7 +112,7 @@ public class FBScript : MonoBehaviour
             else
             {
                 Debug.Log("Called log in on non canvas");
-                //FB.API("/me?fields=score", HttpMethod.GET, GetCurrentScore);
+                FB.API("/me/scores", HttpMethod.GET, GetCurrentScore);
             }
         }
     }
@@ -343,13 +343,25 @@ public class FBScript : MonoBehaviour
         Debug.Log("called get current score method");
         IDictionary<string, object> data = result.ResultDictionary;
         Scorelist = (List<object>)data["data"];
+        if (Scorelist.Count > 0)
+        {
+            var entry = (Dictionary<string, object>)Scorelist[0];
+            var user = (Dictionary<string, object>)entry["user"];
+            _myID = user["id"].ToString();
+            string scorestring = entry["score"].ToString();
+            int sc = int.Parse(scorestring);
+            myScore = sc;
+            if (Highscores)
+                Highscores.GetComponent<ScoreScreen>().AddScore();
 
-        var entry = (Dictionary<string, object>)Scorelist[0];
-        var user = (Dictionary<string, object>)entry["user"];
-        _myID = user["id"].ToString();
-        string scorestring = entry["score"].ToString();
-        int sc = int.Parse(scorestring);
-        PlayerPrefs.SetInt("Highscore", sc);
+            PlayerPrefs.SetInt("Highscore", sc);
+        }
+        else
+        {
+            myScore = 0;
+            if (Highscores)
+                Highscores.GetComponent<ScoreScreen>().AddScore();
+        }
         if (switchScript)
             switchScript.GetComponent<SwitchWorlds>().SetButtons(0);
 
@@ -405,6 +417,7 @@ public class FBScript : MonoBehaviour
 
     public void SetScore(int score)
     {
+        Debug.Log("Called set score");
         Highscores.GetComponent<ScoreScreen>().UnlockLevel(myScore);
         if (myScore < score)
         {
