@@ -10,9 +10,9 @@ public class Buttons : MonoBehaviour
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void OnBeforeSceneLoadRuntimeMethod()
     {
-        PlayerPrefs.SetString("Slam", "space");
-        PlayerPrefs.SetString("Rewind", "r");
-        PlayerPrefs.SetInt("Highscore", 0);
+        //PlayerPrefs.SetString("Slam", "space");
+        //PlayerPrefs.SetString("Rewind", "r");
+        //PlayerPrefs.SetInt("Highscore", 0);
     }
     //void Start()
     //{
