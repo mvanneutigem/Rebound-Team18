@@ -26,10 +26,32 @@ public class ReflectedTrampoline : MonoBehaviour
                 Vector3 reflectedVector = inVelocity;
                 //only reflect y part of velocity over set threshold
 
-                reflectedVector.y = UpPower;
+                reflectedVector.y = 0;
+                Vector3 addedVector = new Vector3(0, UpPower, 0);
+                Vector3 combined = reflectedVector + addedVector * TrampolinePower;
 
-                other.gameObject.GetComponent<PhysicsPlayerController>().ApplyLocalForce(reflectedVector * TrampolinePower);
+                other.gameObject.GetComponent<PhysicsPlayerController>().ApplyLocalForce(combined);
                 _audioManager.PlaySFX("bounce");
+            }
+        }
+    }
+
+    void OnCollisionExit(Collision other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            if (other.gameObject.GetComponent<PhysicsPlayerController>().materialstate == PhysicsPlayerController.Mat.RUBBER)
+            {
+                var normal = this.transform.up;
+                var inVelocity = other.gameObject.GetComponent<PhysicsPlayerController>().GetLocalVelocity();
+                Vector3 reflectedVector = inVelocity;
+                //only reflect y part of velocity over set threshold
+
+                reflectedVector.y = 0;
+                Vector3 addedVector = new Vector3(0, UpPower, 0);
+                Vector3 combined = reflectedVector + addedVector * TrampolinePower;
+
+                other.gameObject.GetComponent<PhysicsPlayerController>().ApplyLocalForce(combined);
             }
         }
     }
