@@ -59,6 +59,8 @@ public class PhysicsPlayerController : MonoBehaviour
     //keys
     private string _slamKey;
 
+    private Death[] deathplanes;
+
     public enum Mat
     {
         METAL,
@@ -80,9 +82,11 @@ public class PhysicsPlayerController : MonoBehaviour
         Application.targetFrameRate = 500;
         QualitySettings.vSyncCount = 0;
 
-        //_rewind = this.GetComponent<Rewind>();
-        //_rewindTime = _rewind.MaxRewindTime;
-        //_refillMult = _rewind.RefillMultiplier;
+
+        deathplanes = GameObject.FindObjectsOfType<Death>();
+        _rewind = this.GetComponent<Rewind>();
+        _rewindTime = _rewind.MaxRewindTime;
+        _refillMult = _rewind.RefillMultiplier;
 
         materialstate = Mat.RUBBER;
         _transSelf = this.transform;
@@ -105,20 +109,31 @@ public class PhysicsPlayerController : MonoBehaviour
 
     void Update()
     {
-        //if (Input.GetKeyDown("g"))
-        //{
-        //    _godMode = !_godMode;
+        if (Input.GetKeyDown("g"))
+        {
+            _godMode = !_godMode;
 
-        //    if (_godMode)
-        //    {
-        //        _rewind.MaxRewindTime = 120;
-        //        _rewind.RefillMultiplier = 1;
-        //    }
-        //    else
-        //    {
-        //        _rewind.MaxRewindTime = _rewindTime;
-        //    }
-        //}
+            if (_godMode)
+            {
+                _rewind.MaxRewindTime = 120;
+                _rewind.RefillMultiplier = 1;
+
+                for (int i = 0; i < deathplanes.Length; i++)
+                {
+                    deathplanes[i].SetEnabled(false);
+                }
+            }
+            else
+            {
+                _rewind.MaxRewindTime = _rewindTime;
+                _rewind.RefillMultiplier = _refillMult;
+
+                for (int i = 0; i < deathplanes.Length; i++)
+                {
+                    deathplanes[i].SetEnabled(true);
+                }
+            }
+        }
 
         _moveDirRight = Vector3.Cross(_upVector3.normalized, _moveDirForward.normalized);
         _velocity = ConvertToLocalSpace(_playerRigidBody.velocity);
